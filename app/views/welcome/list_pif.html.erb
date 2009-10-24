@@ -1,0 +1,13 @@
+<h1>People I follow</h1>
+Updated:  <%= iflu %><br/><br/>
+<table>
+  <thead>
+    <tr>
+      <%= sort_header_tag('i_follow_nbr') %>
+      <%= sort_header_tag('name') %>
+      <%= sort_header_tag('nbr_followers') %>
+    </tr>
+  </thead>
+  
+  <%= render(:partial => "ifollow_row", :collection => @users) %> 
+</table>

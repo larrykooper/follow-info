@@ -1,0 +1,11 @@
+#main_page li {
+	line-height: 2;
+}
+
+#main_page a {
+	margin-right: 40px;
+}
+
+#stat_page .stat {
+	text-align: right;
+}

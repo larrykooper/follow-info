@@ -1,0 +1,12 @@
+<h1>My Followers</h1>
+Updated:  <%= flu %><br/><br/>
+<table>
+  <thead>
+    <tr>
+      <%= sort_header_tag('follows_me_nbr') %>
+      <%= sort_header_tag('name') %>
+    </tr>
+  </thead>
+  
+  <%= render(:partial => "foller_row", :collection => @follers) %> 
+</table>

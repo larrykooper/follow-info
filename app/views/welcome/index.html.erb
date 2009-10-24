@@ -1,0 +1,34 @@
+<div id="main_page">
+
+<h1>Larry's Twitter App</h1>
+
+<h2>Functions</h2>
+
+<h3>SHOW INFO:</h3>
+<ul>
+
+<li><%= link_to "List people I follow", :action => "list_pif" %>  Last updated: <%= iflu %> </li>
+
+<li><%= link_to "Stats", {:action => "list_stats"}, :style => "margin-right: 80px;" %> Last updated: <%= earlier %>  </li>
+
+<li><%= link_to "List my followers", :action => "list_follers" %>  Last updated: <%= flu %>  </li>
+
+<li><%= link_to "Unfollowed me", :action => "list_unfollowed" %> Last updated: <%= flu %></li>
+
+<li><%= link_to "List people I follow with fewer followers than me", :action => "list_fewer" %>  Last updated: <%= earlier %> </li>
+
+</ul>
+
+<h3>UPDATE MY DATABASE:</h3>
+
+<ul>
+  
+<li><%= link_to "Add a new person I follow", :action => "add_pif" %>  </li>
+
+<li><%= link_to "Update my followers list", :action => "update_follers" %> Last updated: <%= flu %> </li>
+
+<li><%= link_to "Update list of people I follow (incl. their nbr of followers)", :action => "update_pif" %> Last updated: <%= iflu %> </li>
+
+</ul>
+
+</div>

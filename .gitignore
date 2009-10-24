@@ -1,0 +1,10 @@
+.DS_Store
+/log/*.log
+/log/nohup.out
+/tmp/sessions/*
+!/tmp/sessions/.keep
+/public/tmp
+/tmp/*
+.*\~
+*.tmproj
+.tmp
