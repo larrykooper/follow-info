@@ -34,9 +34,5 @@ class WelcomeController < ApplicationController
     larry.update_all_pif 
     redirect_to(:action => 'list_pif')
   end 
-  
-  def update_chunk
-    lkhere 
-  end 
       
 end
