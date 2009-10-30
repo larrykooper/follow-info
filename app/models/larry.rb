@@ -57,6 +57,7 @@ class Larry
     gone_list.each do |user|
       deleted_pif = DeletedPif.new({:name => user.name, 
         :nbr_followers => user.nbr_followers, 
+        :i_follow_nbr => user.i_follow_nbr, 
         :i_followed => user.i_follow})
       deleted_pif.save! 
       if user.follows_me 
