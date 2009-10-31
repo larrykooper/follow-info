@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>Larry's Twitter App</title>
+  <%= stylesheet_link_tag 'base', 'screen' %>
+  <%= javascript_include_tag :defaults %>
+</head>
+<body>
+  
+<div id="content">
+  <% if @current_owner -%>
+    <div class="owner_header"> 
+      <%= @current_owner.name %> 
+    </div>
+  <% end -%>
+
+  <% [:notice, :warning, :error].each do |type| -%>
+    <% if flash[type] -%>
+      <div id="flash_<%= type %>" class="message">
+        <p><%= h flash[type] %></p>
+      </div>
+    <% end -%>
+  <% end -%>
+  <%= link_to "Home", :action => "index"%>
+
+  <%= yield  %>
+</div>
+
+</body>
+</html>
