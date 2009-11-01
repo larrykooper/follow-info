@@ -3,7 +3,7 @@
 body {
   font-family: Verdana, 'Lucida Grande', sans-serif;     
   font-size: small;
-  background-color: #7B112F; 
+  background-color: #6B8FD4; 
   color: #333;
   margin: 25px;
 }
@@ -102,8 +102,7 @@ table {
 table th,
 table td {
   border-bottom: 2px solid #ececec;
-  padding: 12px 8px;
-  text-align: center;
+  padding: 4px 8px;   
 }
 
 table .odd {

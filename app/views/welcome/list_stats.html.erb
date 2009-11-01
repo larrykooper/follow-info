@@ -5,8 +5,8 @@ Updated: <%= earlier %><br/><br/>
 
   <tr><td>Following:</td><td class="stat"> <%= @following %></td></tr>
   <tr><td>Followers I have:</td><td class="stat"> <%= @followers %></td></tr>
-  <tr><td>More than me:</td><td class="stat"> <%= @more %></td></tr>
-  <tr><td>Less or = to me:</td><td class="stat"> <%= @less_eq %></td></tr>
+  <tr><td>More than me:</td><td class="stat"> <%= @more %>, <%= @more_pct %>%</td></tr>
+  <tr><td>Less or = to me:</td><td class="stat"> <%= @less_eq %>, <%= @less_pct %>%</td></tr>
   <tr><td>Median followers:</td><td class="stat"> <%= number_with_delimiter(@median_fol.to_i) %></td></tr>
   <tr><td>Mean followers:</td><td class="stat"> <%= number_with_delimiter(@mean_fol.to_i) %></td></tr>
 </table>

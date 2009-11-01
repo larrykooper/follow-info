@@ -23,8 +23,8 @@ class WelcomeController < ApplicationController
     @followers = User.count "follows_me = 1"
     @more = User.count(:conditions => ["i_follow = 1 AND nbr_followers > ?", @followers])
     @less_eq = @following - @more
-    @more_pct = @more / @following
-    @less_pct = @less_eq / @following 
+    @more_pct = @more * 100 / @following
+    @less_pct = @less_eq * 100 / @following 
     @median_fol = User.median_followers_of_pif 
     @mean_fol = User.average :nbr_followers, :conditions => "i_follow = 1"    
   end
