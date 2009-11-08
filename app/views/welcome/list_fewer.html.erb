@@ -1,0 +1,19 @@
+<% 
+@page_title = "People I follow with low followers"
+%>
+
+<h1>Followers I have - <%= @my_followers_count %></h1>
+
+<h1>People I follow who have fewer followers than I - <%= @count %> - <%= @percent %>%</h1>
+Updated:  <%= iflu %><br/><br/>
+<table>
+  <thead>
+    <tr>
+      <%= sort_header_tag('i_follow_nbr') %>
+      <%= sort_header_tag('name') %>
+      <%= sort_header_tag('nbr_followers') %>
+    </tr>
+  </thead>
+  
+  <%= render(:partial => "fewer_row", :collection => @fewer) %> 
+</table>

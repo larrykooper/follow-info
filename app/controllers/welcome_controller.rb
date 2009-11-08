@@ -7,6 +7,15 @@ class WelcomeController < ApplicationController
     @following = User.count :conditions => "i_follow = 1"
     @followers = User.count :conditions => "follows_me = 1"
   end 
+  
+  def list_fewer
+    @my_followers_count = User.larrys_foller_count
+    sort_init('i_follow_nbr', 'desc', nil)     
+    sort_update('')
+    @fewer = User.find(:all, :conditions => ["i_follow = 1 AND nbr_followers <= ?", @my_followers_count], :order => sort_clause)
+    @count = @fewer.size  
+    @percent = @count * 100 / User.larry_following_count 
+  end 
    
   def list_follers
     sort_init('follows_me_nbr', 'desc', nil)
@@ -29,8 +38,8 @@ class WelcomeController < ApplicationController
   end   
   
   def list_stats
-    @following = User.count :conditions => "i_follow = 1"
-    @followers = User.count :conditions => "follows_me = 1"
+    @following = User.larry_following_count 
+    @followers = User.larrys_foller_count
     @more = User.count(:conditions => ["i_follow = 1 AND nbr_followers > ?", @followers])
     @less_eq = @following - @more
     @more_pct = @more * 100 / @following

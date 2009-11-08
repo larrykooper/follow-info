@@ -27,6 +27,15 @@ class User < ActiveRecord::Base
       :taken_care_of => true})               
     user.save! 
   end 
+  
+  def self.larrys_foller_count
+    # So I do not need to call API 
+    self.count :conditions => "follows_me = 1"
+  end 
+  
+  def self.larry_following_count
+    self.count :conditions => "i_follow = 1"
+  end 
    
   def process_pif(pif, ind) 
     # Update one user that I follow      
