@@ -3,5 +3,4 @@
 
 class DeletedPif < ActiveRecord::Base 
   
-  
 end

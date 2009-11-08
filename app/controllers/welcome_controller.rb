@@ -46,7 +46,7 @@ class WelcomeController < ApplicationController
           session[:update_worker_key] = nil
           page.redirect_to :action => "list_pif" 
         end
-        larry.finish_up
+        larry.finish_update_pifs
       else
         render :update do |page|
           page[:pif_update_status].setStyle :width => "#{@percent_complete * 2}px"
@@ -55,5 +55,32 @@ class WelcomeController < ApplicationController
       end
     end
   end   
+  
+  def update_follers 
+    larry = Larry.instance 
+    larry.update_follers 
+    redirect_to(:action => 'check_foller_update_status')     
+  end 
+  
+  def check_foller_update_status
+    larry = Larry.instance
+    @percent_complete = Larry.foller_update_status     
+    
+    if request.xhr?
+      if @percent_complete == 100     
+        render :update do |page| 
+          flash[:notice] = "Follower Update is complete!"  
+          session[:follower_update_worker_key] = nil
+          page.redirect_to :action => "list_follers"   
+        end
+        larry.finish_update_follers   
+      else
+        render :update do |page|
+          page[:foller_update_status].setStyle :width => "#{@percent_complete * 2}px"
+          page[:foller_update_status].replace_html "#{@percent_complete}%"
+        end        
+      end
+    end
+  end 
       
 end

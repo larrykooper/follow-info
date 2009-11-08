@@ -13,10 +13,15 @@ class User < ActiveRecord::Base
     self.find(:all, :conditions => "taken_care_of = 0 AND i_follow = 1")
   end 
   
+  def self.quitters 
+    self.find(:all, :conditions => "taken_care_of = 0 AND follows_me = 1")
+  end 
+  
   def self.create_new_pif(pif, ind)
     user = User.new({:name => pif.screen_name,
       :nbr_followers => pif.followers_count, 
       :is_me => false,
+      :follows_me => false,
       :i_follow => true,
       :i_follow_nbr => ind, 
       :taken_care_of => true})               
@@ -33,5 +38,27 @@ class User < ActiveRecord::Base
     self.taken_care_of = true 
     self.save!                      
   end   
+  
+  def self.create_new_foller(foller, ind)     
+     user = User.new({:name => foller['screen_name'],
+      :nbr_followers => foller['followers_count'], 
+      :is_me => false,
+      :follows_me => true,
+      :i_follow => false,
+      :follows_me_nbr => ind, 
+      :taken_care_of => true})               
+    user.save!       
+  end 
+  
+  def process_foller(foller, ind)    
+    # Update one user who follows me
+    unless self.follows_me
+      self.follows_me = true        
+    end 
+    self.nbr_followers = foller['followers_count'] 
+    self.follows_me_nbr = ind 
+    self.taken_care_of = true 
+    self.save!          
+  end 
     
 end 

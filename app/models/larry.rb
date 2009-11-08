@@ -45,7 +45,7 @@ class Larry
     MiddleMan.worker(:user_update_worker).async_update_users({:arg => {:following_nbr => following_nbr}, :job_key => 'fiznit'})          
   end   
   
-  def finish_up
+  def finish_update_pifs
      # Update system info 
     si = SystemInfo.find(1)
     si.i_follow_last_update = Time.now 
@@ -56,7 +56,7 @@ class Larry
       deleted_pif = DeletedPif.new({:name => user.name, 
         :nbr_followers => user.nbr_followers, 
         :i_follow_nbr => user.i_follow_nbr, 
-        :i_followed => user.i_follow})
+        :follows_me => user.follows_me})
       deleted_pif.save! 
       if user.follows_me 
         user.i_follow = false 
@@ -67,9 +67,49 @@ class Larry
     end # gone_list.each do  
   end 
   
+  def finish_update_follers 
+    # Update system info 
+    si = SystemInfo.find(1)
+    si.followers_last_update = Time.now 
+    si.save!    
+    # Deal with the quitters 
+    quitter_list = User.quitters   
+    quitter_list.each do |user|    
+      quitter = MyQuitter.new({:name => user.name,         
+        :fmr_follows_me_nbr => user.follows_me_nbr, 
+        :i_follow => user.i_follow})
+      quitter.save! 
+      if user.i_follow
+        user.follows_me = false 
+        user.save! 
+      else 
+        user.destroy 
+      end       
+    end # quitter_list.each do      
+  end 
+  
   def self.pif_update_status 
     @status = MiddleMan.worker(:user_update_worker).ask_result("result")
     @status 
+  end 
+  
+  def self.foller_update_status     
+    @status = MiddleMan.worker(:follower_update_worker).ask_result("result")
+    @status 
+  end 
+  
+  def update_follers     
+    # Update entire list of people who follow me 
+    # From Twitter to my database 
+    larry = Larry.instance
+    follers_nbr = larry.nbr_of_followers  
+    ActiveRecord::Base.connection.execute("TRUNCATE my_quitters")
+    # For all users, set taken_care_of to false; taken_care_of is a temp column
+    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = 0")     
+    # Create a new worker 
+    MiddleMan.new_worker(:worker => :follower_update_worker) 
+    # Invoke worker method 
+    MiddleMan.worker(:follower_update_worker).async_update_followers({:arg => {:follers_nbr => follers_nbr}, :job_key => 'fizpit'})       
   end 
 
 end  # class Larry

@@ -1,0 +1,5 @@
+<h1>Follower Updating in Progress</h1>
+
+<div id="foller_update_status" class="progress"></div> 
+
+<%= periodically_call_remote( :url => {:action => "check_foller_update_status"}, :frequency => 3) %>

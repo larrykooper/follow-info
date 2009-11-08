@@ -9,13 +9,39 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091023144037) do
+ActiveRecord::Schema.define(:version => 20091101203230) do
+
+  create_table "bdrb_job_queues", :force => true do |t|
+    t.binary   "args"
+    t.string   "worker_name"
+    t.string   "worker_method"
+    t.string   "job_key"
+    t.integer  "taken"
+    t.integer  "finished"
+    t.integer  "timeout"
+    t.integer  "priority"
+    t.datetime "submitted_at"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.datetime "archived_at"
+    t.string   "tag"
+    t.string   "submitter_info"
+    t.string   "runner_info"
+    t.string   "worker_key"
+    t.datetime "scheduled_at"
+  end
 
   create_table "deleted_pifs", :force => true do |t|
     t.string  "name"
     t.integer "nbr_followers"
     t.integer "i_follow_nbr"
-    t.boolean "i_followed"
+    t.boolean "follows_me"
+  end
+
+  create_table "my_quitters", :force => true do |t|
+    t.string  "name"
+    t.integer "fmr_follows_me_nbr"
+    t.boolean "i_follow"
   end
 
   create_table "system_infos", :force => true do |t|
