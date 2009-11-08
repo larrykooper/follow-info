@@ -10,6 +10,7 @@ class WelcomeController < ApplicationController
     sort_init('follows_me_nbr', 'desc', nil)
     sort_update('')    
     @follers = User.find(:all, :conditions => ["follows_me = 1"], :order => sort_clause) 
+    @count = @follers.size
   end  
   
   def list_idropped    
@@ -22,11 +23,12 @@ class WelcomeController < ApplicationController
     sort_init('i_follow_nbr', 'desc', nil) 
     sort_update('')
     @users = User.find(:all, :conditions => ["i_follow = 1"], :order => sort_clause)
+    @count = @users.size 
   end   
   
   def list_stats
-    @following = User.count "i_follow = 1"
-    @followers = User.count "follows_me = 1"
+    @following = User.count :conditions => "i_follow = 1"
+    @followers = User.count :conditions => "follows_me = 1"
     @more = User.count(:conditions => ["i_follow = 1 AND nbr_followers > ?", @followers])
     @less_eq = @following - @more
     @more_pct = @more * 100 / @following
