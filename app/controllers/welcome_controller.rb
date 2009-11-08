@@ -4,6 +4,8 @@ class WelcomeController < ApplicationController
 	include SortHelper
   
   def index 
+    @following = User.count :conditions => "i_follow = 1"
+    @followers = User.count :conditions => "follows_me = 1"
   end 
    
   def list_follers

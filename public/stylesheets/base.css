@@ -2,9 +2,17 @@
 	line-height: 2;
 }
 
+#main_page #show_info {
+	margin-left: 17px;
+}
+
+/*
+
 #main_page a {
 	margin-right: 40px;
 }
+
+*/
 
 #stat_page .stat {
 	text-align: right;

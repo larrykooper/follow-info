@@ -1,3 +1,7 @@
+<% 
+@page_title = "Home"
+%>
+
 <div id="main_page">
 
 <h1>Larry's Twitter App</h1>
@@ -5,21 +9,21 @@
 <h2>Functions</h2>
 
 <h3>SHOW INFO:</h3>
-<ul>
+<table id="show_info">
 
-<li><%= link_to "List people I follow", :action => "list_pif" %>  Last updated: <%= iflu %> </li>
+<tr><td>&bull; <%= link_to "List people I follow", :action => "list_pif" %> - <%= @following %></td><td>Last updated: <%= iflu %> </td></tr>
 
-<li><%= link_to "Stats", {:action => "list_stats"}, :style => "margin-right: 80px;" %> Last updated: <%= earlier %>  </li>
+<tr><td>&bull; <%= link_to "Stats", :action => "list_stats" %></td><td>Last updated: <%= earlier %></td></tr>
 
-<li><%= link_to "List my followers", :action => "list_follers" %>  Last updated: <%= flu %>  </li>
+<tr><td>&bull; <%= link_to "List my followers", :action => "list_follers" %>  - <%= @followers %></td><td>Last updated: <%= flu %></td></tr>
 
-<li><%= link_to "List Unfollowed me", :action => "list_unfollowed" %> Last updated: <%= flu %></li> 
+<tr><td>&bull; <%= link_to "List Unfollowed me", :action => "list_unfollowed" %> </td><td>Last updated: <%= flu %></td></tr>
 
-<li><%= link_to "List people I unfollowed (or changed usernames)", :action => "list_idropped" %> Last updated: <%= iflu %></li> 
+<tr><td>&bull; <%= link_to "List people I unfollowed (or changed usernames)", :action => "list_idropped" %> </td><td>Last updated: <%= iflu %></td></tr>
 
-<li><%= link_to "List people I follow with fewer followers than me", :action => "list_fewer" %>  Last updated: <%= earlier %> </li>
+<tr><td>&bull; <%= link_to "List people I follow with fewer followers than me", :action => "list_fewer" %> </td><td>Last updated: <%= earlier %></td></tr>
 
-</ul>
+</table>
 
 <h3>UPDATE MY DATABASE:</h3>
 
