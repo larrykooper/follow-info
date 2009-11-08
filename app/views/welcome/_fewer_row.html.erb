@@ -1,5 +1,5 @@
 <tr>
   <td><%= fewer_row.i_follow_nbr %></td>
-  <td><%= fewer_row.name %></td>
+  <td><%= link_to fewer_row.name, "http://twitter.com/#{fewer_row.name}" %></td>
   <td align="right"><%= number_with_delimiter(fewer_row.nbr_followers) %></td>
 </tr>
