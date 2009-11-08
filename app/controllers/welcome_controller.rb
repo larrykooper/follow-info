@@ -42,7 +42,7 @@ class WelcomeController < ApplicationController
     if request.xhr?
       if @percent_complete == 100
         render :update do |page| 
-          flash[:notice] = "PIF Update is complete!"
+          flash[:notice] = "People I Follow Update is complete!"
           session[:update_worker_key] = nil
           page.redirect_to :action => "list_pif" 
         end

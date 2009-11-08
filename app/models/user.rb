@@ -18,8 +18,8 @@ class User < ActiveRecord::Base
   end 
   
   def self.create_new_pif(pif, ind)
-    user = User.new({:name => pif.screen_name,
-      :nbr_followers => pif.followers_count, 
+    user = User.new({:name => pif['screen_name'],
+      :nbr_followers => pif['followers_count'], 
       :is_me => false,
       :follows_me => false,
       :i_follow => true,
@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
     unless self.i_follow   
       self.i_follow = true        
     end 
-    self.nbr_followers = pif.followers_count 
+    self.nbr_followers = pif['followers_count']
     self.i_follow_nbr = ind 
     self.taken_care_of = true 
     self.save!                      

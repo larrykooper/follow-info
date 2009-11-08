@@ -1,4 +1,9 @@
 class Twitcon
+  
+   @@USER_URIS = {   
+  	:friends => '/statuses/friends/LarryKooper.json',
+  	:followers => '/statuses/followers/LarryKooper.json'
+  }  
    
   API_ROOT_URL = 'twitter.com'
   
@@ -11,7 +16,7 @@ class Twitcon
   
   def self.my(action, options = {})
     params = options 
-    response = self.create_http_get_request('/statuses/followers/LarryKooper.json', params) 
+    response = self.create_http_get_request(@@USER_URIS[action], params)     
     #$stderr.puts response
     retval = unmarshal(response)
   end 
