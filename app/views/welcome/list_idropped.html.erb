@@ -1,0 +1,15 @@
+<h1>People I Unfollowed or Who Changed Usernames</h1>
+Updated:  <%= iflu %><br/><br/> 
+<table>
+  <thead>
+    <tr>     
+      <%= sort_header_tag('name') %>
+      <%= sort_header_tag('nbr_followers') %>
+      <%= sort_header_tag('i_follow_nbr') %>
+      <%= sort_header_tag('follows_me')%>
+    </tr>
+  </thead>
+  
+  <%= render(:partial => "idropped_row", :collection => @deleted_pifs) %> 
+</table>
+

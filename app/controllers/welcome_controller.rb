@@ -12,11 +12,17 @@ class WelcomeController < ApplicationController
     @follers = User.find(:all, :conditions => ["follows_me = 1"], :order => sort_clause) 
   end  
   
+  def list_idropped    
+    sort_init('i_follow_nbr', 'desc', nil)
+    sort_update('')
+    @deleted_pifs = DeletedPif.find(:all, :order => sort_clause)  
+  end
+  
   def list_pif 
     sort_init('i_follow_nbr', 'desc', nil) 
     sort_update('')
     @users = User.find(:all, :conditions => ["i_follow = 1"], :order => sort_clause)
-  end 
+  end   
   
   def list_stats
     @following = User.count "i_follow = 1"

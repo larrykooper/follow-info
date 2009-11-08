@@ -13,4 +13,9 @@ module WelcomeHelper
     si = SystemInfo.find(1)
     si.i_follow_last_update.strftime("%I:%M %p %m/%d/%y")
   end 
+  
+  def yes_no(value)
+    value ? 'yes' : 'no'
+  end
+  
 end
