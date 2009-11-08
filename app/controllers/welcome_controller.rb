@@ -35,6 +35,12 @@ class WelcomeController < ApplicationController
     @mean_fol = User.average :nbr_followers, :conditions => "i_follow = 1"    
   end
   
+  def list_unfollowed 
+    sort_init('fmr_follows_me_nbr', 'desc', nil)
+    sort_update('')
+    @my_quitters = MyQuitter.find(:all, :order => sort_clause)
+  end 
+  
   def update_pif    
     larry = Larry.instance 
     larry.update_all_pif  
