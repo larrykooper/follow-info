@@ -15,14 +15,19 @@ class Twitcon
   end 
   
   def self.my(action, options = {})
+    # returns nil if twitter returns an error 
     params = options 
-    response = self.create_http_get_request(@@USER_URIS[action], params)     
+    response = self.create_http_get_request(@@USER_URIS[action], params)          
     #$stderr.puts response
     retval = unmarshal(response)
   end 
   
   def self.unmarshal(data)
-    result = JSON.parse(data)    
+    begin 
+      result = JSON.parse(data)   
+    rescue Exception => err
+      result = nil 
+    end  
   end 
 
 end
