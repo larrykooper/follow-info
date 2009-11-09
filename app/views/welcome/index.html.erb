@@ -29,7 +29,14 @@
 
 <ul>
   
-<li><%= link_to "Add a new person I follow", :action => "add_pif" %>  </li>
+<li>Add a new person I follow:
+<% form_tag(:action => :add_pif) do %> 
+  Username:  <%= text_field_tag(:username)%>
+  Nbr of followers user has: <%= text_field_tag(:nbr_followers, "", :size => 6)%>
+  <%= submit_tag "Submit" %>
+  
+<% end %>
+  </li>
 
 <li><%= link_to "Update my followers list", :action => "update_follers" %> Last updated: <%= flu %> </li>
 

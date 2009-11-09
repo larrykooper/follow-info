@@ -17,6 +17,24 @@ class User < ActiveRecord::Base
     self.find(:all, :conditions => "taken_care_of = 0 AND follows_me = 1")
   end 
   
+  def self.add_pif(params) 
+    user = User.find_by_name(params[:username])
+    if user.nil? 
+      newuser = User.new({:name => params[:username],
+        :nbr_followers => params[:nbr_followers],
+        :is_me => false, 
+        :follows_me => false, 
+        :i_follow => true, 
+        :i_follow_nbr => self.larry_following_count + 1 })  
+      newuser.save!       
+    else 
+      user.nbr_followers = params[:nbr_followers]
+      user.i_follow = true
+      user.i_follow_nbr = self.larry_following_count + 1 
+      user.save! 
+    end 
+  end 
+  
   def self.create_new_pif(pif, ind)
     user = User.new({:name => pif['screen_name'],
       :nbr_followers => pif['followers_count'], 

@@ -2,6 +2,11 @@ class WelcomeController < ApplicationController
   
   helper :sort
 	include SortHelper
+	
+	def add_pif 
+	  User.add_pif(params)
+	  redirect_to(:action => 'list_pif')
+	end 
   
   def index 
     @following = User.count :conditions => "i_follow = 1"
