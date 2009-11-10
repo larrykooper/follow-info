@@ -39,34 +39,41 @@ class UserUpdateWorker < BackgrounDRb::MetaWorker
     ret_hash = {}       
    
     twit_reply = Twitcon.my(:friends, :cursor => cursor) 
-    next_cursor = twit_reply["next_cursor"]
-    ret_hash[:next_cursor] = next_cursor
-    myfriends = twit_reply["users"]
-    ret_hash[:status] = myfriends.size == 0 ? 'finished' : 'unfinished'
-    if ret_hash[:status] == 'finished'
-      cache['result'] = 100
-    end 
-    logger.info "size of myfriends = #{myfriends.size}"   
+    if twit_reply.nil?
+      ret_hash[:status] = 'finished'
+      ret_hash[:last_screen_name] = ""
+      ret_hash[:ind] = starting_ind 
+      ret_hash[:next_cursor] = 0       
+    else 
+      next_cursor = twit_reply["next_cursor"]
+      ret_hash[:next_cursor] = next_cursor
+      myfriends = twit_reply["users"]
+      ret_hash[:status] = myfriends.size == 0 ? 'finished' : 'unfinished'
+      if ret_hash[:status] == 'finished'
+        cache['result'] = 100
+      end 
+      logger.info "size of myfriends = #{myfriends.size}"   
     
-    #myfriends is an array    
-    ind = starting_ind  # use the last index I used minus 1 
-    screen_name = ''
-    myfriends.each do |pif|        
-      # Process a PIF from Twitter 
-      screen_name = pif['screen_name']
-      if screen_name != last_sn_done 
-        user = User.find_by_name(screen_name)  # returns nil if not found 
-        if user.nil?   
-          User.create_new_pif(pif, ind) 
-        else 
-          user.process_pif(pif, ind) 
-        end       
-        ind -= 1  
-        completed = following_nbr - ind 
-        percent_complete = (completed * 100) / following_nbr    
-        logger.info "Updating PIFs is #{percent_complete}% complete..."
-        cache['result'] = percent_complete 
-        last_sn_done = screen_name 
+      #myfriends is an array    
+      ind = starting_ind  # use the last index I used minus 1 
+      screen_name = ''
+      myfriends.each do |pif|        
+        # Process a PIF from Twitter 
+        screen_name = pif['screen_name']
+        if screen_name != last_sn_done 
+          user = User.find_by_name(screen_name)  # returns nil if not found 
+          if user.nil?   
+            User.create_new_pif(pif, ind) 
+          else 
+            user.process_pif(pif, ind) 
+          end       
+          ind -= 1  
+          completed = following_nbr - ind 
+          percent_complete = (completed * 100) / following_nbr    
+          logger.info "Updating PIFs is #{percent_complete}% complete..."
+          cache['result'] = percent_complete 
+          last_sn_done = screen_name 
+        end 
       end
     end # myfriends.each 
     ret_hash[:ind] = ind
