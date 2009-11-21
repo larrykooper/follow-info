@@ -18,9 +18,12 @@ class UserUpdateWorker < BackgrounDRb::MetaWorker
     ending_hash = do_pif_page(following_nbr, following_nbr, cursor, "")   
     screen_name_comp = ending_hash[:last_screen_name]
     cursor = ending_hash[:next_cursor]
-    ending_ind = ending_hash[:ind]  
+    ending_ind = ending_hash[:ind]     
     logger.info "ending_ind before loop = #{ending_ind}"   
-    my_status = 'unfinished'        
+    my_status = 'unfinished'      
+    if ending_ind.nil?  # this means twitter had a problem 
+      my_status = 'finished'
+    end  
     while (ending_ind > 0 && my_status == 'unfinished')
       # Go thru this loop once per each page of my PIFs        
       start_ind = ending_ind 
@@ -29,6 +32,9 @@ class UserUpdateWorker < BackgrounDRb::MetaWorker
       cursor = ending_hash[:next_cursor]
       ending_ind = ending_hash[:ind]
       my_status = ending_hash[:status]
+      if ending_ind.nil?  # this means twitter had a problem 
+        my_status = 'finished'
+      end
       logger.info "ending_ind in loop = #{ending_ind}"   
     end  
     exit     
