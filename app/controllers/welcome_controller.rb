@@ -70,7 +70,11 @@ class WelcomeController < ApplicationController
     @percent_complete = Larry.pif_update_status     
     
     if request.xhr?
-      if @percent_complete == 100
+      if @percent_complete.nil? 
+        render :update do |page|
+          flash[:notice] = "Error 23: There is a Twitter Problem"   
+        end      
+      elsif @percent_complete == 100
         render :update do |page| 
           flash[:notice] = "People I Follow Update is complete!"
           session[:update_worker_key] = nil
@@ -97,7 +101,11 @@ class WelcomeController < ApplicationController
     @percent_complete = Larry.foller_update_status     
     
     if request.xhr?
-      if @percent_complete == 100     
+      if @percent_complete.nil? 
+        render :update do |page|
+          flash[:notice] = "Error 29: There is a Twitter Problem"   
+        end    
+      elsif @percent_complete == 100     
         render :update do |page| 
           flash[:notice] = "Follower Update is complete!"  
           session[:follower_update_worker_key] = nil

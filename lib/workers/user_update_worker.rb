@@ -24,7 +24,7 @@ class UserUpdateWorker < BackgrounDRb::MetaWorker
     if ending_ind.nil?  # this means twitter had a problem 
       my_status = 'finished'
     end  
-    while (ending_ind > 0 && my_status == 'unfinished')
+    while (ending_ind && ending_ind > 0 && my_status == 'unfinished')
       # Go thru this loop once per each page of my PIFs        
       start_ind = ending_ind 
       ending_hash = do_pif_page(start_ind, following_nbr, cursor, screen_name_comp)
