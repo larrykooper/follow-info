@@ -8,8 +8,7 @@ class Twitcon
   API_ROOT_URL = 'twitter.com'
   
   def self.create_http_get_request(uri, params={})
-    path = (params.size > 0) ? "#{uri}?#{params.to_http_str}" : uri 
-    $stderr.puts "pineapple"
+    path = (params.size > 0) ? "#{uri}?#{params.to_http_str}" : uri     
     $stderr.puts path
     response = Net::HTTP.get API_ROOT_URL, path     
   end 

@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
     self.find(:all, :conditions => "taken_care_of = 0 AND follows_me = 1")
   end 
   
+  # Add a new person I follow from entry on the homepage 
   def self.add_pif(params) 
     user = User.find_by_name(params[:username])
     if user.nil? 
@@ -35,6 +36,7 @@ class User < ActiveRecord::Base
     end 
   end 
   
+  # Add a new person I follow from the Twitter API 
   def self.create_new_pif(pif, ind)
     user = User.new({:name => pif['screen_name'],
       :nbr_followers => pif['followers_count'], 
