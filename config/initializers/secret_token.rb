@@ -1,0 +1,1 @@
+FollowInfo::Application.config.secret_token =  '5c58c8ad06f282a9f13a93d06a60bd9ced444e67577edea23684c2a07bcf2df2da94a203c418afa2b674981c077c2c6520fd5da640e4da1579822b23c3f13496'

@@ -9,15 +9,15 @@ class WelcomeController < ApplicationController
 	end 
   
   def index 
-    @following = User.count :conditions => "i_follow = 1"
-    @followers = User.count :conditions => "follows_me = 1"
+    @following = User.where(:i_follow => 1).count 
+    @followers = User.where(:follows_me => 1).count
   end 
   
   def list_fewer
     @my_followers_count = User.larrys_foller_count
     sort_init('i_follow_nbr', 'desc', nil)     
     sort_update('')
-    @fewer = User.find(:all, :conditions => ["i_follow = 1 AND nbr_followers <= ?", @my_followers_count], :order => sort_clause)
+    @fewer = User.where("i_follow = 1 AND nbr_followers <= ?", @my_followers_count).order(sort_clause) 
     @count = @fewer.size  
     @percent = @count * 100 / User.larry_following_count 
   end 
@@ -25,49 +25,49 @@ class WelcomeController < ApplicationController
   def list_follers
     sort_init('follows_me_nbr', 'desc', nil)
     sort_update('')    
-    @follers = User.find(:all, :conditions => ["follows_me = 1"], :order => sort_clause) 
+    @follers = User.where(:follows_me => 1).order(sort_clause)   
     @count = @follers.size
   end  
   
   def list_idropped    
     sort_init('i_follow_nbr', 'desc', nil)
     sort_update('')
-    @deleted_pifs = DeletedPif.find(:all, :order => sort_clause)  
+    @deleted_pifs = DeletedPif.order(sort_clause)   
   end
   
   def list_pif 
     sort_init('i_follow_nbr', 'desc', nil) 
     sort_update('')
-    @users = User.find(:all, :conditions => ["i_follow = 1"], :order => sort_clause)
+    @users = User.where(:i_follow => 1).order(sort_clause)  
     @count = @users.size 
   end   
   
   def list_stats
     @following = User.larry_following_count 
     @followers = User.larrys_foller_count
-    @more = User.count(:conditions => ["i_follow = 1 AND nbr_followers > ?", @followers])
+    @more = User.where("i_follow = 1 AND nbr_followers > ?", @followers).count
     @less_eq = @following - @more
     @more_pct = @more * 100 / @following
     @less_pct = @less_eq * 100 / @following 
     @median_fol = User.median_followers_of_pif 
-    @mean_fol = User.average :nbr_followers, :conditions => "i_follow = 1"    
+    @mean_fol = User.where(:i_follow => 1).average(:nbr_followers)     
   end
   
   def list_unfollowed 
     sort_init('fmr_follows_me_nbr', 'desc', nil)
     sort_update('')
-    @my_quitters = MyQuitter.find(:all, :order => sort_clause)
+    @my_quitters = MyQuitter.order(sort_clause)
   end 
   
   def update_pif    
-    larry = Larry.instance 
+    larry = LarrysTwitterAccount.instance 
     larry.update_all_pif  
     redirect_to(:action => 'check_pif_update_status')
   end  
   
   def check_pif_update_status
-    larry = Larry.instance
-    @percent_complete = Larry.pif_update_status     
+    larry = LarrysTwitterAccount.instance
+    @percent_complete = LarrysTwitterAccount.pif_update_status     
     
     if request.xhr?
       if @percent_complete.nil? 
@@ -91,14 +91,14 @@ class WelcomeController < ApplicationController
   end   
   
   def update_follers 
-    larry = Larry.instance 
+    larry = LarrysTwitterAccount.instance 
     larry.update_follers 
     redirect_to(:action => 'check_foller_update_status')     
   end 
   
   def check_foller_update_status
-    larry = Larry.instance
-    @percent_complete = Larry.foller_update_status     
+    larry = LarrysTwitterAccount.instance
+    @percent_complete = LarrysTwitterAccount.foller_update_status     
     
     if request.xhr?
       if @percent_complete.nil? 

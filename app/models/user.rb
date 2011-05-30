@@ -1,20 +1,20 @@
 # A user is one Twitter account
 class User < ActiveRecord::Base 
   
-  require 'math_stuff'
+  require 'math_stuff' 
   
   def self.median_followers_of_pif 
-    pif = self.find(:all, :conditions =>  "i_follow = 1") 
+    pif = User.where(:i_follow => 1)  
     my_array = pif.collect {|user| user.nbr_followers }
     med = MathStuff.median(my_array)    
   end
   
   def self.pifs_deleted 
-    self.find(:all, :conditions => "taken_care_of = 0 AND i_follow = 1")
+    User.where("taken_care_of = 0 AND i_follow = 1")
   end 
   
   def self.quitters 
-    self.find(:all, :conditions => "taken_care_of = 0 AND follows_me = 1")
+   User.where("taken_care_of = 0 AND follows_me = 1")
   end 
   
   # Add a new person I follow from entry on the homepage 
@@ -50,11 +50,11 @@ class User < ActiveRecord::Base
   
   def self.larrys_foller_count
     # So I do not need to call API 
-    self.count :conditions => "follows_me = 1"
+    User.where("follows_me = 1").count    
   end 
   
   def self.larry_following_count
-    self.count :conditions => "i_follow = 1"
+    User.where("i_follow = 1").count  
   end 
    
   def process_pif(pif, ind) 

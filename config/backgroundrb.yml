@@ -1,7 +1,0 @@
---- 
-:memcache: 127.0.0.1:11211
-:backgroundrb: 
-  :ip: 0.0.0.0
-  :port: 11006
-  :result_storage: memcache
-  :persistent_disabled: true

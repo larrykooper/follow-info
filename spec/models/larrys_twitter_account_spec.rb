@@ -7,7 +7,7 @@ my_info =
 describe '#nbr_following' do
   it "should return the number of people I follow" do    
     Net::HTTP.stub!(:get).and_return(my_info)        
-    larry = Larry.instance 
+    larry = LarrysTwitterAccount.instance 
     f = larry.nbr_following
     f.should == 813 
   end 
@@ -16,7 +16,7 @@ end
 describe '#nbr_of_followers' do 
   it "should return my number of followers" do    
     Net::HTTP.stub!(:get).and_return(my_info)        
-    larry = Larry.instance 
+    larry = LarrysTwitterAccount.instance 
     f = larry.nbr_of_followers
     f.should == 259
   end
