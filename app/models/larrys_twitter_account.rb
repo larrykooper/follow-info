@@ -1,7 +1,5 @@
 require 'rubygems'
-gem('twitter4r', '>=0.2.1')
 require 'singleton'
-require 'twitter'
 require 'xml/libxml'
 
 # This class is a singleton that models my Twitter account. 

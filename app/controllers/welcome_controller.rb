@@ -1,8 +1,5 @@
 class WelcomeController < ApplicationController 
-  
-  helper :sort
-	include SortHelper
-	
+  	
 	def add_pif 
 	  User.add_pif(params)
 	  redirect_to(:action => 'list_pif')
@@ -14,30 +11,26 @@ class WelcomeController < ApplicationController
   end 
   
   def list_fewer
-    @my_followers_count = User.larrys_foller_count
-    sort_init('i_follow_nbr', 'desc', nil)     
-    sort_update('')
+    @my_followers_count = User.larrys_foller_count    
+    sort_clause = "i_follow_nbr DESC"
     @fewer = User.where("i_follow = 1 AND nbr_followers <= ?", @my_followers_count).order(sort_clause) 
     @count = @fewer.size  
     @percent = @count * 100 / User.larry_following_count 
   end 
    
-  def list_follers
-    sort_init('follows_me_nbr', 'desc', nil)
-    sort_update('')    
+  def list_follers   
+    sort_clause = "follows_me_nbr DESC" 
     @follers = User.where(:follows_me => 1).order(sort_clause)   
     @count = @follers.size
   end  
   
-  def list_idropped    
-    sort_init('i_follow_nbr', 'desc', nil)
-    sort_update('')
+  def list_idropped       
+    sort_clause = "i_follow_nbr DESC"
     @deleted_pifs = DeletedPif.order(sort_clause)   
   end
   
-  def list_pif 
-    sort_init('i_follow_nbr', 'desc', nil) 
-    sort_update('')
+  def list_pif     
+    sort_clause = "i_follow_nbr DESC"
     @users = User.where(:i_follow => 1).order(sort_clause)  
     @count = @users.size 
   end   
@@ -53,9 +46,8 @@ class WelcomeController < ApplicationController
     @mean_fol = User.where(:i_follow => 1).average(:nbr_followers)     
   end
   
-  def list_unfollowed 
-    sort_init('fmr_follows_me_nbr', 'desc', nil)
-    sort_update('')
+  def list_unfollowed     
+    sort_clause = "fmr_follows_me_nbr DESC"
     @my_quitters = MyQuitter.order(sort_clause)
   end 
   

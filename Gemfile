@@ -11,7 +11,6 @@ gem 'libxml-ruby'
 gem 'sqlite3-ruby', :require =>"sqlite3"
 gem 'aws-s3', :require =>"aws/s3"
 
-gem 'twitter4r', '>=0.2.1'
 gem 'resque'
 gem 'resque-status'
 
