@@ -1,25 +1,18 @@
-require 'rubygems'
-gem('twitter4r', '>=0.2.1')
-require 'twitter'
+require 'twitcon'
 
-class UserUpdateWorker < BackgrounDRb::MetaWorker 
-  set_worker_name :user_update_worker 
-  set_no_auto_load(true)
+class UpdatePifs
   
-  def create(args=nil)
-    @logger.info "PIF update worker starting in create"
-    cache['result'] = 0 
-  end 
+  @queue = :pif_updating 
   
-  def update_users(args = {})
-    logger.info 'updating PIFs now'  
-    following_nbr = args[:following_nbr]       
+  def self.perform(nbr_following)
+    puts 'updating PIFs now'  
+    following_nbr = nbr_following 
     cursor = "-1"
     ending_hash = do_pif_page(following_nbr, following_nbr, cursor, "")   
     screen_name_comp = ending_hash[:last_screen_name]
     cursor = ending_hash[:next_cursor]
     ending_ind = ending_hash[:ind]     
-    logger.info "ending_ind before loop = #{ending_ind}"   
+    puts "ending_ind before loop = #{ending_ind}"   
     my_status = 'unfinished'      
     if ending_ind.nil?  # this means twitter had a problem 
       my_status = 'finished'
@@ -35,12 +28,12 @@ class UserUpdateWorker < BackgrounDRb::MetaWorker
       if ending_ind.nil?  # this means twitter had a problem 
         my_status = 'finished'
       end
-      logger.info "ending_ind in loop = #{ending_ind}"   
-    end  
-    exit     
-  end
-      
-  def do_pif_page(starting_ind, following_nbr, cursor, last_sn_done)  
+      puts "ending_ind in loop = #{ending_ind}"   
+    end     
+    finish_update_pifs
+  end #self.perform
+  
+  def self.do_pif_page(starting_ind, following_nbr, cursor, last_sn_done)  
     # Do a call to Twitter for one page of my PIFs 
     ret_hash = {}       
    
@@ -56,9 +49,9 @@ class UserUpdateWorker < BackgrounDRb::MetaWorker
       myfriends = twit_reply["users"]
       ret_hash[:status] = myfriends.size == 0 ? 'finished' : 'unfinished'
       if ret_hash[:status] == 'finished'
-        cache['result'] = 100
+        #cache['result'] = 100
       end 
-      logger.info "size of myfriends = #{myfriends.size}"   
+      puts "size of myfriends = #{myfriends.size}"   
     
       #myfriends is an array    
       ind = starting_ind  # use the last index I used minus 1 
@@ -76,15 +69,38 @@ class UserUpdateWorker < BackgrounDRb::MetaWorker
           ind -= 1  
           completed = following_nbr - ind 
           percent_complete = (completed * 100) / following_nbr    
-          logger.info "Updating PIFs is #{percent_complete}% complete..."
-          cache['result'] = percent_complete 
+          puts "Updating PIFs is #{percent_complete}% complete..."
+          #cache['result'] = percent_complete 
           last_sn_done = screen_name 
         end 
       end
     end # myfriends.each 
     ret_hash[:ind] = ind
     ret_hash[:last_screen_name] = screen_name 
-    ret_hash      
-  end   # def do_pif_page 
+    ret_hash          
+  end 
+  
+  def self.finish_update_pifs
+    # Update system info 
+    si = SystemInfo.find(1)
+    si.i_follow_last_update = Time.now 
+    si.save!       
+    # Deal with the deleted 
+    gone_list = User.pifs_deleted 
+    gone_list.each do |user|
+      deleted_pif = DeletedPif.new({:name => user.name, 
+        :nbr_followers => user.nbr_followers, 
+        :i_follow_nbr => user.i_follow_nbr, 
+        :follows_me => user.follows_me})
+      deleted_pif.save! 
+      if user.follows_me 
+        user.i_follow = false 
+        user.save! 
+      else 
+        user.destroy 
+      end       
+    end # gone_list.each do  
+
+  end 
   
 end 
