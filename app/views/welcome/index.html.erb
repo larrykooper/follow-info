@@ -27,12 +27,18 @@
 
 <h3>UPDATE MY DATABASE:</h3>
 
-<ul>
+<table>
 
-<li><%= link_to "Update my followers list", :action => "update_follers" %> Last updated: <%= flu %> </li>
+  <tr>
+    <td>&bull; <%= link_to "Update my followers list", :action => "update_follers" %> </td>
+    <td>Last updated: <%= flu %> </td>
+  </tr>
 
-<li><%= link_to "Update list of people I follow (incl. their nbr of followers)", :action => "update_pif", :method => :post %> Last updated: <%= iflu %> </li> 
+  <tr>
+    <td>&bull; <%= link_to "Update list of people I follow (incl. their nbr of followers)", :action => "update_pif", :method => :post %> </td>
+    <td>Last updated: <%= iflu %> </td>
+  </tr>
 
-</ul>
+</table>
 
 </div>
