@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController 
-  	
+  helper_method :sort_column, :sort_direction 
 	def add_pif 
 	  User.add_pif(params)
 	  redirect_to(:action => 'list_pif')
@@ -18,9 +18,10 @@ class WelcomeController < ApplicationController
     @percent = @count * 100 / User.larry_following_count 
   end 
    
-  def list_follers   
-    sort_clause = "follows_me_nbr DESC" 
-    @follers = User.where(:follows_me => 1).order(sort_clause)   
+  def list_follers 
+    @sort_column_default = 'follows_me_nbr'
+    @sort_direction_default = 'desc'
+    @follers = User.where(:follows_me => 1).order(sort_column + " " + sort_direction)   
     @count = @follers.size
   end  
   
@@ -29,9 +30,11 @@ class WelcomeController < ApplicationController
     @deleted_pifs = DeletedPif.order(sort_clause)   
   end
   
-  def list_pif     
-    sort_clause = "i_follow_nbr DESC"
-    @users = User.where(:i_follow => 1).order(sort_clause)  
+  def list_pif  
+    @sort_column_default = 'i_follow_nbr'   
+    @sort_direction_default = 'desc'
+   
+    @users = User.where(:i_follow => 1).order(sort_column + " " + sort_direction)  
     @count = @users.size 
   end   
   
@@ -112,5 +115,15 @@ class WelcomeController < ApplicationController
       end
     end
   end 
+  
+  private 
+  
+  def sort_column
+    User.column_names.include?(params[:sort]) ? params[:sort] : @sort_column_default
+  end
+  
+  def sort_direction 
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+  end  
       
 end
