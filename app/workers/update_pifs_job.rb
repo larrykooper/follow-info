@@ -77,7 +77,7 @@ class UpdatePifsJob < Resque::JobWithStatus
     ret_hash          
   end 
   
-  def self.finish_update_pifs
+  def finish_update_pifs
     # Update system info 
     si = SystemInfo.find(1)
     si.i_follow_last_update = Time.now 

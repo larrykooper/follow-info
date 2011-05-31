@@ -15,31 +15,14 @@ class User < ActiveRecord::Base
   
   def self.quitters 
    User.where("taken_care_of = 0 AND follows_me = 1")
-  end 
-  
-  # Add a new person I follow from entry on the homepage 
-  def self.add_pif(params) 
-    user = User.find_by_name(params[:username])
-    if user.nil? 
-      newuser = User.new({:name => params[:username],
-        :nbr_followers => params[:nbr_followers],
-        :is_me => false, 
-        :follows_me => false, 
-        :i_follow => true, 
-        :i_follow_nbr => self.larry_following_count + 1 })  
-      newuser.save!       
-    else 
-      user.nbr_followers = params[:nbr_followers]
-      user.i_follow = true
-      user.i_follow_nbr = self.larry_following_count + 1 
-      user.save! 
-    end 
-  end 
+  end  
   
   # Add a new person I follow from the Twitter API 
   def self.create_new_pif(pif, ind)
+    last_time_tweeted = pif['status'].nil? ? nil :  pif['status']['created_at']
     user = User.new({:name => pif['screen_name'],
       :nbr_followers => pif['followers_count'], 
+      :last_time_tweeted => last_time_tweeted,
       :is_me => false,
       :follows_me => false,
       :i_follow => true,
@@ -58,11 +41,13 @@ class User < ActiveRecord::Base
   end 
    
   def process_pif(pif, ind) 
+    last_time_tweeted = pif['status'].nil? ? nil :  pif['status']['created_at']
     # Update one user that I follow      
     unless self.i_follow   
       self.i_follow = true        
-    end 
+    end     
     self.nbr_followers = pif['followers_count']
+    self.last_time_tweeted = last_time_tweeted
     self.i_follow_nbr = ind 
     self.taken_care_of = true
     self.save!                      
@@ -70,7 +55,7 @@ class User < ActiveRecord::Base
   
   def self.create_new_foller(foller, ind)     
      user = User.new({:name => foller['screen_name'],
-      :nbr_followers => foller['followers_count'], 
+      :nbr_followers => foller['followers_count'],       
       :is_me => false,
       :follows_me => true,
       :i_follow => false,
