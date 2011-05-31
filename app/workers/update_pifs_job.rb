@@ -1,12 +1,12 @@
 require 'twitcon'
 
-class UpdatePifs
+class UpdatePifsJob < Resque::JobWithStatus
   
   @queue = :pif_updating 
   
-  def self.perform(nbr_following)
+  def perform
     puts 'updating PIFs now'  
-    following_nbr = nbr_following 
+    following_nbr = options['nbr_following'] 
     cursor = "-1"
     ending_hash = do_pif_page(following_nbr, following_nbr, cursor, "")   
     screen_name_comp = ending_hash[:last_screen_name]
@@ -33,7 +33,7 @@ class UpdatePifs
     finish_update_pifs
   end #self.perform
   
-  def self.do_pif_page(starting_ind, following_nbr, cursor, last_sn_done)  
+  def do_pif_page(starting_ind, following_nbr, cursor, last_sn_done)  
     # Do a call to Twitter for one page of my PIFs 
     ret_hash = {}       
    
@@ -47,10 +47,7 @@ class UpdatePifs
       next_cursor = twit_reply["next_cursor"]
       ret_hash[:next_cursor] = next_cursor
       myfriends = twit_reply["users"]
-      ret_hash[:status] = myfriends.size == 0 ? 'finished' : 'unfinished'
-      if ret_hash[:status] == 'finished'
-        #cache['result'] = 100
-      end 
+      ret_hash[:status] = myfriends.size == 0 ? 'finished' : 'unfinished'     
       puts "size of myfriends = #{myfriends.size}"   
     
       #myfriends is an array    
@@ -70,7 +67,7 @@ class UpdatePifs
           completed = following_nbr - ind 
           percent_complete = (completed * 100) / following_nbr    
           puts "Updating PIFs is #{percent_complete}% complete..."
-          #cache['result'] = percent_complete 
+          at(percent_complete, "At #{percent_complete}")
           last_sn_done = screen_name 
         end 
       end

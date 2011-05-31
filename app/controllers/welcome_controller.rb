@@ -56,33 +56,22 @@ class WelcomeController < ApplicationController
   
   def update_pif    
     larry = LarrysTwitterAccount.instance 
-    larry.update_all_pif  
-    redirect_to(:action => 'check_pif_update_status')
+    pifs_job_id = larry.update_all_pif  
+    redirect_to :action => 'check_pif_update_status', :pifs_job_id => pifs_job_id
   end  
   
   def check_pif_update_status
-    larry = LarrysTwitterAccount.instance
-    @percent_complete = LarrysTwitterAccount.pif_update_status     
-    
+    larry = LarrysTwitterAccount.instance     
+    @pifs_job_id = params[:pifs_job_id]        
     if request.xhr?
-      if @percent_complete.nil? 
-        render :update do |page|
-          flash[:notice] = "Error 23: There is a Twitter Problem"   
-        end      
-      elsif @percent_complete == 100
-        render :update do |page| 
-          flash[:notice] = "People I Follow Update is complete!"
-          session[:update_worker_key] = nil
-          page.redirect_to :action => "list_pif" 
-        end
-        larry.finish_update_pifs
-      else
-        render :update do |page|
-          page[:pif_update_status].setStyle :width => "#{@percent_complete * 2}px"
-          page[:pif_update_status].replace_html "#{@percent_complete}%"
-        end        
-      end
-    end
+      @status = larry.pif_update_status(@pifs_job_id)
+      if @status 
+        @pct = @status["num"]   
+      else 
+        @pct = "UNKNOWN"
+      end 
+      render :text => @pct
+    end  
   end   
   
   def update_follers 

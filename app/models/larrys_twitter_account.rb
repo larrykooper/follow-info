@@ -30,8 +30,9 @@ class LarrysTwitterAccount
     nbr 
   end 
     
-  def self.pif_update_status 
-    # TODO - REIMPLEMENT THE PROGRESS BAR       
+  def pif_update_status(job_id)
+    @status = Resque::Status.get(job_id)    
+    @status     
   end   
   
   def update_follers     
@@ -56,12 +57,13 @@ class LarrysTwitterAccount
     # Update entire list of people I follow 
     # From Twitter to my database 
     larry = LarrysTwitterAccount.instance
-    following_nbr = larry.nbr_following  
+    nbr_following = larry.nbr_following  
     ActiveRecord::Base.connection.execute("TRUNCATE deleted_pifs")
     # For all users, set taken_care_of to false 
     ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = 0")     
     # Call Resque worker
-    Resque.enqueue(UpdatePifs, following_nbr)  
+    @pifs_job_id = UpdatePifsJob.create(:nbr_following => nbr_following) 
+    @pifs_job_id 
   end   
 
 end  # class LarrysTwitterAccount

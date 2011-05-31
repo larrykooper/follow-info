@@ -1,34 +1,34 @@
-var JOBID = "";
+var PIFJOBID = "";
 
 // Credit: http://www.erichynds.com/javascript/a-recursive-settimeout-pattern/
 
-function rst(){
+function rstp(){
   setTimeout(function(){
     $.ajax({
-      url: '/welcome/check_foller_update_status?follers_job_id=' + JOBID,
+      url: '/welcome/check_pif_update_status?pifs_job_id=' + PIFJOBID,
       success: function( response ){               
-        $('#foller_update_status').width(2*response); 
-        $('#foller_update_status').html(response+"%");
+        $('#pif_update_status').width(2*response); 
+        $('#pif_update_status').html(response+"%");
         if (response == "100")
         {
-	        window.location="/welcome/list_follers";
+	        window.location="/welcome/list_pif";
         }
         else 
         {
-	        rst(); // recurse
+	        rstp(); // recurse
         };                                  
     },
       error: function(){
                // do some error handling.  you
                // should probably adjust the timeout
                // here. 
-               rst(); // recurse, if you'd like.
+               rstp(); // recurse, if you'd like.
       }
     });
   }, 1000);
 }
 
 $(document).ready(function(){	
-	JOBID = $('#job_key').attr("data-key");
-	rst();
+	PIFJOBID = $('#job_key').attr("data-key");
+	rstp();
 });	

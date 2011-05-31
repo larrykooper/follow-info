@@ -1,5 +1,10 @@
+<% content_for :script do %>
+  <%= javascript_include_tag "pif_update_status" %>  
+<% end %>
+
 <h1>People I Follow Updating in Progress</h1>
+
+<div id="job_key" data-key=<%= @pifs_job_id %>></div>
 
 <div id="pif_update_status" class="progress"></div> 
 
-Now we are updating the list of people I follow!
