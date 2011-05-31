@@ -1,5 +1,11 @@
+<% content_for :script do %>
+  <%= javascript_include_tag "follower_update_status" %>  
+<% end %>
+
 <h1>Follower Updating in Progress</h1>
+
+<div id="job_key" data-key=<%= @follers_job_id %>></div>
 
 <div id="foller_update_status" class="progress"></div> 
 
-This is the page where we check follower update status!
+percent complete is <span id="pctcom"></span>

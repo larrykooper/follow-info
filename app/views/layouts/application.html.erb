@@ -6,7 +6,8 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title>Larry's Twitter App - <%= @page_title || "Page needs title" %></title>
   <%= stylesheet_link_tag 'base', 'screen' %>
-  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag :defaults %> 
+  <%= yield :script %> 
 </head>
 <body>
   

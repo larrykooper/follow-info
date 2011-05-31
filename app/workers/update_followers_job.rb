@@ -1,14 +1,14 @@
 require 'twitcon'
 
-class UpdateFollowers 
+class UpdateFollowersJob < Resque::JobWithStatus
   # THIS IS THE Resque WORKER 
   # Also known as the "job class"
   
   @queue = :follower_updating 
   
-  def self.perform(follers_nbr)
-   
-    puts 'updating followers now'       
+  def perform   
+    puts 'updating followers now'     
+    follers_nbr = options['follers_nbr'].to_i  
     puts "follers_nbr = #{follers_nbr}"          
     cursor = "-1"
     ending_hash = do_follers_page(follers_nbr, follers_nbr, cursor, "")  
@@ -31,7 +31,7 @@ class UpdateFollowers
     puts "finished updating followers"   
   end # self.perform
     
-  def self.do_follers_page(starting_ind, follers_nbr, cursor, last_sn_done)        
+  def do_follers_page(starting_ind, follers_nbr, cursor, last_sn_done)        
     # Do a call to Twitter for one page of my followers  
     ret_hash = {}
     
@@ -47,10 +47,7 @@ class UpdateFollowers
       ret_hash[:next_cursor] = next_cursor
       myfollers = twit_reply["users"]
     
-      ret_hash[:status] = myfollers.size == 0 ? 'finished' : 'unfinished'
-      if ret_hash[:status] == 'finished'
-        #cache['result'] = 100
-      end 
+      ret_hash[:status] = myfollers.size == 0 ? 'finished' : 'unfinished'      
       puts "size of myfollers = #{myfollers.size}"
     
       #myfollers is an array    
@@ -70,8 +67,8 @@ class UpdateFollowers
           ind -= 1  
           completed = follers_nbr - ind   
           percent_complete = (completed * 100) / follers_nbr    
-          puts "Updating my followers is #{percent_complete}% complete..."
-          #cache['result'] = percent_complete 
+          puts "Updating my followers is #{percent_complete}% complete..."         
+          at(percent_complete, "At #{percent_complete}")          
           last_sn_done = screen_name 
         end
       end # myfollers.each   
@@ -81,7 +78,7 @@ class UpdateFollowers
     ret_hash    
   end   # def do_follers_page 
   
-  def self.finish_update_follers 
+  def finish_update_follers 
     # Update system info 
     si = SystemInfo.find(1)
     si.followers_last_update = Time.now 

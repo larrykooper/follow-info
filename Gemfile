@@ -7,12 +7,13 @@ gem 'mysql2'
 
 gem 'bj'
 gem 'hpricot'
+gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
 gem 'sqlite3-ruby', :require =>"sqlite3"
 gem 'aws-s3', :require =>"aws/s3"
 
 gem 'resque'
-gem 'resque-status'
+gem 'resque-status', :require => "resque/status"
 
 gem 'sourcify'
 gem 'ruby_parser'

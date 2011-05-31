@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
     end 
     self.nbr_followers = pif['followers_count']
     self.i_follow_nbr = ind 
-    self.taken_care_of = true 
+    self.taken_care_of = true
     self.save!                      
   end   
   
@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
     end 
     self.nbr_followers = foller['followers_count'] 
     self.follows_me_nbr = ind 
-    self.taken_care_of = true 
+    self.taken_care_of = true    
     self.save!          
   end 
     
