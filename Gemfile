@@ -3,21 +3,21 @@
 
 source :rubygems
 gem "rails", "3.0.7"
-gem 'mysql2'
 
+gem 'aws-s3', :require =>"aws/s3"
 gem 'bj'
+gem 'file-tail'
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
-gem 'sqlite3-ruby', :require =>"sqlite3"
-gem 'aws-s3', :require =>"aws/s3"
-
+gem 'mysql2'
+gem 'oauth'
 gem 'resque'
 gem 'resque-status', :require => "resque/status"
-
-gem 'sourcify'
 gem 'ruby_parser'
-gem 'file-tail'
+gem 'sourcify'
+gem 'sqlite3-ruby', :require =>"sqlite3"
+
 
 group :development do
   gem 'ruby-debug-base19', "0.11.24"
