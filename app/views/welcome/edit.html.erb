@@ -1,1 +1,26 @@
-this is edit.
+<% 
+@page_title = "Editing a user"
+%>
+
+<%= link_to "All people I follow",{ :action => "list_pif"},  :class=>"pif_link" %>
+
+<h2>Editing a User</h2> 
+<div id="edit_page">
+  <p>
+    <label>User name:</label> <%= @user.name %>
+  </p>
+  <p>
+    <label>Tags:</label> <%= @user.tags.first.name if @user.tags.first%>
+  </p>
+  <p>
+    <label>Tags Published:</label> <%= yes_no(@user.taggings.first.is_published) if @user.taggings.first %>
+  </p>
+
+  <div>
+    <b>My tags:</b>
+  </div>
+  <div id="tags_list">
+    <%= all_my_tags %>
+  </div>
+
+</div>

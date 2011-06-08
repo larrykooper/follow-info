@@ -1,6 +1,7 @@
 # A user is one Twitter account
 class User < ActiveRecord::Base 
-  has_and_belongs_to_many :tags
+  has_many :taggings 
+  has_many :tags, :through => :taggings
   
   require 'math_stuff' 
   

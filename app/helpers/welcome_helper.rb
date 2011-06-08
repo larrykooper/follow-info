@@ -18,4 +18,14 @@ module WelcomeHelper
     value ? 'yes' : 'no'
   end
   
+  def all_my_tags 
+    taglist = ""
+    Tag.used_tags.each do |tag|
+      taglist << "<span class='tagName'>"
+      taglist << tag.name 
+      taglist << "</span>"
+    end
+    taglist.html_safe
+  end 
+  
 end

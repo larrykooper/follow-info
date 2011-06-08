@@ -2,7 +2,12 @@
 #  in order to organize them into lists
 # and keep track of who I follow. 
 class Tag < ActiveRecord::Base 
-  has_and_belongs_to_many :users 
+  has_many :taggings
+  has_many :users, :through => :taggings  
+  
+  def self.used_tags 
+    where(:taggings.size > 0).order('name')
+  end   
   
   def add_user(user)
     users << user 

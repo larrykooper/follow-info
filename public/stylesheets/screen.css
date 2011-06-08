@@ -188,3 +188,26 @@ table .odd {
   background-color: green;
   padding: 10px;
 }
+
+/* EDIT A USER PAGE  */
+
+.pif_link {
+	margin: 0 30px;
+}
+
+#edit_page p {
+	font-size:  130%;
+}
+
+#edit_page label {
+	font-weight: bold;
+}
+
+#tags_list {
+	font-size:  130%;
+	line-height: 200%;
+}
+
+.tagName {
+	margin: 0 11px;
+}
