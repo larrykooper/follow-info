@@ -10,8 +10,9 @@ gem 'file-tail'
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
-gem 'mysql2'
+gem 'mysql2', "0.2.7"
 gem 'oauth'
+gem 'rake', "0.8.7"
 gem 'resque'
 gem 'resque-status', :require => "resque/status"
 gem 'ruby_parser'

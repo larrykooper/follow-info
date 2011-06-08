@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110531021152) do
+ActiveRecord::Schema.define(:version => 20110605180954) do
 
   create_table "bdrb_job_queues", :force => true do |t|
     t.binary   "args"
@@ -48,6 +48,17 @@ ActiveRecord::Schema.define(:version => 20110531021152) do
   create_table "system_infos", :force => true do |t|
     t.datetime "followers_last_update"
     t.datetime "i_follow_last_update"
+  end
+
+  create_table "tags", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tags_users", :force => true do |t|
+    t.integer "tag_id"
+    t.integer "user_id"
   end
 
   create_table "users", :force => true do |t|

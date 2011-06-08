@@ -1,9 +1,42 @@
 class WelcomeController < ApplicationController 
   helper_method :sort_column, :sort_direction 
+	
 	def add_pif 
 	  User.add_pif(params)
 	  redirect_to(:action => 'list_pif')
 	end 
+	
+  def check_foller_update_status    
+    larry = LarrysTwitterAccount.instance 
+    @follers_job_id = params[:follers_job_id]        
+    if request.xhr?
+      @status = larry.foller_update_status(@follers_job_id)
+      if @status 
+        @pct = @status["num"]   
+      else 
+        @pct = "UNKNOWN"
+      end 
+      render :text => @pct
+    end
+  end 
+  	
+	def check_pif_update_status
+    larry = LarrysTwitterAccount.instance     
+    @pifs_job_id = params[:pifs_job_id]        
+    if request.xhr?
+      @status = larry.pif_update_status(@pifs_job_id)
+      if @status 
+        @pct = @status["num"]   
+      else 
+        @pct = "UNKNOWN"
+      end 
+      render :text => @pct
+    end  
+  end   
+  
+  def edit    
+    @user = User.find(params["id"])   	
+  end
   
   def index 
     @following = User.where(:i_follow => 1).count 
@@ -52,48 +85,20 @@ class WelcomeController < ApplicationController
   def list_unfollowed     
     sort_clause = "fmr_follows_me_nbr DESC"
     @my_quitters = MyQuitter.order(sort_clause)
-  end 
-  
-  def update_pif    
-    larry = LarrysTwitterAccount.instance 
-    pifs_job_id = larry.update_all_pif  
-    redirect_to :action => 'check_pif_update_status', :pifs_job_id => pifs_job_id
-  end  
-  
-  def check_pif_update_status
-    larry = LarrysTwitterAccount.instance     
-    @pifs_job_id = params[:pifs_job_id]        
-    if request.xhr?
-      @status = larry.pif_update_status(@pifs_job_id)
-      if @status 
-        @pct = @status["num"]   
-      else 
-        @pct = "UNKNOWN"
-      end 
-      render :text => @pct
-    end  
   end   
   
   def update_follers 
     larry = LarrysTwitterAccount.instance 
     follers_job_id = larry.update_follers
     redirect_to :action => 'check_foller_update_status', :follers_job_id => follers_job_id
-  end 
+  end
   
-  def check_foller_update_status    
+  def update_pif    
     larry = LarrysTwitterAccount.instance 
-    @follers_job_id = params[:follers_job_id]        
-    if request.xhr?
-      @status = larry.foller_update_status(@follers_job_id)
-      if @status 
-        @pct = @status["num"]   
-      else 
-        @pct = "UNKNOWN"
-      end 
-      render :text => @pct
-    end
-  end 
-  
+    pifs_job_id = larry.update_all_pif  
+    redirect_to :action => 'check_pif_update_status', :pifs_job_id => pifs_job_id
+  end     
+    
   private 
   
   def sort_column

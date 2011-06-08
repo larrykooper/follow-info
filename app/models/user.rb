@@ -1,5 +1,6 @@
 # A user is one Twitter account
 class User < ActiveRecord::Base 
+  has_and_belongs_to_many :tags
   
   require 'math_stuff' 
   
@@ -16,6 +17,17 @@ class User < ActiveRecord::Base
   def self.quitters 
    User.where("taken_care_of = 0 AND follows_me = 1")
   end  
+  
+   def self.create_new_foller(foller, ind)     
+     user = User.new({:name => foller['screen_name'],
+      :nbr_followers => foller['followers_count'],       
+      :is_me => false,
+      :follows_me => true,
+      :i_follow => false,
+      :follows_me_nbr => ind, 
+      :taken_care_of => true})               
+    user.save!       
+  end 
   
   # Add a new person I follow from the Twitter API 
   def self.create_new_pif(pif, ind)
@@ -51,18 +63,7 @@ class User < ActiveRecord::Base
     self.i_follow_nbr = ind 
     self.taken_care_of = true
     self.save!                      
-  end   
-  
-  def self.create_new_foller(foller, ind)     
-     user = User.new({:name => foller['screen_name'],
-      :nbr_followers => foller['followers_count'],       
-      :is_me => false,
-      :follows_me => true,
-      :i_follow => false,
-      :follows_me_nbr => ind, 
-      :taken_care_of => true})               
-    user.save!       
-  end 
+  end    
   
   def process_foller(foller, ind)    
     # Update one user who follows me
