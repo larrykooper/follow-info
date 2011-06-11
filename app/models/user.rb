@@ -76,5 +76,9 @@ class User < ActiveRecord::Base
     self.taken_care_of = true    
     self.save!          
   end 
+  
+  def tag_list
+     (tags.collect {|tag| tag.name }).join(", ") 
+  end 
     
 end 

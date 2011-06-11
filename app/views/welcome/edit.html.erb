@@ -10,13 +10,14 @@
     <label>User name:</label> <%= @user.name %>
   </p>
   <p>
-    <label>Tags:</label> <%= @user.tags.first.name if @user.tags.first%>
+    <label>Tags:</label> <%= @user.tag_list %>
   </p>
   <p>
-    <label>Tags Published:</label> <%= yes_no(@user.taggings.first.is_published) if @user.taggings.first %>
+    <label>Tags Published:</label>
+    <%= display_tags(@user.taggings) %>
   </p>
 
-  <div>
+  <div id="tags_area">
     <b>My tags:</b>
   </div>
   <div id="tags_list">

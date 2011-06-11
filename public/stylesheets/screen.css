@@ -203,6 +203,11 @@ table .odd {
 	font-weight: bold;
 }
 
+#tags_area {
+	padding-top: 17px;
+	border-top: 2px solid #000000;
+}
+
 #tags_list {
 	font-size:  130%;
 	line-height: 200%;

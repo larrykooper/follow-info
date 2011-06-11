@@ -18,6 +18,14 @@ module WelcomeHelper
     value ? 'yes' : 'no'
   end
   
+  def display_tags(taggings)
+    if taggings.empty? 
+      "no"
+    else 
+      yes_no(taggings.first.is_published)            
+    end  
+  end
+  
   def all_my_tags 
     taglist = ""
     Tag.used_tags.each do |tag|
