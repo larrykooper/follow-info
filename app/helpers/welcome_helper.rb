@@ -38,4 +38,17 @@ module WelcomeHelper
     taglist.html_safe
   end 
   
+  def tags_display_for(tag_arr)
+    taglist = ""
+    tag_arr.each do |tag|
+      taglist << "<span"
+      taglist << " class='published'" if tag.is_published 
+      taglist << ">"
+      taglist << tag.name
+      taglist << "</span>"
+      taglist << ", " unless tag_arr.last == tag
+    end 
+    taglist.html_safe     
+  end
+  
 end
