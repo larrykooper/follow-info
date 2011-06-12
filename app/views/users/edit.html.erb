@@ -1,6 +1,11 @@
 <% 
 @page_title = "Editing a user"
 %>
+
+<% content_for :script do %>
+  <%= javascript_include_tag "edit" %>
+<% end %>
+
 <%= link_to "All people I follow",{ :action => "list_pif"},  :class=>"pif_link" %>
 
 <h2>Editing a User</h2> 
