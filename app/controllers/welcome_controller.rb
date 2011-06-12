@@ -62,7 +62,6 @@ class WelcomeController < ApplicationController
   def list_pif  
     @sort_column_default = 'i_follow_nbr'   
     @sort_direction_default = 'desc'
-   
     @users = User.where(:i_follow => 1).order(sort_column + " " + sort_direction)  
     @count = @users.size 
   end   
