@@ -1,11 +1,11 @@
 class Twitcon
   
    @@USER_URIS = {   
-  	:friends => '/statuses/friends/LarryKooper.json',
-  	:followers => '/statuses/followers/LarryKooper.json'
+  	:friends => '/1/statuses/friends/LarryKooper.json',
+  	:followers => '/1/statuses/followers/LarryKooper.json'
   }  
    
-  API_ROOT_URL = 'twitter.com'
+  API_ROOT_URL = 'api.twitter.com'
   
   def self.create_http_get_request(uri, params={})
     path = (params.size > 0) ? "#{uri}?#{params.to_http_str}" : uri     
