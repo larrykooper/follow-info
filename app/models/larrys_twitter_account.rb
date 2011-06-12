@@ -6,6 +6,17 @@ require 'xml/libxml'
 class LarrysTwitterAccount
   include Singleton 
   
+  def foller_update_status(job_id)       
+    @status = Resque::Status.get(job_id)    
+    @status 
+  end  
+  
+  def lists_update_status(job_id)
+    @status = Resque::Status.get(job_id)
+    @status
+  end
+  
+  # Does a live update from Twitter 
   def nbr_following
     q_string = "/users/show.xml?screen_name=LarryKooper" 
     response = Net::HTTP.get API_ROOT_URL, q_string     
@@ -33,9 +44,22 @@ class LarrysTwitterAccount
   def pif_update_status(job_id)
     @status = Resque::Status.get(job_id)    
     @status     
-  end   
+  end    
   
-  def update_follers     
+  def update_all_pif 
+    # Update entire list of people I follow 
+    # From Twitter to my database 
+    larry = LarrysTwitterAccount.instance
+    nbr_following = larry.nbr_following  # Does a live update from Twitter 
+    ActiveRecord::Base.connection.execute("TRUNCATE deleted_pifs")
+    # For all users, set taken_care_of to false 
+    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = 0")     
+    # Call Resque worker
+    @pifs_job_id = UpdatePifsJob.create(:nbr_following => nbr_following) 
+    @pifs_job_id 
+  end   
+
+def update_follers     
     # Update entire list of people who follow me 
     # From Twitter to my database 
     larry = LarrysTwitterAccount.instance
@@ -46,24 +70,13 @@ class LarrysTwitterAccount
     # Call Resque worker
     @follers_job_id = UpdateFollowersJob.create(:follers_nbr => follers_nbr)           
     @follers_job_id   
-  end 
-  
-  def foller_update_status(job_id)       
-    @status = Resque::Status.get(job_id)    
-    @status 
-  end  
+  end
 
-  def update_all_pif 
-    # Update entire list of people I follow 
-    # From Twitter to my database 
-    larry = LarrysTwitterAccount.instance
-    nbr_following = larry.nbr_following  
-    ActiveRecord::Base.connection.execute("TRUNCATE deleted_pifs")
-    # For all users, set taken_care_of to false 
-    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = 0")     
-    # Call Resque worker
-    @pifs_job_id = UpdatePifsJob.create(:nbr_following => nbr_following) 
-    @pifs_job_id 
-  end   
+  def update_lists 
+    ActiveRecord::Base.connection.execute("TRUNCATE deleted_taggings")
+    ActiveRecord::Base.connection.execute("UPDATE taggings SET taken_care_of = 0")
+    @lists_job_id = UpdateListsJob.create()
+    @lists_job_id
+  end 
 
 end  # class LarrysTwitterAccount

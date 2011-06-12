@@ -31,13 +31,13 @@ class UpdatePifsJob < Resque::JobWithStatus
       puts "ending_ind in loop = #{ending_ind}"   
     end     
     finish_update_pifs
-  end #self.perform
+  end #perform
   
   def do_pif_page(starting_ind, following_nbr, cursor, last_sn_done)  
-    # Do a call to Twitter for one page of my PIFs 
+    # Do a call to Twitter for one page (c.100) of my PIFs 
     ret_hash = {}       
    
-    twit_reply = Twitcon.my(:friends, :cursor => cursor) 
+    twit_reply = Twitcon.my(:friends, :cursor => cursor)  # The call to Twitter 
     if twit_reply.nil?
       ret_hash[:status] = 'finished'
       ret_hash[:last_screen_name] = ""
@@ -56,7 +56,7 @@ class UpdatePifsJob < Resque::JobWithStatus
       myfriends.each do |pif|        
         # Process a PIF from Twitter 
         screen_name = pif['screen_name']
-        if screen_name != last_sn_done 
+        if screen_name != last_sn_done # This line checks for Twitter's repeats 
           user = User.find_by_name(screen_name)  # returns nil if not found 
           if user.nil?   
             User.create_new_pif(pif, ind) 
@@ -82,7 +82,7 @@ class UpdatePifsJob < Resque::JobWithStatus
     si = SystemInfo.find(1)
     si.i_follow_last_update = Time.now 
     si.save!       
-    # Deal with the deleted 
+    # Deal with the deleted (the users where taken_care_of is now 0)
     gone_list = User.pifs_deleted 
     gone_list.each do |user|
       deleted_pif = DeletedPif.new({:name => user.name, 

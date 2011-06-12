@@ -35,8 +35,13 @@
   </tr>
 
   <tr>
-    <td>&bull; <%= link_to "Update list of people I follow", :action => "update_pif", :method => :post %> </td>
-    <td>Last updated: <%= iflu %> </td>
+    <td>&bull; <%= link_to "Update list of people I follow (PIF)", :action => "update_pif", :method => :post %> </td>
+    <td>Last updated: <%= iflu %> </td>    
+  </tr>
+  
+  <tr>
+    <td>&bull; <%= link_to "Update PIFs' tags from my Twitter Lists", :action => "update_lists", :method => :post %></td>
+    <td>Last updated: </td>
   </tr>
 
 </table>

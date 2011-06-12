@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110611233159) do
+ActiveRecord::Schema.define(:version => 20110612191207) do
 
   create_table "bdrb_job_queues", :force => true do |t|
     t.binary   "args"
@@ -39,6 +39,13 @@ ActiveRecord::Schema.define(:version => 20110611233159) do
     t.boolean "follows_me"
   end
 
+  create_table "deleted_taggings", :force => true do |t|
+    t.string   "tag_name"
+    t.string   "user_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "my_quitters", :force => true do |t|
     t.string  "name"
     t.integer "fmr_follows_me_nbr"
@@ -48,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20110611233159) do
   create_table "system_infos", :force => true do |t|
     t.datetime "followers_last_update"
     t.datetime "i_follow_last_update"
+    t.datetime "lists_last_update"
   end
 
   create_table "taggings", :force => true do |t|
@@ -56,6 +64,7 @@ ActiveRecord::Schema.define(:version => 20110611233159) do
     t.boolean  "is_published"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "taken_care_of"
   end
 
   create_table "tags", :force => true do |t|

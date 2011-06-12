@@ -1,10 +1,14 @@
-# A user is one Twitter account
+# A user is one Twitter account.
+# It could be somebody I follow or someone who follows me, 
+# or both.
+
 class User < ActiveRecord::Base 
   has_many :taggings 
   has_many :tags, :through => :taggings
   
   require 'math_stuff' 
-  
+
+  # CLASS METHODS   
   def self.create_new_foller(foller, ind)     
      user = User.new({:name => foller['screen_name'],
       :nbr_followers => foller['followers_count'],       
@@ -18,7 +22,7 @@ class User < ActiveRecord::Base
   
   # Add a new person I follow from the Twitter API 
   def self.create_new_pif(pif, ind)
-    last_time_tweeted = pif['status'].nil? ? nil :  pif['status']['created_at']
+    last_time_tweeted = pif['status'].nil? ? nil : pif['status']['created_at']
     user = User.new({:name => pif['screen_name'],
       :nbr_followers => pif['followers_count'], 
       :last_time_tweeted => last_time_tweeted,
@@ -52,9 +56,22 @@ class User < ActiveRecord::Base
   def self.quitters 
    User.where("taken_care_of = 0 AND follows_me = 1")
   end  
-   
+  
+  # PUBLIC INSTANCE METHODS 
+  
+ def process_foller(foller, ind)    
+    # Update one user who follows me
+    unless self.follows_me
+      self.follows_me = true        
+    end 
+    self.nbr_followers = foller['followers_count'] 
+    self.follows_me_nbr = ind 
+    self.taken_care_of = true    
+    self.save!          
+  end    
+  
   def process_pif(pif, ind) 
-    last_time_tweeted = pif['status'].nil? ? nil :  pif['status']['created_at']
+    last_time_tweeted = pif['status'].nil? ? nil : pif['status']['created_at']
     # Update one user that I follow      
     unless self.i_follow   
       self.i_follow = true        
@@ -64,18 +81,7 @@ class User < ActiveRecord::Base
     self.i_follow_nbr = ind 
     self.taken_care_of = true
     self.save!                      
-  end    
-  
-  def process_foller(foller, ind)    
-    # Update one user who follows me
-    unless self.follows_me
-      self.follows_me = true        
-    end 
-    self.nbr_followers = foller['followers_count'] 
-    self.follows_me_nbr = ind 
-    self.taken_care_of = true    
-    self.save!          
-  end 
+  end      
   
   def tag_list
      (tags.collect {|tag| tag.name }).join(", ") 

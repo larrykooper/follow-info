@@ -13,17 +13,14 @@ namespace :follow do
     file_path = "/users/larry/twitter/badlistusers.txt"   
     myfile = File.open(file_path, 'w') 
     client = TwitterOAuth::Client.new   
-    hshLists = client.get_lists(ACCOUNT_NAME) 
+    hshLists = client.get_lists(ACCOUNT_NAME)   # Get all my public lists 
     if hshLists["error"]
       puts "Twitter error, rate limit exceeded"
     else    
       arrLists = hshLists["lists"] 
       arrLists.each do |list|             
         process_a_list(list, client, myfile)
-      end  
-      # process_a_list(arrLists[0], client, myfile)  # delete me  
-    
-      # puts Tag.all.inspect-- that did work 
+      end         
     end
     myfile.close
   end
@@ -33,13 +30,12 @@ namespace :follow do
     puts "Starting " + listname 
     mytag = Tag.find_by_name(listname)
     arrMembers = client.list_all_members(ACCOUNT_NAME, listname)
-    # member = arrMembers[0] # delete me
     arrMembers.each do |member|    
       username = member["screen_name"]
       puts username
       userobj = User.find_by_name(username)
       if userobj && userobj.i_follow 
-        mytag.add_user(userobj)
+        mytag.add_user(userobj)  # that was users << user (i.e. create a tagging)
       else 
         myfile.puts listname + ", " + username + "\n"  
       end      

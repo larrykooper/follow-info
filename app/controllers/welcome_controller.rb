@@ -19,6 +19,20 @@ class WelcomeController < ApplicationController
       render :text => @pct
     end
   end 
+  
+  def check_lists_update_status 
+    larry = LarrysTwitterAccount.instance 
+    @lists_job_id = params[:lists_job_id]
+    if request.xhr? 
+      @status = larry.lists_update_status(@lists_job_id)
+      if @status 
+        @pct = @status["num"]
+      else 
+        @pct = "UNKNOWN"
+      end
+      render :text => @pct
+    end 
+  end 
   	
 	def check_pif_update_status
     larry = LarrysTwitterAccount.instance     
@@ -87,6 +101,12 @@ class WelcomeController < ApplicationController
     follers_job_id = larry.update_follers
     redirect_to :action => 'check_foller_update_status', :follers_job_id => follers_job_id
   end
+  
+  def update_lists 
+    larry = LarrysTwitterAccount.instance 
+    lists_job_id = larry.update_lists 
+    redirect_to :action => 'check_lists_update_status', :lists_job_id => lists_job_id
+  end 
   
   def update_pif    
     larry = LarrysTwitterAccount.instance 
