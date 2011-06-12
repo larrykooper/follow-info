@@ -53,10 +53,6 @@ form {
   margin: 0;
 }
 
-form p {
-  padding: 0.5em 0em;
-}
-
 fieldset {
   border: 0;
   margin: 1em 0;
@@ -70,8 +66,7 @@ fieldset legend {
 }
 
 form label {
-  color: #333;
-  display: block;
+  color: #333; 
   font-weight: bold;
   padding-bottom: 2px;
 }
@@ -203,6 +198,20 @@ table .odd {
 	font-weight: bold;
 }
 
+#tags_label {
+	margin-right: 62px;
+}
+
+input#tags {
+	width: 300px;
+}
+
+input#save_button {
+	width: 150px;
+	height: 29px;
+	margin: 10px 11px 12px 150px;
+}
+
 #tags_area {
 	padding-top: 17px;
 	border-top: 2px solid #000000;
@@ -215,4 +224,8 @@ table .odd {
 
 .tagName {
 	margin: 0 11px;
+}
+
+.published {
+	font-weight: bold;
 }

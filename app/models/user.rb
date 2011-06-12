@@ -5,21 +5,7 @@ class User < ActiveRecord::Base
   
   require 'math_stuff' 
   
-  def self.median_followers_of_pif 
-    pif = User.where(:i_follow => 1)  
-    my_array = pif.collect {|user| user.nbr_followers }
-    med = MathStuff.median(my_array)    
-  end
-  
-  def self.pifs_deleted 
-    User.where("taken_care_of = 0 AND i_follow = 1")
-  end 
-  
-  def self.quitters 
-   User.where("taken_care_of = 0 AND follows_me = 1")
-  end  
-  
-   def self.create_new_foller(foller, ind)     
+  def self.create_new_foller(foller, ind)     
      user = User.new({:name => foller['screen_name'],
       :nbr_followers => foller['followers_count'],       
       :is_me => false,
@@ -52,6 +38,20 @@ class User < ActiveRecord::Base
   def self.larry_following_count
     User.where("i_follow = 1").count  
   end 
+  
+  def self.median_followers_of_pif 
+    pif = User.where(:i_follow => 1)  
+    my_array = pif.collect {|user| user.nbr_followers }
+    med = MathStuff.median(my_array)    
+  end
+  
+  def self.pifs_deleted 
+    User.where("taken_care_of = 0 AND i_follow = 1")
+  end 
+  
+  def self.quitters 
+   User.where("taken_care_of = 0 AND follows_me = 1")
+  end  
    
   def process_pif(pif, ind) 
     last_time_tweeted = pif['status'].nil? ? nil :  pif['status']['created_at']
@@ -79,6 +79,15 @@ class User < ActiveRecord::Base
   
   def tag_list
      (tags.collect {|tag| tag.name }).join(", ") 
-  end 
+  end   
+ 
+  def tag_with_manually(list)
+    Tag.transaction do
+      taggings.destroy_all
+      Tag.parse(list).each do |name|        
+        Tag.find_or_create_by_name(name).add_user_manually(self)        
+      end
+    end   
+  end  
     
 end 

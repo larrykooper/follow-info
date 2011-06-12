@@ -34,10 +34,6 @@ class WelcomeController < ApplicationController
     end  
   end   
   
-  def edit    
-    @user = User.find(params["id"])   	
-  end
-  
   def index 
     @following = User.where(:i_follow => 1).count 
     @followers = User.where(:follows_me => 1).count

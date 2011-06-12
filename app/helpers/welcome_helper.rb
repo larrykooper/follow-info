@@ -29,7 +29,9 @@ module WelcomeHelper
   def all_my_tags 
     taglist = ""
     Tag.used_tags.each do |tag|
-      taglist << "<span class='tagName'>"
+      taglist << "<span class='tagName"
+      taglist << " published" if tag.is_published 
+      taglist << "'>"
       taglist << tag.name 
       taglist << "</span>"
     end

@@ -5,5 +5,5 @@
   <td align="right"><%= number_with_delimiter(ifollow_row.nbr_followers) %></td>
   <td><%= yes_no(ifollow_row.follows_me) %></td>
   <td><%= ifollow_row.last_time_tweeted %></td>
-  <td><%=link_to "Edit Tag", :controller => "welcome", :action => "edit", :id => ifollow_row.id %></td>
+  <td><%=link_to "Edit Tag", :controller => "users", :action => "edit", :id => ifollow_row.id %></td>
 </tr>
