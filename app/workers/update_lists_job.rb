@@ -5,7 +5,7 @@ class UpdateListsJob < Resque::JobWithStatus
   @queue = :list_updating
   @@client = TwitterOAuth::Client.new   
   @@ACCOUNT_NAME = 'LarryKooper'
-  @@file_path = "/users/larry/twitter/badlistusers.txt"   
+  @@file_path = Rails.root.join('public','files','badlistusers.txt')   
   @@myfile = File.open(@@file_path, 'w') 
   
   def perform
