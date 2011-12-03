@@ -28,9 +28,13 @@ class UpdatePifsJob < Resque::JobWithStatus
       if ending_ind.nil?  # this means twitter had a problem 
         my_status = 'finished'
       end
-      puts "ending_ind in loop = #{ending_ind}"   
+      puts "ending_ind in loop = #{ending_ind}"     # here is a printout 
     end     
-    finish_update_pifs
+    if ending_ind > 0 
+      puts "UPDATE ENDED EARLY - Skipping finish_update_pifs"
+    else     
+      finish_update_pifs   # Don't delete anything if we ended early 
+    end
   end #perform
   
   def do_pif_page(starting_ind, following_nbr, cursor, last_sn_done)  
@@ -48,7 +52,7 @@ class UpdatePifsJob < Resque::JobWithStatus
       ret_hash[:next_cursor] = next_cursor
       myfriends = twit_reply["users"]
       ret_hash[:status] = myfriends.size == 0 ? 'finished' : 'unfinished'     
-      puts "size of myfriends = #{myfriends.size}"   
+      puts "size of myfriends = #{myfriends.size}"     # here is a printout 
     
       #myfriends is an array    
       ind = starting_ind  # use the last index I used minus 1 

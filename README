@@ -27,6 +27,9 @@ To use the background functions of the app, before starting the server, start ba
 
 Because this has been up to now a single-user app, you will need to make a few code changes to make it run for any user (Sorry, no setup app yet):
 
-app/models/setup.rb - fill in your Twitter username and password (4 times)
-app/models/larry.rb - fill in your Twitter username (2 times)
-lib/twitcon.rb - fill in your Twitter username (2 times)
+replace YourTwitterUsername with 
+
+app/models/larrys_twitter_account.rb - replace YourTwitterUsername with your Twitter username (2 times)
+app/workers/update_lists_job.rb - replace YourTwitterUsername with your Twitter username (1 time)
+lib/tasks/follow.rake - replace YourTwitterUsername with your Twitter username (1 time)
+lib/twitcon.rb -replace YourTwitterUsername with your Twitter username (2 times)

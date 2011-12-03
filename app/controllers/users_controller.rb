@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.tag_with_manually(params[:tags])   
     flash[:notice] = 'User was successfully updated.'
-    redirect_to :controller => "welcome", :action => 'list_pif', :sort => "name", :direction => "asc"
+    redirect_to :controller => "welcome", :action => 'list_pif', :sort => "i_follow_nbr", :direction => "desc"
   end 
   
 end 

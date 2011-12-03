@@ -3,7 +3,7 @@
 # or both.
 
 class User < ActiveRecord::Base 
-  has_many :taggings 
+  has_many :taggings, :dependent => :destroy   
   has_many :tags, :through => :taggings
   
   require 'math_stuff' 
@@ -77,7 +77,7 @@ class User < ActiveRecord::Base
       self.i_follow = true        
     end     
     self.nbr_followers = pif['followers_count']
-    self.last_time_tweeted = last_time_tweeted
+    self.last_time_tweeted = last_time_tweeted if last_time_tweeted 
     self.i_follow_nbr = ind 
     self.taken_care_of = true
     self.save!                      

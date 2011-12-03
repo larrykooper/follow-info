@@ -11,7 +11,7 @@ class Tagging < ActiveRecord::Base
     tagging.save! 
   end  
   
-  def self.taggings_deleted 
+  def self.taggings_not_taken_care_of 
     sex_tag = Tag.find_by_name("sex")
     # Sex taggings for now will not be taken_care_of since they are private 
     # But we can't assume if not TCO they are deleted 

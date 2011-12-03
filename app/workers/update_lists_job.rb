@@ -17,10 +17,10 @@ class UpdateListsJob < Resque::JobWithStatus
       arrLists = hshLists["lists"] 
       arrLists.each do |list|             
         process_a_list(list)
-      end         
+      end  
+      finish_update_lists        
     end    
-    @@myfile.close
-    finish_update_lists 
+    @@myfile.close    
   end
   
   def process_a_list(list)
@@ -52,7 +52,7 @@ class UpdateListsJob < Resque::JobWithStatus
     si = SystemInfo.find(1)
     si.lists_last_update = Time.now
     si.save! 
-    untagged_taggings_list = Tagging.taggings_deleted 
+    untagged_taggings_list = Tagging.taggings_not_taken_care_of 
     untagged_taggings_list.each do |tagging|
       deleted_tagging = DeletedTagging.new({:tag_name => tagging.tag_name,
         :user_name => tagging.user_name})
