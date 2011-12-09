@@ -1,5 +1,8 @@
 FollowInfo::Application.routes.draw do  
- 
+  
+  devise_for :follow_info_users
+
+  root :to => "welcome#index" 
   match '/' => 'welcome#index'
   resources :users
   match ':controller/:action'
