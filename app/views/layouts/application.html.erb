@@ -26,6 +26,11 @@
     <% end -%>
   <% end -%>
   <%= link_to "Home", :action => "index"%>
+  <% if follow_info_user_signed_in? %>
+    <%= link_to('logout', destroy_follow_info_user_session_path) %>
+  <% else %>
+    <%= link_to('login', new_user_session_path) %>
+  <% end %>
 
   <%= yield  %>
 </div>

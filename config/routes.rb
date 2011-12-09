@@ -1,6 +1,6 @@
 FollowInfo::Application.routes.draw do  
   
-  devise_for :follow_info_users
+  devise_for :follow_info_users, :skip => :registrations 
 
   root :to => "welcome#index" 
   match '/' => 'welcome#index'
