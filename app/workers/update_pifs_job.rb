@@ -30,10 +30,16 @@ class UpdatePifsJob < Resque::JobWithStatus
       end
       puts "ending_ind in loop = #{ending_ind}"     # here is a printout 
     end     
-    if ending_ind > 0 
+    if ending_ind.nil? || ending_ind > 1 
+      # Don't delete anything if we ended early 
       puts "UPDATE ENDED EARLY - Skipping finish_update_pifs"
-    else     
-      finish_update_pifs   # Don't delete anything if we ended early 
+      at(105, "UPDATE ENDED EARLY - Skipping finish_update_pifs")  # 105 is an error code
+    elsif ending_ind == 1
+      puts "Twitter's number of PIF was off by one"
+      finish_update_pifs
+      at(101, "Twitter's number of PIF was off by one - ignoring the error") # 101 is an error code 
+    else     # assuming ending_ind is zero 
+      finish_update_pifs  
     end
   end #perform
   

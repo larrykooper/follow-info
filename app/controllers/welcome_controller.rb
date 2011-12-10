@@ -37,15 +37,18 @@ class WelcomeController < ApplicationController
   	
 	def check_pif_update_status
     larry = LarrysTwitterAccount.instance     
-    @pifs_job_id = params[:pifs_job_id]        
+    @pifs_job_id = params[:pifs_job_id]
+    @pct = 0
     if request.xhr?
       @status = larry.pif_update_status(@pifs_job_id)
       if @status 
-        @pct = @status["num"]   
-      else 
-        @pct = "UNKNOWN"
+        @pct = @status["num"]
       end 
-      render :text => @pct
+      if @pct > 100  # error condition
+        render :text => @status["total"]
+      else
+        render :text => @pct
+      end
     end  
   end   
   

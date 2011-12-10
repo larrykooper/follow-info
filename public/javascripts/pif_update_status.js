@@ -3,20 +3,24 @@ var PIFJOBID = "";
 // Credit: http://www.erichynds.com/javascript/a-recursive-settimeout-pattern/
 
 function rstp(){
+	// 'response' in the success function is whatever is rendered by the controller
   setTimeout(function(){
     $.ajax({
       url: '/welcome/check_pif_update_status?pifs_job_id=' + PIFJOBID,
-      success: function( response ){               
-        $('#pif_update_status').width(2*response); 
-        $('#pif_update_status').html(response+"%");
-        if (response == "100")
-        {
-	        window.location="/welcome/list_pif";
-        }
-        else 
-        {
-	        rstp(); // recurse
-        };                                  
+      success: function(response){
+	      console.log("response:"+response);
+	      if (!isNaN(response)) {
+          $('#pif_update_status').width(2*response);
+          $('#pif_update_status').html(response+"%");
+          if (response == "100") {
+	          window.location="/welcome/list_pif";
+          } else {
+	          rstp(); // recurse
+          };
+        } else {
+        // just display the message
+        $('#messages').html(response);
+      }          
     },
       error: function(){
                // do some error handling.  you
