@@ -87,6 +87,8 @@ class WelcomeController < ApplicationController
   def list_stats
     @following = User.larry_following_count 
     @followers = User.larrys_foller_count
+    @pif_folling = User.pif_following_me_count
+    @pif_folling_pct = @pif_folling * 100 / @following
     @more = User.where("i_follow = 1 AND nbr_followers > ?", @followers).count
     @less_eq = @following - @more
     @more_pct = @more * 100 / @following

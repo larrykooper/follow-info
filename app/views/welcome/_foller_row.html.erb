@@ -1,4 +1,6 @@
 <tr>
   <td><%= foller_row.follows_me_nbr %></td>
-  <td><%= foller_row.name %></td>
+  <td><%= link_to foller_row.name, "http://twitter.com/#{foller_row.name}" %></td>
+  <td><%= yes_no(foller_row.i_follow) %></td>
 </tr>
+

@@ -43,6 +43,10 @@ class User < ActiveRecord::Base
     User.where("i_follow = 1").count  
   end 
   
+  def self.pif_following_me_count
+    User.where("follows_me = 1 AND i_follow = 1").count
+  end
+  
   def self.median_followers_of_pif 
     pif = User.where(:i_follow => 1)  
     my_array = pif.collect {|user| user.nbr_followers }
