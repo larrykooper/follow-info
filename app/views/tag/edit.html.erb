@@ -1,0 +1,20 @@
+<% content_for :script do %>
+  <%= javascript_include_tag "jquery.tablesorter" %>  
+  <%= javascript_include_tag "tags_list" %>
+<% end %>
+
+
+<%= form_tag('/tag/edit', :method => :post) do -%>
+  <%= submit_tag 'Save Changes' %>
+  <table id="myTags" class="tablesorter">
+    <thead>
+      <tr>
+        <th>Tag</th>
+        <th>User Count</th>
+        <th>Pub'd?</th>
+      </tr>
+    </thead>    
+    <%= render(:partial => "tag_row", :collection => @tags) %>   
+  </table>
+  <%= submit_tag 'Save Changes' %>
+<% end %>

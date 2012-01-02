@@ -25,7 +25,7 @@
       </div>
     <% end -%>
   <% end -%>
-  <%= link_to "Home", :action => "index"%>
+  <%= link_to "Home", :controller => "welcome", :action => "index"%>
   <% if follow_info_user_signed_in? %>
     <%= link_to('logout', destroy_follow_info_user_session_path) %>
   <% else %>
