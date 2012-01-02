@@ -183,6 +183,11 @@ table .odd {
   background-color: green;
   padding: 10px;
 }
+/* other */
+
+.header {
+	cursor: pointer;
+}
 
 /* EDIT A USER PAGE  */
 
