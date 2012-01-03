@@ -1,6 +1,6 @@
 <% tag = tag_row %>
 <tr>
   <td><%= tag.name %></td>
-  <td><%= tag.users.count %></td>
+  <td><%= tag.pifs_count %></td>
   <td><%= check_box_tag tag.name + '_published', "1", tag.is_published %></td>
 </tr>

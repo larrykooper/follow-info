@@ -38,4 +38,8 @@ class Tag < ActiveRecord::Base
     Tagging.create(:tag => self, :user => user, :is_published => false)    
   end
   
+  def pifs_count
+    users.where(:i_follow => 1).count 
+  end 
+  
 end
