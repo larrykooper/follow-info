@@ -2,7 +2,7 @@
 # This preamble is the current preamble for Rails 3 apps; edit as needed.
 
 source :rubygems
-gem "rails", "3.0.7"
+gem "rails", "3.2.6"
 
 gem 'resque-status', :require => "resque/status"
 gem 'aws-s3', :require =>"aws/s3"

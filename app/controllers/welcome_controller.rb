@@ -60,7 +60,7 @@ class WelcomeController < ApplicationController
   def list_fewer
     @my_followers_count = User.larrys_foller_count    
     sort_clause = "i_follow_nbr DESC"
-    @fewer = User.where("i_follow = 1 AND nbr_followers <= ?", @my_followers_count).order(sort_clause) 
+    @fewer = User.where("i_follow = true AND nbr_followers <= ?", @my_followers_count).order(sort_clause) 
     @count = @fewer.size  
     @percent = @count * 100 / User.larry_following_count 
   end 
