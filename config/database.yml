@@ -15,34 +15,30 @@
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
 development:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
-  database: followinfo_development
+  adapter: postgresql
+  encoding: unicode  
+  database: followinfo_dev
   pool: 5
-  username: root
-  password: r3cycl3
-  socket: /tmp/mysql.sock
+  username: larry
+  password: ujkmx7cf
+  
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
-  database: follow-info_test
+  adapter: postgresql
+  encoding: unicode  
+  database: followinfo_test
   pool: 5
-  username: root
-  password: r3cycl3
-  socket: /tmp/mysql.sock
+  username: larry
+  password: ujkmx7cf
 
 production:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
+  adapter: postgresql
+  encoding: unicode  
   database: followinfo_production
   pool: 5
-  username: follow
-  password: str3cher
-  socket: /var/lib/mysql/mysql.sock
+  username: larry
+  password: ujkmx7cf
+  

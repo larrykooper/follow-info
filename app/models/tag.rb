@@ -39,7 +39,7 @@ class Tag < ActiveRecord::Base
   end
   
   def pifs_count
-    users.where(:i_follow => 1).count 
+    users.where(:i_follow => true).count 
   end 
   
 end

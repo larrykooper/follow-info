@@ -53,8 +53,8 @@ class WelcomeController < ApplicationController
   end   
   
   def index 
-    @following = User.where(:i_follow => 1).count 
-    @followers = User.where(:follows_me => 1).count
+    @following = User.where(:i_follow => true).count 
+    @followers = User.where(:follows_me => true).count
   end 
   
   def list_fewer
@@ -68,7 +68,7 @@ class WelcomeController < ApplicationController
   def list_follers 
     @sort_column_default = 'follows_me_nbr'
     @sort_direction_default = 'desc'
-    @follers = User.where(:follows_me => 1).order(sort_column + " " + sort_direction)   
+    @follers = User.where(:follows_me => true).order(sort_column + " " + sort_direction)   
     @count = @follers.size
   end  
   
@@ -80,7 +80,7 @@ class WelcomeController < ApplicationController
   def list_pif  
     @sort_column_default = 'i_follow_nbr'   
     @sort_direction_default = 'desc'
-    @users = User.where(:i_follow => 1).order(sort_column + " " + sort_direction)  
+    @users = User.where(:i_follow => true).order(sort_column + " " + sort_direction)  
     @count = @users.size 
   end   
   
@@ -89,12 +89,12 @@ class WelcomeController < ApplicationController
     @followers = User.larrys_foller_count
     @pif_folling = User.pif_following_me_count
     @pif_folling_pct = @pif_folling * 100 / @following
-    @more = User.where("i_follow = 1 AND nbr_followers > ?", @followers).count
+    @more = User.where("i_follow = true AND nbr_followers > ?", @followers).count
     @less_eq = @following - @more
     @more_pct = @more * 100 / @following
     @less_pct = @less_eq * 100 / @following 
     @median_fol = User.median_followers_of_pif 
-    @mean_fol = User.where(:i_follow => 1).average(:nbr_followers)     
+    @mean_fol = User.where(:i_follow => true).average(:nbr_followers)     
   end
   
   def list_unfollowed     

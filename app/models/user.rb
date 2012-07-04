@@ -36,29 +36,29 @@ class User < ActiveRecord::Base
   
   def self.larrys_foller_count
     # So I do not need to call API 
-    User.where("follows_me = 1").count    
+    User.where("follows_me = true").count    
   end 
   
   def self.larry_following_count
-    User.where("i_follow = 1").count  
+    User.where("i_follow = true").count  
   end 
   
   def self.pif_following_me_count
-    User.where("follows_me = 1 AND i_follow = 1").count
+    User.where("follows_me = true AND i_follow = true").count
   end
   
   def self.median_followers_of_pif 
-    pif = User.where(:i_follow => 1)  
+    pif = User.where(:i_follow => true)  
     my_array = pif.collect {|user| user.nbr_followers }
     med = MathStuff.median(my_array)    
   end
   
   def self.pifs_deleted 
-    User.where("taken_care_of = 0 AND i_follow = 1")
+    User.where("taken_care_of = 0 AND i_follow = true")
   end 
   
   def self.quitters 
-   User.where("taken_care_of = 0 AND follows_me = 1")
+   User.where("taken_care_of = 0 AND follows_me = true")
   end  
   
   # PUBLIC INSTANCE METHODS 
