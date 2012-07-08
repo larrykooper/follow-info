@@ -4,6 +4,11 @@
 source :rubygems
 gem "rails", "3.2.6"
 
+group :assets do 
+  gem 'sass-rails', '~> 3.2.3'
+  gem 'uglifier', '>= 1.0.3'
+end 
+
 gem 'resque-status', :require => "resque/status"
 gem 'aws-s3', :require =>"aws/s3"
 gem 'bj'
