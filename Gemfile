@@ -12,14 +12,11 @@ gem 'file-tail'
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
-gem 'mysql2', "0.2.7"
 gem 'oauth'
 gem 'pg'
 gem 'resque'
 gem 'ruby_parser'
 gem 'sourcify'
-gem 'sqlite3-ruby', :require =>"sqlite3"
-
 
 group :development do
   gem 'rspec-rails'
