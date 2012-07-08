@@ -1,6 +1,7 @@
 require "twitter_oauth/twitter_oauth"
 
-class UpdateListsJob < Resque::JobWithStatus 
+class UpdateListsJob
+  include Resque::Plugins::Status
   
   @queue = :list_updating
   @@client = TwitterOAuth::Client.new   

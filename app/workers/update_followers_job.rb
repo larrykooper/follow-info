@@ -1,6 +1,7 @@
 require 'twitcon'
 
-class UpdateFollowersJob < Resque::JobWithStatus
+class UpdateFollowersJob
+  include Resque::Plugins::Status
   # THIS IS THE Resque WORKER 
   # Also known as the "job class"
   

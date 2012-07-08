@@ -1,6 +1,7 @@
 require 'twitcon'
 
-class UpdatePifsJob < Resque::JobWithStatus
+class UpdatePifsJob
+  include Resque::Plugins::Status
   
   @queue = :pif_updating 
   

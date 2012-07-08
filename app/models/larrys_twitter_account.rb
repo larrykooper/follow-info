@@ -7,12 +7,12 @@ class LarrysTwitterAccount
   include Singleton 
   
   def foller_update_status(job_id)       
-    @status = Resque::Status.get(job_id)    
+    @status = Resque::Plugins::Status::Hash.get(job_id)
     @status 
   end  
   
   def lists_update_status(job_id)
-    @status = Resque::Status.get(job_id)
+    @status = Resque::Plugins::Status::Hash.get(job_id)
     @status
   end
   
@@ -42,7 +42,7 @@ class LarrysTwitterAccount
   end 
     
   def pif_update_status(job_id)
-    @status = Resque::Status.get(job_id)    
+    @status = Resque::Plugins::Status::Hash.get(job_id)
     @status     
   end    
   
@@ -53,7 +53,7 @@ class LarrysTwitterAccount
     nbr_following = larry.nbr_following  # Does a live update from Twitter 
     ActiveRecord::Base.connection.execute("TRUNCATE deleted_pifs")
     # For all users, set taken_care_of to false 
-    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = 0")     
+    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = false")
     # Call Resque worker
     @pifs_job_id = UpdatePifsJob.create(:nbr_following => nbr_following) 
     @pifs_job_id 
@@ -66,7 +66,7 @@ def update_follers
     follers_nbr = larry.nbr_of_followers  
     ActiveRecord::Base.connection.execute("TRUNCATE my_quitters")
     # For all users, set taken_care_of to false; taken_care_of is a temp column
-    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = 0")     
+    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = false")
     # Call Resque worker
     @follers_job_id = UpdateFollowersJob.create(:follers_nbr => follers_nbr)           
     @follers_job_id   
@@ -74,7 +74,7 @@ def update_follers
 
   def update_lists 
     ActiveRecord::Base.connection.execute("TRUNCATE deleted_taggings")
-    ActiveRecord::Base.connection.execute("UPDATE taggings SET taken_care_of = 0")
+    ActiveRecord::Base.connection.execute("UPDATE taggings SET taken_care_of = false")
     @lists_job_id = UpdateListsJob.create()
     @lists_job_id
   end 
