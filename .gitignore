@@ -10,3 +10,4 @@
 .tmp
 /config/heroku.yml
 dump.rdb
+/config/database.yml
