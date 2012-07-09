@@ -28,6 +28,6 @@ gem 'thin'
 
 group :development do
   gem 'rspec-rails'
-  gem 'ruby-debug-base19', "0.11.24"
+  # gem 'ruby-debug-base19', "0.11.24"
   gem 'ruby-debug19', "0.11.6"
 end
