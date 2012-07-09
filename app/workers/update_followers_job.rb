@@ -2,6 +2,7 @@ require 'twitcon'
 
 class UpdateFollowersJob
   include Resque::Plugins::Status
+  extend HerokuAutoScaler
   # THIS IS THE Resque WORKER 
   # Also known as the "job class"
   

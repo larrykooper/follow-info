@@ -2,6 +2,7 @@ require 'twitcon'
 
 class UpdatePifsJob
   include Resque::Plugins::Status
+  extend HerokuAutoScaler
   
   @queue = :pif_updating 
   
@@ -93,7 +94,7 @@ class UpdatePifsJob
     si = SystemInfo.find(1)
     si.i_follow_last_update = Time.now 
     si.save!       
-    # Deal with the deleted (the users where taken_care_of is now 0)
+    # Deal with the deleted (the users where taken_care_of is now false)
     gone_list = User.pifs_deleted 
     gone_list.each do |user|
       deleted_pif = DeletedPif.new({:name => user.name, 

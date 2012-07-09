@@ -2,6 +2,7 @@ require "twitter_oauth/twitter_oauth"
 
 class UpdateListsJob
   include Resque::Plugins::Status
+  extend HerokuAutoScaler
   
   @queue = :list_updating
   @@client = TwitterOAuth::Client.new   
