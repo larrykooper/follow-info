@@ -15,7 +15,7 @@ class Tagging < ActiveRecord::Base
     sex_tag = Tag.find_by_name("sex")
     # Sex taggings for now will not be taken_care_of since they are private 
     # But we can't assume if not TCO they are deleted 
-    Tagging.where("taken_care_of = 0 AND is_published = 1 AND tag_id != ?", sex_tag.id)
+    Tagging.where("taken_care_of = false AND is_published = true AND tag_id != ?", sex_tag.id)
   end 
     
   # INSTANCE METHODS 

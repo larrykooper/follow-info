@@ -54,11 +54,11 @@ class User < ActiveRecord::Base
   end
   
   def self.pifs_deleted 
-    User.where("taken_care_of = 0 AND i_follow = true")
+    User.where("taken_care_of = false AND i_follow = true")
   end 
   
   def self.quitters 
-   User.where("taken_care_of = 0 AND follows_me = true")
+   User.where("taken_care_of = false AND follows_me = true")
   end  
   
   # PUBLIC INSTANCE METHODS 
