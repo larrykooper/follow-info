@@ -14,14 +14,18 @@ gem 'aws-s3', :require =>"aws/s3"
 gem 'bj'
 gem 'devise'
 gem 'file-tail'
+gem 'heroku'
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
 gem 'oauth'
 gem 'pg'
+gem 'redis'
 gem 'resque'
 gem 'ruby_parser'
 gem 'sourcify'
+
+gem 'thin'
 
 group :development do
   gem 'rspec-rails'

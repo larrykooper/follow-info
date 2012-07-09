@@ -8,3 +8,5 @@
 .*\~
 *.tmproj
 .tmp
+/config/heroku.yml
+dump.rdb
