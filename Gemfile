@@ -11,7 +11,6 @@ end
 
 gem 'resque-status', :require => "resque/status"
 gem 'aws-s3', :require =>"aws/s3"
-gem 'bj'
 gem 'devise'
 gem 'file-tail'
 gem 'heroku'
