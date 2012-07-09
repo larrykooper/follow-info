@@ -8,7 +8,7 @@ function rstp(){
     $.ajax({
       url: '/welcome/check_pif_update_status?pifs_job_id=' + PIFJOBID,
       success: function(response){
-	      console.log("response:"+response);
+	      //console.log("response:"+response);
 	      if (!isNaN(response)) {
           $('#pif_update_status').width(2*response);
           $('#pif_update_status').html(response+"%");
@@ -32,7 +32,13 @@ function rstp(){
   }, 1000);
 }
 
-$(document).ready(function(){	
-	PIFJOBID = $('#job_key').attr("data-key");
-	rstp();
+$(document).ready(function(){
+  var jobkey = $('#job_key');
+  if (jobkey) {
+    var page = jobkey.attr("data-page");
+    if (page == "check_pif_update_status") {
+      PIFJOBID = jobkey.attr("data-key");
+      rstp();
+    }
+  }
 });	

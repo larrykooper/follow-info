@@ -29,6 +29,12 @@ function rst(){
 }
 
 $(document).ready(function(){	
-	JOBID = $('#job_key').attr("data-key");
-	rst();
+  var jobkey = $('#job_key');
+  if (jobkey) {
+    var page = jobkey.attr("data-page");
+    if (page == "check_foller_update_status") {
+	    JOBID = $('#job_key').attr("data-key");
+	    rst();
+    }
+  }  
 });	
