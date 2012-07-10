@@ -1,0 +1,1 @@
+$(document).ready(function(){$("#myPifs").tablesorter({headers:{0:{sorter:!1},1:{sorter:!1},2:{sorter:!0},3:{sorter:!1},4:{sorter:!0},5:{sorter:!1}}})});
