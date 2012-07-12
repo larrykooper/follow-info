@@ -1,11 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
-load(File.expand_path('../heroku_env.rb', __FILE__))
-
-# If you have a Gemfile, require the gems listed there, including any gems
-# you've limited to :test, :development, or :production.
-#Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
