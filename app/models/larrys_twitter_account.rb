@@ -70,13 +70,6 @@ def update_follers
     # Call Resque worker
     @follers_job_id = UpdateFollowersJob.create(:follers_nbr => follers_nbr)           
     @follers_job_id   
-  end
-
-  def update_lists 
-    ActiveRecord::Base.connection.execute("TRUNCATE deleted_taggings")
-    ActiveRecord::Base.connection.execute("UPDATE taggings SET taken_care_of = false")
-    @lists_job_id = UpdateListsJob.create()
-    @lists_job_id
-  end 
+  end  
 
 end  # class LarrysTwitterAccount

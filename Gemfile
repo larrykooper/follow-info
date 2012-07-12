@@ -9,18 +9,17 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end 
 
-gem 'resque-status', :require => "resque/status"
-gem 'aws-s3', :require =>"aws/s3"
+gem 'resque-status'
+gem 'resque'
+gem 'heroku'
 gem 'devise'
 gem 'file-tail'
-gem 'heroku'
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
 gem 'oauth'
 gem 'pg'
-gem 'redis'
-gem 'resque'
+
 gem 'ruby_parser'
 gem 'sourcify'
 
@@ -28,6 +27,5 @@ gem 'thin'
 
 group :development do
   gem 'rspec-rails'
-  # gem 'ruby-debug-base19', "0.11.24"
   gem 'ruby-debug19', "0.11.6"
 end

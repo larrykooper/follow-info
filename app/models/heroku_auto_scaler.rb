@@ -27,6 +27,7 @@ module HerokuAutoScaler
     end
 
     def after_enqueue_scale_up(*args)
+      Rails.logger.info "I RAN THE after_enqueue HOOK"
       HerokuAutoScaler.scale_up!
     end
 
