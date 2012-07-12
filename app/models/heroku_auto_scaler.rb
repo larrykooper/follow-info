@@ -54,7 +54,7 @@ module HerokuAutoScaler
   end
 
   def scale_down!
-    Rails.logger.info "Scale down j:#{job_count} w:#{resque_workers}"
+    Rails.logger.info "About to scale workers down. job count:#{job_count} resque-workers:#{resque_workers}"
     self.heroku_workers = 0 if job_count == 0 && resque_workers == 1
   end
 
@@ -77,7 +77,9 @@ module HerokuAutoScaler
   end
 
   def heroku_workers=(qty)
-    heroku.set_workers(ENV['HEROKU_APP'], qty) if heroku
+    # Line below commented because does not work for Cedar
+    #heroku.set_workers(ENV['HEROKU_APP'], qty) if heroku
+    heroku.ps_scale(ENV['HEROKU_APP'], {:type => "worker", :qty => qty}) if heroku
   end
 
   def job_count
