@@ -1,4 +1,5 @@
 # This was a one-time-use rake task to set up my tags in my db from scratch
+# Using Twitter's lists 
 # NOTE 
 # Need to write this to accommodate Twitter's rate limits 
 # So (1) recover from Twitter errors 
