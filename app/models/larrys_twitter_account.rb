@@ -10,13 +10,8 @@ class LarrysTwitterAccount
   def foller_update_status(job_id)       
     @status = Resque::Plugins::Status::Hash.get(job_id)
     @status 
-  end  
-  
-  def lists_update_status(job_id)
-    @status = Resque::Plugins::Status::Hash.get(job_id)
-    @status
   end
-  
+
   # Does a live update from Twitter 
   def nbr_following
     q_string = "/users/show.xml?screen_name=LarryKooper" 
