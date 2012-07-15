@@ -19,10 +19,10 @@ module WelcomeHelper
   end
   
   def display_tags(taggings)
-    if taggings.empty? 
+    if taggings.empty?
       "no"
-    else 
-      yes_no(taggings.first.is_published)            
+    else
+      yes_no(taggings.first.tag.is_published)
     end  
   end
   
