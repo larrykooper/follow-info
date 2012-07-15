@@ -1,10 +1,7 @@
-<% content_for :script do %>
-  <%= javascript_include_tag "pif_update_status" %>  
-<% end %>
-
 <h1>People I Follow Updating in Progress</h1>
 
-<div id="job_key" data-key="<%= @pifs_job_id %>" data-page="check_pif_update_status"></div>
+<div id="job_key" data-key="<%= @pifs_job_id %>" data-checkStatusPath="/welcome/check_pif_update_status?pifs_job_id=" data-jobDonePath="/welcome/list_pif">
+</div>
 
 <div id="pif_update_status" class="progress"></div> 
 

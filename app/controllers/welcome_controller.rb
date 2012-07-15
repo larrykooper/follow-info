@@ -11,44 +11,20 @@ class WelcomeController < ApplicationController
     larry = LarrysTwitterAccount.instance 
     @follers_job_id = params[:follers_job_id]        
     if request.xhr?
-      @status = larry.foller_update_status(@follers_job_id)
-      if @status 
-        @pct = @status["num"]   
-      else 
-        @pct = "UNKNOWN"
-      end 
-      render :text => @pct
+      @status = larry.foller_update_status(@follers_job_id)      
+      response = {:mystatus => @status["status"], :pct => @status["num"]}
+      render json: response
     end
   end 
-  
-  def check_lists_update_status 
-    larry = LarrysTwitterAccount.instance 
-    @lists_job_id = params[:lists_job_id]
-    if request.xhr? 
-      @status = larry.lists_update_status(@lists_job_id)
-      if @status 
-        @pct = @status["num"]
-      else 
-        @pct = "UNKNOWN"
-      end
-      render :text => @pct
-    end 
-  end 
-  	
-	def check_pif_update_status
-    larry = LarrysTwitterAccount.instance     
+
+  def check_pif_update_status
+    larry = LarrysTwitterAccount.instance
     @pifs_job_id = params[:pifs_job_id]
     @pct = 0
     if request.xhr?
       @status = larry.pif_update_status(@pifs_job_id)
-      if @status 
-        @pct = @status["num"]
-      end 
-      if @pct > 100  # error condition
-        render :text => @status["total"]
-      else
-        render :text => @pct
-      end
+      response = {:mystatus => @status["status"], :pct => @status["num"]}
+      render json: response
     end  
   end   
   
