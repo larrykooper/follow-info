@@ -5,6 +5,7 @@ require 'xml/libxml'
 # This class is a singleton that models my Twitter account. 
 class LarrysTwitterAccount
   include Singleton 
+  extend HerokuAutoScaler::AutoScaling  
   
   def foller_update_status(job_id)       
     @status = Resque::Plugins::Status::Hash.get(job_id)
