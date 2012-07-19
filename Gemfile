@@ -19,6 +19,7 @@ gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
 gem 'oauth'
 gem 'pg'
+gem 'dalli'
 
 gem 'ruby_parser'
 gem 'sourcify'

@@ -1,9 +1,11 @@
-<tr>
-  <td><%= ifollow_row.i_follow_nbr %></td>
-  <td><%= link_to ifollow_row.name, "http://twitter.com/#{ifollow_row.name}" %></td>
-  <td><%= tags_display_for(ifollow_row.tags) %></td>  
-  <td align="right"><%= number_with_delimiter(ifollow_row.nbr_followers) %></td>
-  <td><%= yes_no(ifollow_row.follows_me) %></td>
-  <td><%= ifollow_row.last_time_tweeted %></td>
-  <td><%=link_to "Edit Tag", :controller => "users", :action => "edit", :id => ifollow_row.id %></td>
-</tr>
+<% cache "user-#{ifollow_row.id}" do %>
+  <tr>
+    <td><%= ifollow_row.i_follow_nbr %></td>
+    <td><%= link_to ifollow_row.name, "http://twitter.com/#{ifollow_row.name}" %></td>
+    <td><%= tags_display_for(ifollow_row.tags) %></td>
+    <td align="right"><%= number_with_delimiter(ifollow_row.nbr_followers) %></td>
+    <td><%= yes_no(ifollow_row.follows_me) %></td>
+    <td><%= ifollow_row.last_time_tweeted %></td>
+    <td><%=link_to "Edit Tag", :controller => "users", :action => "edit", :id => ifollow_row.id %></td>
+  </tr>
+<% end %>
