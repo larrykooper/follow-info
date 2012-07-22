@@ -74,13 +74,7 @@ class WelcomeController < ApplicationController
     larry = LarrysTwitterAccount.instance 
     follers_job_id = larry.update_follers
     redirect_to :action => 'check_foller_update_status', :follers_job_id => follers_job_id
-  end
-  
-  def update_lists 
-    larry = LarrysTwitterAccount.instance 
-    lists_job_id = larry.update_lists 
-    redirect_to :action => 'check_lists_update_status', :lists_job_id => lists_job_id
-  end 
+  end  
   
   def update_pif    
     larry = LarrysTwitterAccount.instance 
