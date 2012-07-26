@@ -84,7 +84,9 @@ class User < ActiveRecord::Base
     self.last_time_tweeted = last_time_tweeted if last_time_tweeted 
     self.i_follow_nbr = ind 
     self.taken_care_of = true
-    self.save!                      
+    self.save!   
+    # invalidate cache
+    expire_fragment("user-#{self.id}")                   
   end      
   
   def tag_list

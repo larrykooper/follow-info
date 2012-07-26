@@ -5,7 +5,7 @@
 # So (1) recover from Twitter errors 
 # and (2) Don't start all over if screws up, start from where left off
 
-require "twitter_oauth/twitter_oauth"
+#require "twitter_oauth/twitter_oauth"
 
 ACCOUNT_NAME='LarryKooper'
 
