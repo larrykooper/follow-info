@@ -22,9 +22,9 @@ class User < ActiveRecord::Base
   
   # Add a new person I follow from the Twitter API 
   def self.create_new_pif(pif, ind)
-    last_time_tweeted = pif['status'].nil? ? nil : pif['status']['created_at']
-    user = User.new({:name => pif['screen_name'],
-      :nbr_followers => pif['followers_count'], 
+    last_time_tweeted = pif.status.nil? ? nil : pif.status['created_at']
+    user = User.new({:name => pif.screen_name,
+      :nbr_followers => pif.followers_count, 
       :last_time_tweeted => last_time_tweeted,
       :is_me => false,
       :follows_me => false,
@@ -75,18 +75,18 @@ class User < ActiveRecord::Base
   end    
   
   def process_pif(pif, ind) 
-    last_time_tweeted = pif['status'].nil? ? nil : pif['status']['created_at']
+    last_time_tweeted = pif.status.nil? ? nil : pif.status['created_at']
     # Update one user that I follow      
     unless self.i_follow   
       self.i_follow = true        
     end     
-    self.nbr_followers = pif['followers_count']
+    self.nbr_followers = pif.followers_count
     self.last_time_tweeted = last_time_tweeted if last_time_tweeted 
     self.i_follow_nbr = ind 
     self.taken_care_of = true
     self.save!   
     # invalidate cache
-    expire_fragment("user-#{self.id}")                   
+    ActionController::Base.new.expire_fragment("user-#{self.id}")                   
   end      
   
   def tag_list

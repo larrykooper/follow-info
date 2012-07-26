@@ -20,10 +20,8 @@ gem 'libxml-ruby'
 gem 'oauth'
 gem 'pg'
 gem 'dalli'
-
-gem 'ruby_parser'
-gem 'sourcify'
-
+gem 'twitter'
+gem 'oauth'
 gem 'thin'
 
 group :development do
