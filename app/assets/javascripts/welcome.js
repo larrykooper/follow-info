@@ -30,7 +30,7 @@ function checkJobStatus(resqueJobId, checkJobStatusPath, jobDonePath){
           recursiveCheckJobStatus();
         } 
       });
-    }, 1000); // wait 1000 milliseconds or one second
+    }, 2000); // wait 2000 milliseconds or 2 seconds
   }
   recursiveCheckJobStatus();
 }
