@@ -5,115 +5,104 @@ class UpdatePifsJob
   @queue = :pif_updating 
   
   def perform
-    puts 'updating PIFs now'
-    if defined? Twitterauth::CLIENT
-      @@tclient = Twitterauth::CLIENT
+    puts 'updatePifsJob started'
+    @@done_count = 0
+    if defined? CLIENT
+      @@tclient = CLIENT
     else 
-      @@tclient = Twitter::Client.new(
+      @@tclient = Twitcon::Client.new(
         :consumer_key => ENV["TWITTER_CONSUMER_KEY"],
         :consumer_secret => ENV["TWITTER_CONSUMER_SECRET"],
-        :oauth_token => CurrentUser.access_token,
-        :oauth_token_secret => CurrentUser.access_token_secret
+        :oauth_token => ENV["TWITTER_OAUTH_TOKEN"],
+        :oauth_token_secret => ENV["TWITTER_OAUTH_TOKEN_SECRET"]
       )
-    end    
-    following_nbr = options['nbr_following'] 
-    cursor = "-1"
-    myerror = catch (:error) do  
-      ending_hash = do_pif_page(following_nbr, following_nbr, cursor, "")   # A page is now 5000 PIFs
-      screen_name_comp = ending_hash[:last_screen_name]
-      cursor = ending_hash[:next_cursor]
-      ending_ind = ending_hash[:ind]     
-      puts "ending_ind before loop = #{ending_ind}"   
-      my_status = 'unfinished'      
-      if ending_ind.nil?  # this means twitter had a problem 
-        my_status = 'finished'
-      end  
-      while (ending_ind && ending_ind > 0 && my_status == 'unfinished')
-        # Go thru this loop once per each page of my PIFs        
-        start_ind = ending_ind 
-        ending_hash = do_pif_page(start_ind, following_nbr, cursor, screen_name_comp)
-        screen_name_comp = ending_hash[:last_screen_name]
-        cursor = ending_hash[:next_cursor]
-        ending_ind = ending_hash[:ind]
-        my_status = ending_hash[:status]
-        if ending_ind.nil?  # this means twitter had a problem 
-          my_status = 'finished'
-        end
-        puts "ending_ind in loop = #{ending_ind}"     # here is a printout 
-      end     
-      if ending_ind.nil? || ending_ind > 1 
-        # Don't delete anything if we ended early 
-        puts "UPDATE ENDED EARLY - Skipping finish_update_pifs"
-        at(105, "UPDATE ENDED EARLY - Skipping finish_update_pifs")  # 105 is an error code
-      elsif ending_ind == 1
-        puts "Twitter's number of PIF was off by one"
-        finish_update_pifs
-        at(101, "Twitter's number of PIF was off by one - ignoring the error") # 101 is an error code 
-      else     # assuming ending_ind is zero 
-        finish_update_pifs  
+    end
+    done_with_all_pifs = false
+    while not done_with_all_pifs
+      ending_hash = do_5000_pifs
+      if ending_hash[:next_cursor] == 0
+        done_with_all_pifs = true
       end
     end
-    if myerror 
-      puts "#{myerror}"
+    if ending_hash[:api_status] == "ok"
+      finish_update_pifs
+    else
+      puts "we did not end normally - not deleting anything, #{ending_hash[:api_status]} "
     end
-  end #perform
-  
-  def do_pif_page(starting_ind, following_nbr, cursor, last_sn_done)  
-    # Do a call to Twitter for one page (c.5000) of my PIFs 
-    ret_hash = {}       
+  end # def perform
+
+  def do_5000_pifs
+    ret_hash = {}
+    ret_hash[:api_status] = "ok"
+    friend_lookup_ok = true
     begin
-      twit_reply = @@tclient.friend_ids # Call Twitter
-    rescue Twitter::Error 
-      puts "Twitter call caused error!"
+      twitter_reply = @@tclient.friend_ids # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitcon::Cursor object
+    rescue
+      puts "Twitter call friend_ids caused error!"
       puts "#{$!}"
-      throw :error, "#{$!}"
-    end  
-    if twit_reply.nil?
-      ret_hash[:status] = 'finished'
-      ret_hash[:last_screen_name] = ""
-      ret_hash[:ind] = starting_ind 
-      ret_hash[:next_cursor] = 0       
-    else 
-      next_cursor = twit_reply.next_cursor
+      # end further processing
+      friend_lookup_ok = false
+      ret_hash[:api_status] = "friend lookup caused error"
+    end
+    if friend_lookup_ok
+      puts "I just successfully called friend_ids"
+      next_cursor = twitter_reply.next_cursor
       ret_hash[:next_cursor] = next_cursor
-      mypifs = twit_reply.ids
-      ret_hash[:status] = mypifs.size == 0 ? 'finished' : 'unfinished'     
-      puts "size of mypifs = #{mypifs.size}"     # here is a printout 
-    
-      #mypifs is an array    
-      ind = starting_ind  # use the last index I used minus 1 
-      screen_name = ''
-      mypifs.each do |pif_id|
-        begin
-          twit_user = @@tclient.users(pif_id)  # This is a call to Twitter
-        rescue Twitter::Error::ClientError 
-          puts "Twitter call caused error!"
-          puts "#{$!}"         
-          throw :error, "#{$!}"
+      pifs = twitter_reply.ids
+      @@friends_page_size = pifs.size
+      puts "friends_page_size: #{@@friends_page_size}"
+      done_with_friends_page = false
+      starting = 0
+      user_lookup_ok = true
+      while not done_with_friends_page
+        ending = starting + 99
+        puts "starting: #{starting}, ending: #{ending}"
+        user_lookup_ok = do_100(pifs[starting..ending])
+        if !user_lookup_ok
+          ret_hash[:api_status] = "user lookup caused error"
+          done_with_friends_page = true  #we stop
+        end
+        if ending >= (@@friends_page_size - 1)
+          done_with_friends_page = true
         end 
-        # Process a PIF from Twitter 
-        pif = twit_user[0]
-        screen_name = pif.screen_name
-        if screen_name != last_sn_done # This line checks for Twitter's repeats 
-          user = User.find_by_name(screen_name)  # returns nil if not found 
-          if user.nil?   
-            User.create_new_pif(pif, ind) 
-          else 
-            user.process_pif(pif, ind) 
-          end       
-          ind -= 1  
-          completed = following_nbr - ind 
-          percent_complete = (completed * 100) / following_nbr    
-          puts "Updating PIFs is #{percent_complete}% complete..."
-          at(percent_complete, "At #{percent_complete}")
-          last_sn_done = screen_name 
-        end 
+        starting = ending + 1
       end
-    end # mypifs.each 
-    ret_hash[:ind] = ind
-    ret_hash[:last_screen_name] = screen_name 
-    ret_hash          
-  end 
+    end
+    ret_hash
+  end  # do_5000_pifs
+
+  def do_100(pifs)
+    user_lookup_ok = true
+    begin
+      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitter::User objects
+    rescue
+      puts "Twitter call users/lookup caused error!"
+      puts "#{$!}"
+      # end further processing
+      user_lookup_ok = false
+    end
+    if user_lookup_ok
+      puts "just did user/lookup"
+      twitter_user_info.each do |pif|
+        puts "doing #{pif.screen_name}"
+        @@done_count += 1
+        @@ind = @@friends_page_size + 1 - @@done_count
+        # Process a PIF against User table
+        user = User.find_by_name(pif.screen_name)  # returns nil if not found
+        if user.nil?
+          User.create_new_pif(pif, @@ind)
+        else
+          user.process_pif(pif, @@ind)
+        end
+        percent_complete = (@@done_count * 100) / @@friends_page_size # TODO fix this for users who follow > 5000 people
+        #puts "Updating PIFs is #{percent_complete}% complete..."
+        at(percent_complete, "At #{percent_complete}")
+        puts "done count: #{@@done_count} of #{@@friends_page_size}"
+        puts "ind: #{@@ind}"
+      end
+    end
+    user_lookup_ok
+  end # do_100
   
   def finish_update_pifs
     # Update system info 
@@ -135,7 +124,6 @@ class UpdatePifsJob
         user.destroy 
       end       
     end # gone_list.each do  
+  end
 
-  end 
-  
-end 
+end # class UpdatePifsJob
