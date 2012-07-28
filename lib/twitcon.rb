@@ -1,49 +1,34 @@
-class Twitcon
-  
-   @@USER_URIS = {   
-  	:friends => '/1/statuses/friends/LarryKooper.json',
-  	:followers => '/1/statuses/followers/LarryKooper.json'
-  }  
-   
-  API_ROOT_URL = 'api.twitter.com'
-  
-  def self.create_http_get_request(uri, params={})
-    path = (params.size > 0) ? "#{uri}?#{params.to_http_str}" : uri     
-    $stderr.puts path
-    response = Net::HTTP.get API_ROOT_URL, path     
-  end 
-  
-  def self.my(action, options = {})
-    # returns nil if twitter returns an error 
-    params = options 
-    response = self.create_http_get_request(@@USER_URIS[action], params)          
-    #$stderr.puts response
-    retval = unmarshal(response)
-  end 
-  
-  def self.unmarshal(data)
-    begin 
-      result = JSON.parse(data)   
-    rescue Exception => err
-      result = nil 
-    end  
-  end 
+require 'twitcon/client'
+require 'twitcon/configurable'
 
-end
-
-class Hash
-  # Returns string formatted for HTTP URL encoded name-value pairs.
-  # For example,
-  #  {:id => 'thomas_hardy'}.to_http_str 
-  #  # => "id=thomas_hardy"
-  #  {:id => 23423, :since => Time.now}.to_http_str
-  #  # => "since=Thu,%2021%20Jun%202007%2012:10:05%20-0500&id=23423"
-  def to_http_str
-    result = ''
-    return result if self.empty?
-    self.each do |key, val|
-      result << "#{key}=#{CGI.escape(val.to_s)}&"
+module Twitcon
+  class << self
+     include Twitcon::Configurable
+  
+  
+    # Delegate to a Twitcon::Client
+    #
+    # @return [Twitcon::Client]
+    def client
+      if @client && @client.cache_key == options.hash
+        @client
+      else
+        @client = Twitcon::Client.new(options)
+      end
     end
-    result.chop # remove the last '&' character, since it can be discarded
+
+    def respond_to?(method, include_private=false)
+      self.client.respond_to?(method, include_private) || super
+    end
+
+  private
+
+    def method_missing(method, *args, &block)
+      return super unless self.client.respond_to?(method)
+      self.client.send(method, *args, &block)
+    end
+
   end
-end
+end 
+
+Twitcon.setup
