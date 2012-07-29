@@ -29,6 +29,36 @@ module Twitcon
       @rate_limit = Twitcon::RateLimit.new
     end
     
+    # @see https://dev.twitter.com/docs/api/1/get/followers/ids
+    # @rate_limited Yes
+    # @authentication_required No unless requesting it from a protected user
+    # @raise [Twitcon::Error::Unauthorized] Error raised when supplied user credentials are not valid.
+    # @return [Twitcon::Cursor]
+    # @overload follower_ids(options={})
+    #   Returns an array of numeric IDs for every user following the authenticated user
+    #
+    #   @param options [Hash] A customizable set of options.
+    #   @option options [Integer] :cursor (-1) Breaks the results into pages. Provide values as returned in the response objects's next_cursor and previous_cursor attributes to page back and forth in the list.
+    #   @example Return the authenticated user's followers' IDs
+    #     Twitcon.follower_ids
+    # @overload follower_ids(user, options={})
+    #   Returns an array of numeric IDs for every user following the specified user
+    #
+    #   @param user [Integer, String, Twitcon::User] A Twitter user ID, screen name, or object.
+    #   @param options [Hash] A customizable set of options.
+    #   @option options [Integer] :cursor (-1) Breaks the results into pages. This is recommended for users who are following many users. Provide a value of -1 to begin paging. Provide values as returned in the response body's next_cursor and previous_cursor attributes to page back and forth in the list.
+    #   @example Return @sferik's followers' IDs
+    #     Twitcon.follower_ids('sferik')
+    #     Twitcon.follower_ids(7505382)  # Same as above
+    def follower_ids(*args)
+      options = {:cursor => -1}
+      options.merge!(args.extract_options!)
+      user = args.pop
+      options.merge_user!(user)
+      response = get("/1/followers/ids.json", options)
+      Twitcon::Cursor.from_response(response)
+    end    
+    
     # @see https://dev.twitter.com/docs/api/1/get/friends/ids
     # @rate_limited Yes
     # @authentication_required No unless requesting it from a protected user
@@ -64,15 +94,15 @@ module Twitcon
     # @see https://dev.twitter.com/docs/api/1/get/users/lookup
     # @rate_limited Yes
     # @authentication_required Yes
-    # @raise [Twitter::Error::Unauthorized] Error raised when supplied user credentials are not valid.
-    # @return [Array<Twitter::User>] The requested users.
+    # @raise [Twitcon::Error::Unauthorized] Error raised when supplied user credentials are not valid.
+    # @return [Array<Twitcon::User>] The requested users.
     # @overload users(*users)
-    #   @param users [Array<Integer, String, Twitter::User>, Set<Integer, String, Twitter::User>] An array of Twitter user IDs, screen names, or objects.
+    #   @param users [Array<Integer, String, Twitcon::User>, Set<Integer, String, Twitcon::User>] An array of Twitter user IDs, screen names, or objects.
     #   @example Return extended information for @sferik and @pengwynn
-    #     Twitter.users('sferik', 'pengwynn')
-    #     Twitter.users(7505382, 14100886)    # Same as above
+    #     Twitcon.users('sferik', 'pengwynn')
+    #     Twitcon.users(7505382, 14100886)    # Same as above
     # @overload users(*users, options)
-    #   @param users [Array<Integer, String, Twitter::User>, Set<Integer, String, Twitter::User>] An array of Twitter user IDs, screen names, or objects.
+    #   @param users [Array<Integer, String, Twitcon::User>, Set<Integer, String, Twitcon::User>] An array of Twitter user IDs, screen names, or objects.
     #   @param options [Hash] A customizable set of options.
     def users(*args)
       options = args.extract_options!

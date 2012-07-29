@@ -10,8 +10,8 @@ class User < ActiveRecord::Base
 
   # CLASS METHODS   
   def self.create_new_foller(foller, ind)     
-     user = User.new({:name => foller['screen_name'],
-      :nbr_followers => foller['followers_count'],       
+     user = User.new({:name => foller.screen_name,
+      :nbr_followers => foller.followers_count,       
       :is_me => false,
       :follows_me => true,
       :i_follow => false,
@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
     unless self.follows_me
       self.follows_me = true        
     end 
-    self.nbr_followers = foller['followers_count'] 
+    self.nbr_followers = foller.followers_count 
     self.follows_me_nbr = ind 
     self.taken_care_of = true    
     self.save!          
