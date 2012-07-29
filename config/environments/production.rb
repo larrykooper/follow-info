@@ -23,7 +23,7 @@ FollowInfo::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
   
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( base.css screen.css edit.js follower_update_status.js jquery.tablesorter.js pif_update_status.js pifs_list.js tags_list.js)
+  config.assets.precompile += %w( base.css screen.css edit.js follower_update_status.js jquery.tablesorter.js pif_update_status.js pifs_list.js tags_list.js tags_short_list.js)
 
 
   # Disable delivery errors, bad email addresses will be ignored

@@ -4,7 +4,7 @@ class TagController < ApplicationController
     if request.method == "GET"
       @tags = Tag.order("name") 
     end
-    if request.method == "POST"
+    if request.method == "POST"  # It posts to itself
       # Get list of all tags 
       tags = Tag.all 
       # Set up two hashes of all tags
@@ -26,9 +26,11 @@ class TagController < ApplicationController
       end
       flash[:notice] = 'Tags were successfully updated!'
       @tags = Tag.order("name")
-      
     end  # if POST
-    
   end  # def edit
-   
+
+  def list
+    @tags = Tag.by_user_count
+  end
+
 end # class

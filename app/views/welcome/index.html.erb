@@ -21,6 +21,8 @@
 
 <tr><td>&bull; <%= link_to "List people I unfollowed (or changed usernames)", :action => "list_idropped" %> </td><td>Last updated: <%= iflu %></td></tr>
 
+<tr><td>&bull; <%= link_to "List Tags", "/tags" %></td><td></td></tr>
+
 </table>
 
 <h3>UPDATE MY DATABASE:</h3>
@@ -38,7 +40,7 @@
   </tr>
 
   <tr>
-    <td>&bull; <%= link_to "List Tags; Change Published / Unpublished Status", :controller => "tag", :action => "edit" %></td>
+    <td>&bull; <%= link_to "Change Published / Unpublished Status of Tags", :controller => "tag", :action => "edit" %></td>
     <td> </td>
   </tr>
 
