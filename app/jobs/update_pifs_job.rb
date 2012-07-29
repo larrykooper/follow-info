@@ -27,7 +27,7 @@ class UpdatePifsJob
     if ending_hash[:api_status] == "ok"
       finish_update_pifs
     else
-      puts "we did not end normally - not deleting anything, #{ending_hash[:api_status]} "
+      puts "we did not end normally - not deleting anything. Error message: #{ending_hash[:api_status]} "
     end
   end # def perform
 
@@ -42,7 +42,7 @@ class UpdatePifsJob
       puts "#{$!}"
       # end further processing
       friend_lookup_ok = false
-      ret_hash[:api_status] = "friend lookup caused error"
+      ret_hash[:api_status] = "Friend lookup caused error"
     end
     if friend_lookup_ok
       puts "I just successfully called friend_ids"
@@ -59,7 +59,7 @@ class UpdatePifsJob
         puts "starting: #{starting}, ending: #{ending}"
         user_lookup_ok = do_100(pifs[starting..ending])
         if !user_lookup_ok
-          ret_hash[:api_status] = "user lookup caused error"
+          ret_hash[:api_status] = "User lookup caused error"
           done_with_friends_page = true  #we stop
         end
         if ending >= (@@friends_page_size - 1)
@@ -74,7 +74,7 @@ class UpdatePifsJob
   def do_100(pifs)
     user_lookup_ok = true
     begin
-      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitter::User objects
+      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitcon::User objects
     rescue
       puts "Twitter call users/lookup caused error!"
       puts "#{$!}"
