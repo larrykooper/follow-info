@@ -1,3 +1,5 @@
+require 'twitcon'
+
 class UpdateFollowersJob
   include Resque::Plugins::Status
   extend HerokuAutoScaler::AutoScaling
