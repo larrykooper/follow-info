@@ -1,11 +1,12 @@
 ---
 sort_asc.png: sort_asc-e9e51778c32e055a73c106b86c1893d2.png
 sort_desc.png: sort_desc-fe494e95cb425f5403160a9bd8b6a18f.png
-application.js: application-81f8b0ab431428f08801a6276d9769e0.js
+application.js: application-61f17b9b97fe0c7b805228a015589d1c.js
 edit.js: edit-53053a151f1f3092780e9d444a2d7dd3.js
 jquery.tablesorter.js: jquery.tablesorter-0581df869346a3949c2ff2c26b7844de.js
 pifs_list.js: pifs_list-6819468f6080686fc3f935aad5933b60.js
 tags_list.js: tags_list-3b44731a12b377e330969af66b2fb937.js
+tags_short_list.js: tags_short_list-4e3b6445a74ce0a88f5389d76181579f.js
 application.css: application-7202212293ae2bad96b46792a0b74773.css
 base.css: base-1888141244d31130310640eb05da1a67.css
 screen.css: screen-9d7098e628c619be39cbfbee00295892.css
