@@ -1,6 +1,1 @@
-$(document).ready(function() 
-  { 
-    $(".tagName").click(function(event) {
-		  $('#tags').val($(event.target).text());	
-    });
-});
+$(document).ready(function(){$(".tagName").click(function(e){$("#tags").val($(e.target).text())})});
