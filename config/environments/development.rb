@@ -39,4 +39,6 @@ FollowInfo::Application.configure do
   config.assets.debug = true
 
   config.cache_store = :dalli_store
+  
+  config.assets.precompile += %w( base.css screen.css edit.js follower_update_status.js jquery.tablesorter.js pif_update_status.js pifs_list.js tags_list.js tags_short_list.js)
 end
