@@ -1,1 +1,7 @@
-$(document).ready(function(){$("#myTags").tablesorter({headers:{0:{sorter:!0},1:{sorter:!0}}})});
+$(document).ready(function() 
+    { 
+        $("#myTags").tablesorter({headers: { 0: { sorter: true}, 1: {sorter: true},
+  }}); 
+    } 
+); 
+   
