@@ -3,6 +3,7 @@
 # It saves info about when things were updated 
 
 class SystemInfo < ActiveRecord::Base 
+  attr_accessible :followers_last_update, :i_follow_last_update
   
   def self.earlier 
     si = self.find(1)

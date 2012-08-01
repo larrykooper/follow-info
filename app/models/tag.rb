@@ -2,6 +2,7 @@
 #  in order to organize them into lists
 # and keep track of who I follow. 
 class Tag < ActiveRecord::Base 
+  attr_accessible :name, :is_published
   has_many :taggings
   has_many :users, :through => :taggings  
   

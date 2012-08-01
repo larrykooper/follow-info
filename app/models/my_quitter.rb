@@ -3,4 +3,5 @@
 # next update of the follower list. 
 
 class MyQuitter < ActiveRecord::Base 
+  attr_accessible :name, :fmr_follows_me_nbr, :i_follow
 end

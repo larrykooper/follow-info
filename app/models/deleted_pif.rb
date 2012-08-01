@@ -2,5 +2,6 @@
 # The deleted ones are kept in this table until the next update of the PIF list 
 
 class DeletedPif < ActiveRecord::Base 
+  attr_accessible :name, :nbr_followers, :i_follow_nbr, :follows_me
   
 end
