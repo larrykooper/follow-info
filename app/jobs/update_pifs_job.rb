@@ -41,7 +41,8 @@ class UpdatePifsJob
       twitter_reply = @@tclient.friend_ids # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitcon::Cursor object
     rescue
       puts "Twitter call friend_ids caused error!"
-      puts "#{$!}"
+      p $!
+      puts $@
       # end further processing
       friend_lookup_ok = false
       ret_hash[:api_status] = "Friend lookup caused error"
@@ -79,7 +80,8 @@ class UpdatePifsJob
       twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitcon::User objects
     rescue
       puts "Twitter call users/lookup caused error!"
-      puts "#{$!}"
+      p $!
+      puts $@
       # end further processing
       user_lookup_ok = false
     end
