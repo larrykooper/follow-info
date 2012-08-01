@@ -2,11 +2,6 @@ class WelcomeController < ApplicationController
   before_filter :authenticate_follow_info_user!
   helper_method :sort_column, :sort_direction 
 	
-	def add_pif 
-	  User.add_pif(params)
-	  redirect_to(:action => 'list_pif')
-	end 
-	
   def check_foller_update_status    
     larry = LarrysTwitterAccount.instance 
     @follers_job_id = params[:follers_job_id]        

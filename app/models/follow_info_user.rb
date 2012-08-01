@@ -1,3 +1,5 @@
+# A FollowInfoUser is a user of the follow-info app, i.e. someone who wants to track and tag who they follow on Twitter.
+
 class FollowInfoUser < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
