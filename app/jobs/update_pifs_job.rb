@@ -91,14 +91,14 @@ class UpdatePifsJob
         puts "doing #{pif.screen_name}"
         @@done_count += 1
         @@ind = @@friends_page_size + 1 - @@done_count
-        # Process a PIF against User table
-        user = User.find_by_name(pif.screen_name)  # returns nil if not found
-        if user.nil?
-          User.create_new_pif(pif, @@ind)
+        # Process a PIF against TwitterUser table
+        twitter_user = TwitterUser.find_by_name(pif.screen_name)  # returns nil if not found
+        if twitter_user.nil?
+          TwitterUser.create_new_pif(pif, @@ind)
         else
-          user.process_pif(pif, @@ind)
+          twitter_user.process_pif(pif, @@ind)
         end
-        percent_complete = (@@done_count * 100) / @@friends_page_size # TODO fix this for users who follow > 5000 people
+        percent_complete = (@@done_count * 100) / @@friends_page_size # TODO fix this for FI users who follow > 5000 people
         #puts "Updating PIFs is #{percent_complete}% complete..."
         at(percent_complete, "At #{percent_complete}")
         puts "done count: #{@@done_count} of #{@@friends_page_size}"
@@ -113,19 +113,19 @@ class UpdatePifsJob
     si = SystemInfo.find(1)
     si.i_follow_last_update = Time.now 
     si.save!       
-    # Deal with the deleted (the users where taken_care_of is now false)
-    gone_list = User.pifs_deleted 
-    gone_list.each do |user|
-      deleted_pif = DeletedPif.new({:name => user.name, 
-        :nbr_followers => user.nbr_followers, 
-        :fmr_i_follow_nbr => user.i_follow_nbr, 
-        :follows_me => user.follows_me})
+    # Deal with the deleted (the twitter_users where taken_care_of is now false)
+    gone_list = TwitterUser.pifs_deleted 
+    gone_list.each do |twitter_user|
+      deleted_pif = DeletedPif.new({:name => twitter_user.name, 
+        :nbr_followers => twitter_user.nbr_followers, 
+        :fmr_i_follow_nbr => twitter_user.i_follow_nbr, 
+        :follows_me => twitter_user.follows_me})
       deleted_pif.save! 
-      if user.follows_me 
-        user.i_follow = false 
-        user.save! 
+      if twitter_user.follows_me 
+        twitter_user.i_follow = false 
+        twitter_user.save! 
       else 
-        user.destroy 
+        twitter_user.destroy 
       end       
     end # gone_list.each do  
   end

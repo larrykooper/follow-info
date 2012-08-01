@@ -1,6 +1,4 @@
-<% 
-@page_title = "Editing a user"
-%>
+<% @page_title = "Editing a user" %>
 
 <% content_for :script do %>
   <%= javascript_include_tag "edit" %>
@@ -11,16 +9,16 @@
 <h2>Editing a User</h2> 
 <div id="edit_page">
   
-  <%= form_for @user do |f| -%>   
+  <%= form_for @twitter_user do |f| -%>   
     <p>
-      <label>User name:</label> <%= @user.name %>
+      <label>User name:</label> <%= @twitter_user.name %>
     </p>
     <p>
-      <label id="tags_label">Tags:</label><%= text_field_tag "tags", @user.tag_list %>  
+      <label id="tags_label">Tags:</label><%= text_field_tag "tags", @twitter_user.tag_list %>  
     </p>
     <p>
       <label>Tags Published:</label>
-      <%= display_tags(@user.taggings) %>
+      <%= display_tags(@twitter_user.taggings) %>
     </p>
     <%= submit_tag 'Save', {:id=> "save_button"} %>
     <div id="tags_area">

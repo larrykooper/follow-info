@@ -48,8 +48,8 @@ class LarrysTwitterAccount
     larry = LarrysTwitterAccount.instance
     nbr_following = larry.nbr_following  # Does a live update from Twitter 
     ActiveRecord::Base.connection.execute("TRUNCATE deleted_pifs")
-    # For all users, set taken_care_of to false 
-    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = false")
+    # For all twitter_users, set taken_care_of to false 
+    ActiveRecord::Base.connection.execute("UPDATE twitter_users SET taken_care_of = false")
     # Call Resque worker
     @pifs_job_id = UpdatePifsJob.create(:nbr_following => nbr_following) 
     @pifs_job_id 
@@ -61,8 +61,8 @@ def update_follers
     larry = LarrysTwitterAccount.instance
     follers_nbr = larry.nbr_of_followers  
     ActiveRecord::Base.connection.execute("TRUNCATE deleted_followers")
-    # For all users, set taken_care_of to false; taken_care_of is a temp column
-    ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = false")
+    # For all twitter_users, set taken_care_of to false; taken_care_of is a temp column
+    ActiveRecord::Base.connection.execute("UPDATE twitter_users SET taken_care_of = false")
     # Call Resque worker
     @follers_job_id = UpdateFollowersJob.create(:follers_nbr => follers_nbr)           
     @follers_job_id   

@@ -4,12 +4,12 @@
 class Tag < ActiveRecord::Base 
   attr_accessible :name, :is_published
   has_many :taggings
-  has_many :users, :through => :taggings  
+  has_many :twitter_users, :through => :taggings  
   
   # Class Methods
 
-  def self.by_user_count
-    tags_hash = Tagging.joins(:tag).joins(:user).where("users.i_follow" => 't').count(:group => 'tags.name') 
+  def self.by_twitter_user_count
+    tags_hash = Tagging.joins(:tag).joins(:twitter_user).where("twitter_users.i_follow" => 't').count(:group => 'tags.name') 
     tags_arr = tags_hash.sort { |a,b| b[1]<=>a[1] }
   end
 
@@ -36,14 +36,12 @@ class Tag < ActiveRecord::Base
 
   # Instance Methods
 
-  def add_user_manually(user)
-    # We set is_published to false 
-    # because manually added tags are not published    
-    Tagging.create(:tag => self, :user => user, :is_published => false)    
+  def add_twitter_user_manually(twitter_user)   
+    Tagging.create(:tag => self, :twitter_user => twitter_user)    
   end
   
   def pifs_count
-    users.where(:i_follow => true).count 
+    twitter_users.where(:i_follow => true).count 
   end 
   
 end

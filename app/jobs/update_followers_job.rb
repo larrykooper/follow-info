@@ -40,8 +40,9 @@ class UpdateFollowersJob
     begin
       twitter_reply = @@tclient.follower_ids # Call Twitter
     rescue
-      puts "Twitter call follower_ids caused error!"
-      puts "#{$!}"
+      puts "Twitter call follower_ids caused error!"      
+      p $!
+      puts $@
       # end further processing
       followers_lookup_ok = false
       ret_hash[:api_status] = "Follower lookup caused error"
@@ -78,7 +79,8 @@ class UpdateFollowersJob
       twitter_user_info = @@tclient.users(follers) # Call Twitter; this returns an array of Twitcon::User objects
     rescue
       puts "Twitter call users/lookup caused error!"
-      puts "#{$!}"
+      p $!
+      puts $@
       # end further processing
       user_lookup_ok = false 
     end
@@ -88,16 +90,16 @@ class UpdateFollowersJob
         puts "doing #{foller.screen_name}"
         @@done_count += 1
         @@ind = @@follers_page_size + 1 - @@done_count
-        # Process a follower against User table
-        user = User.find_by_name(foller.screen_name) # returns nil if not found
-        if user.nil?
-          User.create_new_foller(foller, @@ind)          
+        # Process a follower against TwitterUser table
+        twitter_user = TwitterUser.find_by_name(foller.screen_name) # returns nil if not found
+        if twitter_user.nil?
+          TwitterUser.create_new_foller(foller, @@ind)          
         else
-          user.process_foller(foller, @@ind)
+          twitter_user.process_foller(foller, @@ind)
         end
-        percent_complete = (@@done_count * 100) / @@follers_page_size # TODO fix this for users who have > 5000 followers
+        percent_complete = (@@done_count * 100) / @@follers_page_size # TODO fix this for FI users who have > 5000 followers
         at(percent_complete, "At #{percent_complete}")
-        puts "done count: #{@@done_count} of #{@@follers_page_size}" # TODO fix for users who have > 5000 followers
+        puts "done count: #{@@done_count} of #{@@follers_page_size}" # TODO fix for FI users who have > 5000 followers
         puts "ind: #{@@ind}"
       end
     end
@@ -109,18 +111,18 @@ class UpdateFollowersJob
     si = SystemInfo.find(1)
     si.followers_last_update = Time.now 
     si.save!    
-    # Deal with the users who have unfollowed me  
-    unfollowed_me_list = User.followers_deleted 
-    unfollowed_me_list.each do |user|    
-      unfollower = DeletedFollower.new({:name => user.name,         
-        :fmr_follows_me_nbr => user.follows_me_nbr, 
-        :i_follow => user.i_follow})
+    # Deal with the twitter_users who have unfollowed me  
+    unfollowed_me_list = TwitterUser.followers_deleted 
+    unfollowed_me_list.each do |twitter_user|    
+      unfollower = DeletedFollower.new({:name => twitter_user.name,         
+        :fmr_follows_me_nbr => twitter_user.follows_me_nbr, 
+        :i_follow => twitter_user.i_follow})
       unfollower.save! 
-      if user.i_follow
-        user.follows_me = false 
-        user.save! 
+      if twitter_user.i_follow
+        twitter_user.follows_me = false 
+        twitter_user.save! 
       else 
-        user.destroy 
+        twitter_user.destroy 
       end       
     end # unfollowed_me_list.each do          
   end

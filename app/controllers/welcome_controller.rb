@@ -24,14 +24,14 @@ class WelcomeController < ApplicationController
   end   
   
   def index 
-    @following = User.where(:i_follow => true).count 
-    @followers = User.where(:follows_me => true).count
+    @following = TwitterUser.where(:i_follow => true).count 
+    @followers = TwitterUser.where(:follows_me => true).count
   end
 
   def list_follers 
     @sort_column_default = 'follows_me_nbr'
     @sort_direction_default = 'desc'
-    @follers = User.where(:follows_me => true).order(sort_column + " " + sort_direction)   
+    @follers = TwitterUser.where(:follows_me => true).order(sort_column + " " + sort_direction)   
     @count = @follers.size
   end  
   
@@ -43,17 +43,17 @@ class WelcomeController < ApplicationController
   def list_pif  
     @sort_column_default = 'i_follow_nbr'   
     @sort_direction_default = 'desc'
-    @users = User.where(:i_follow => true).order(sort_column + " " + sort_direction)  
-    @count = @users.size 
+    @twitter_users = TwitterUser.where(:i_follow => true).order(sort_column + " " + sort_direction)  
+    @count = @twitter_users.size 
   end   
   
   def list_stats
-    @following = User.larry_following_count 
-    @followers = User.larrys_foller_count
-    @pif_folling = User.pif_following_me_count
+    @following = TwitterUser.larry_following_count 
+    @followers = TwitterUser.larrys_foller_count
+    @pif_folling = TwitterUser.pif_following_me_count
     @pif_folling_pct = @pif_folling * 100 / @following
-    @median_fol = User.median_followers_of_pif 
-    @mean_fol = User.where(:i_follow => true).average(:nbr_followers)     
+    @median_fol = TwitterUser.median_followers_of_pif 
+    @mean_fol = TwitterUser.where(:i_follow => true).average(:nbr_followers)     
   end
   
   def list_unfollowed     
@@ -76,7 +76,7 @@ class WelcomeController < ApplicationController
   private 
   
   def sort_column
-    User.column_names.include?(params[:sort]) ? params[:sort] : @sort_column_default
+    TwitterUser.column_names.include?(params[:sort]) ? params[:sort] : @sort_column_default
   end
   
   def sort_direction 
