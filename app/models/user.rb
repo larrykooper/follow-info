@@ -58,7 +58,7 @@ class User < ActiveRecord::Base
     User.where("taken_care_of = false AND i_follow = true")
   end 
   
-  def self.quitters 
+  def self.followers_deleted 
    User.where("taken_care_of = false AND follows_me = true")
   end  
   

@@ -1,6 +1,4 @@
-<% 
-@page_title = "Unfollowed Me"
-%>
+<% @page_title = "Unfollowed Me" %>
 
 <h1>People Who Have Recently Unfollowed Me</h1>
 Updated: <%= flu %><br/><br/> 
@@ -14,5 +12,5 @@ Updated: <%= flu %><br/><br/>
     </tr>
   </thead>
   
-  <%= render(:partial => "quitter_row", :collection => @my_quitters) %> 
+  <%= render(:partial => "unfollower_row", :collection => @deleted_followers) %> 
 </table>

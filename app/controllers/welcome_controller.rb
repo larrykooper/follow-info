@@ -63,7 +63,7 @@ class WelcomeController < ApplicationController
   
   def list_unfollowed     
     sort_clause = "fmr_follows_me_nbr DESC"
-    @my_quitters = MyQuitter.order(sort_clause)
+    @deleted_followers = DeletedFollower.order(sort_clause)
   end   
   
   def update_follers 

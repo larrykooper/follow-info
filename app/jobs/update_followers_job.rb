@@ -109,20 +109,20 @@ class UpdateFollowersJob
     si = SystemInfo.find(1)
     si.followers_last_update = Time.now 
     si.save!    
-    # Deal with the quitters 
-    quitter_list = User.quitters   
-    quitter_list.each do |user|    
-      quitter = MyQuitter.new({:name => user.name,         
+    # Deal with the users who have unfollowed me  
+    unfollowed_me_list = User.followers_deleted 
+    unfollowed_me_list.each do |user|    
+      unfollower = DeletedFollower.new({:name => user.name,         
         :fmr_follows_me_nbr => user.follows_me_nbr, 
         :i_follow => user.i_follow})
-      quitter.save! 
+      unfollower.save! 
       if user.i_follow
         user.follows_me = false 
         user.save! 
       else 
         user.destroy 
       end       
-    end # quitter_list.each do          
+    end # unfollowed_me_list.each do          
   end
   
 end # class

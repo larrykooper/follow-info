@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801184127) do
+ActiveRecord::Schema.define(:version => 20120801185853) do
+
+  create_table "deleted_followers", :force => true do |t|
+    t.string  "name"
+    t.integer "fmr_follows_me_nbr"
+    t.boolean "i_follow"
+  end
 
   create_table "deleted_pifs", :force => true do |t|
     t.string  "name"
@@ -37,12 +43,6 @@ ActiveRecord::Schema.define(:version => 20120801184127) do
 
   add_index "follow_info_users", ["email"], :name => "index_follow_info_users_on_email", :unique => true
   add_index "follow_info_users", ["reset_password_token"], :name => "index_follow_info_users_on_reset_password_token", :unique => true
-
-  create_table "my_quitters", :force => true do |t|
-    t.string  "name"
-    t.integer "fmr_follows_me_nbr"
-    t.boolean "i_follow"
-  end
 
   create_table "system_infos", :force => true do |t|
     t.datetime "followers_last_update"
