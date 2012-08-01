@@ -1,7 +1,8 @@
 $(document).ready(function() 
     { 
-        $("#myPifs").tablesorter({headers: { 0: { sorter: true}, 1: {sorter: false},
-	2: {sorter: true}, 3: {sorter: false}, 4: {sorter: true}, 5: {sorter: false} }, sortInitialOrder: "desc"}); 
+        $("#myPifs").tablesorter({
+          sortList:[[0,1],[1,0],[2,1],[3,0],[4,0]] 
+        })
     } 
 ); 
    
