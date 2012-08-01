@@ -11,20 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801182205) do
+ActiveRecord::Schema.define(:version => 20120801184127) do
 
   create_table "deleted_pifs", :force => true do |t|
     t.string  "name"
     t.integer "nbr_followers"
     t.integer "i_follow_nbr"
     t.boolean "follows_me"
-  end
-
-  create_table "deleted_taggings", :force => true do |t|
-    t.string   "tag_name"
-    t.string   "user_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "follow_info_users", :force => true do |t|
@@ -54,7 +47,6 @@ ActiveRecord::Schema.define(:version => 20120801182205) do
   create_table "system_infos", :force => true do |t|
     t.datetime "followers_last_update"
     t.datetime "i_follow_last_update"
-    t.datetime "lists_last_update"
   end
 
   create_table "taggings", :force => true do |t|
