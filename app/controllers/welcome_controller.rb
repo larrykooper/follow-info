@@ -41,7 +41,7 @@ class WelcomeController < ApplicationController
   end  
   
   def list_idropped       
-    sort_clause = "i_follow_nbr DESC"
+    sort_clause = "fmr_i_follow_nbr DESC"
     @deleted_pifs = DeletedPif.order(sort_clause)   
   end
   

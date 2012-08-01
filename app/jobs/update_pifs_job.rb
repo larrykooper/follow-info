@@ -118,7 +118,7 @@ class UpdatePifsJob
     gone_list.each do |user|
       deleted_pif = DeletedPif.new({:name => user.name, 
         :nbr_followers => user.nbr_followers, 
-        :i_follow_nbr => user.i_follow_nbr, 
+        :fmr_i_follow_nbr => user.i_follow_nbr, 
         :follows_me => user.follows_me})
       deleted_pif.save! 
       if user.follows_me 

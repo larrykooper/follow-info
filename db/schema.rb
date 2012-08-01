@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801185853) do
+ActiveRecord::Schema.define(:version => 20120801193143) do
 
   create_table "deleted_followers", :force => true do |t|
     t.string  "name"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 20120801185853) do
   create_table "deleted_pifs", :force => true do |t|
     t.string  "name"
     t.integer "nbr_followers"
-    t.integer "i_follow_nbr"
+    t.integer "fmr_i_follow_nbr"
     t.boolean "follows_me"
   end
 
