@@ -1,7 +1,12 @@
-ENV["REDISTOGO_URL"] ||= "redis://larrykooper:326ccce841a2132c4650f75439938cbc@barb.redistogo.com:9012/"
-
-uri = URI.parse(ENV["REDISTOGO_URL"])
-Resque.redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password, :thread_safe => true)
+if Rails.env.nyt? 
+  uri = URI.parse("redis://localhost:6379/")  
+  Resque.redis = Redis.new(:host => uri.host, :port => uri.port,  
+                                            :password => uri.password)  
+else 
+  ENV["REDISTOGO_URL"] ||= "redis://larrykooper:326ccce841a2132c4650f75439938cbc@barb.redistogo.com:9012/"
+  uri = URI.parse(ENV["REDISTOGO_URL"])
+  Resque.redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password, :thread_safe => true)
+end
 
 Dir["#{Rails.root}/app/jobs/*.rb"].each { |file| require file }
 
