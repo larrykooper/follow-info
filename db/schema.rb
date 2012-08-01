@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801204339) do
+ActiveRecord::Schema.define(:version => 20120801212008) do
 
   create_table "deleted_followers", :force => true do |t|
     t.string  "name"
@@ -66,7 +66,6 @@ ActiveRecord::Schema.define(:version => 20120801204339) do
   create_table "twitter_users", :force => true do |t|
     t.string   "name"
     t.integer  "nbr_followers"
-    t.boolean  "is_me"
     t.boolean  "follows_me"
     t.boolean  "i_follow"
     t.datetime "created_at"

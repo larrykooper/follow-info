@@ -3,11 +3,9 @@ Factory.define :system_info do |f|
   f.i_follow_last_update 4.days.ago 
 end
 
-
-Factory.define :user do |f|
+Factory.define :twitter_user do |f|
   f.name "Joe"
-  f.nbr_followers 143 
-  f.is_me 0 
-  f.follows_me 0 
-  f.i_follow 0 
+  f.nbr_followers 143
+  f.follows_me 0
+  f.i_follow 0
 end 

@@ -3,7 +3,7 @@
 # or both.
 
 class TwitterUser < ActiveRecord::Base 
-  attr_accessible :name, :nbr_followers, :is_me, :follows_me, :i_follow, :i_follow_nbr, :follows_me_nbr, :taken_care_of, :last_time_tweeted
+  attr_accessible :name, :nbr_followers, :follows_me, :i_follow, :i_follow_nbr, :follows_me_nbr, :taken_care_of, :last_time_tweeted
   has_many :taggings, :dependent => :destroy   
   has_many :tags, :through => :taggings
   
@@ -12,8 +12,7 @@ class TwitterUser < ActiveRecord::Base
   # CLASS METHODS   
   def self.create_new_foller(foller, ind)     
      twitter_user = TwitterUser.new({:name => foller.screen_name,
-      :nbr_followers => foller.followers_count,       
-      :is_me => false,
+      :nbr_followers => foller.followers_count,
       :follows_me => true,
       :i_follow => false,
       :follows_me_nbr => ind, 
@@ -27,7 +26,6 @@ class TwitterUser < ActiveRecord::Base
     twitter_user = TwitterUser.new({:name => pif.screen_name,
       :nbr_followers => pif.followers_count, 
       :last_time_tweeted => last_time_tweeted,
-      :is_me => false,
       :follows_me => false,
       :i_follow => true,
       :i_follow_nbr => ind, 
