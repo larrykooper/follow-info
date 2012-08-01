@@ -23,6 +23,11 @@
   width: 690px;
 }
 
+#main_page #long_running_jobs {
+  background-color: #FFCD07;
+  padding-top: 10px;
+}
+
 .homepage_button {
   float: right;
 }
