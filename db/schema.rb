@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801212008) do
+ActiveRecord::Schema.define(:version => 20120802195237) do
 
   create_table "deleted_followers", :force => true do |t|
     t.string  "name"
@@ -43,6 +43,29 @@ ActiveRecord::Schema.define(:version => 20120801212008) do
 
   add_index "follow_info_users", ["email"], :name => "index_follow_info_users_on_email", :unique => true
   add_index "follow_info_users", ["reset_password_token"], :name => "index_follow_info_users_on_reset_password_token", :unique => true
+
+  create_table "follow_info_users_tags", :force => true do |t|
+    t.integer  "follow_info_user_id"
+    t.integer  "tag_id"
+    t.boolean  "is_published"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  create_table "followings", :force => true do |t|
+    t.integer  "follow_info_user_id"
+    t.integer  "twitter_user_id"
+    t.boolean  "tu_follows_fiu"
+    t.datetime "date_tu_started_following_fiu"
+    t.boolean  "fiu_follows_tu"
+    t.datetime "date_fiu_started_following_tu"
+    t.integer  "tag_id"
+    t.integer  "pif_number"
+    t.integer  "follower_number"
+    t.boolean  "taken_care_of"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
 
   create_table "system_infos", :force => true do |t|
     t.datetime "followers_last_update"
