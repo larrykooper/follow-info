@@ -31,26 +31,7 @@ class TwitterUser < ActiveRecord::Base
       :i_follow_nbr => ind, 
       :taken_care_of => true})               
     twitter_user.save! 
-  end 
-  
-  def self.larrys_foller_count
-    # So I do not need to call API 
-    TwitterUser.where("follows_me = true").count    
-  end 
-  
-  def self.larry_following_count
-    TwitterUser.where("i_follow = true").count  
-  end 
-  
-  def self.pif_following_me_count
-    TwitterUser.where("follows_me = true AND i_follow = true").count
-  end
-  
-  def self.median_followers_of_pif 
-    pif = TwitterUser.where(:i_follow => true)  
-    my_array = pif.collect {|twitter_user| twitter_user.nbr_followers }
-    med = MathStuff.median(my_array)    
-  end
+  end  
   
   def self.pifs_deleted 
     TwitterUser.where("taken_care_of = false AND i_follow = true")

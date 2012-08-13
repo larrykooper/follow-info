@@ -1,6 +1,4 @@
-<% 
-@page_title = "My Followers"
-%>
+<% @page_title = "My Followers" %>
 
 <h1>My Followers - <%= @count %></h1>
 Updated:  <%= flu %><br/><br/>
@@ -13,5 +11,5 @@ Updated:  <%= flu %><br/><br/>
     </tr>
   </thead>
   
-  <%= render(:partial => "foller_row", :collection => @follers) %> 
+  <%= render(:partial => "foller_row", :collection => @followings) %> 
 </table>

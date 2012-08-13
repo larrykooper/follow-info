@@ -7,4 +7,25 @@ class Following < ActiveRecord::Base
   belongs_to :follow_info_user 
   belongs_to :twitter_user 
   belongs_to :tag 
+  
+  def self.for_user(user)
+    Following.where(:follow_info_user_id => user.id)
+  end
+  
+  def self.for_user_fiu_follows_tu(fiu) 
+    Following.where(:follow_info_user_id => fiu.id, :fiu_follows_tu => true).includes(:twitter_user).order("pif_number desc") 
+  end
+  
+  def self.for_user_tu_follows_fiu(fiu)
+    Following.where(:follow_info_user_id => fiu.id, :tu_follows_fiu => true).includes(:twitter_user).order("follower_number desc")
+  end
+  
+  def self.for_user_fiu_follows_tu_mini(fiu)
+    Following.where(:follow_info_user_id => fiu.id, :fiu_follows_tu => true)
+  end
+  
+  def self.for_user_tu_follows_fiu_mini(fiu)
+    Following.where(:follow_info_user_id => fiu.id, :tu_follows_fiu => true)
+  end
+
 end

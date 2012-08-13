@@ -24,15 +24,13 @@ class WelcomeController < ApplicationController
   end   
   
   def index 
-    @following = TwitterUser.where(:i_follow => true).count 
-    @followers = TwitterUser.where(:follows_me => true).count
+    @following = current_follow_info_user.pif_count 
+    @followers = current_follow_info_user.follower_count  
   end
 
-  def list_follers 
-    @sort_column_default = 'follows_me_nbr'
-    @sort_direction_default = 'desc'
-    @follers = TwitterUser.where(:follows_me => true).order(sort_column + " " + sort_direction)   
-    @count = @follers.size
+  def list_follers
+    @followings = Following.for_user_tu_follows_fiu(current_follow_info_user)
+    @count = @followings.size
   end  
   
   def list_idropped       
@@ -40,20 +38,18 @@ class WelcomeController < ApplicationController
     @deleted_pifs = DeletedPif.order(sort_clause)   
   end
   
-  def list_pif  
-    @sort_column_default = 'i_follow_nbr'   
-    @sort_direction_default = 'desc'
-    @twitter_users = TwitterUser.where(:i_follow => true).order(sort_column + " " + sort_direction)  
-    @count = @twitter_users.size 
+  def list_pif
+    @followings = Following.for_user_fiu_follows_tu(current_follow_info_user) 
+    @count = @followings.size 
   end   
   
   def list_stats
-    @following = TwitterUser.larry_following_count 
-    @followers = TwitterUser.larrys_foller_count
-    @pif_folling = TwitterUser.pif_following_me_count
+    @following = current_follow_info_user.pif_count  
+    @followers = current_follow_info_user.follower_count 
+    @pif_folling = current_follow_info_user.pif_follower_count
     @pif_folling_pct = @pif_folling * 100 / @following
-    @median_fol = TwitterUser.median_followers_of_pif 
-    @mean_fol = TwitterUser.where(:i_follow => true).average(:nbr_followers)     
+    @median_fol = current_follow_info_user.median_followers_of_pifs 
+    @mean_fol = current_follow_info_user.mean_followers_of_pifs   
   end
   
   def list_unfollowed     
