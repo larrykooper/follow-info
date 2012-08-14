@@ -8,6 +8,7 @@ class UpdatePifsJob
   
   def perform
     puts 'updatePifsJob started'
+    fiu = options['fiu']
     @@done_count = 0
     if defined? CLIENT
       @@tclient = CLIENT
@@ -15,8 +16,8 @@ class UpdatePifsJob
       @@tclient = Twitcon::Client.new(
         :consumer_key => ENV["TWITTER_CONSUMER_KEY"],
         :consumer_secret => ENV["TWITTER_CONSUMER_SECRET"],
-        :oauth_token => ENV["TWITTER_OAUTH_TOKEN"],
-        :oauth_token_secret => ENV["TWITTER_OAUTH_TOKEN_SECRET"]
+        :oauth_token => ENV["TWITTER_OAUTH_TOKEN"],   # TODO fix this
+        :oauth_token_secret => ENV["TWITTER_OAUTH_TOKEN_SECRET"]   # TODO fix this
       )
     end
     done_with_all_pifs = false
@@ -91,13 +92,15 @@ class UpdatePifsJob
         puts "doing #{pif.screen_name}"
         @@done_count += 1
         @@ind = @@friends_page_size + 1 - @@done_count
-        # Process a PIF against TwitterUser table
-        twitter_user = TwitterUser.find_by_name(pif.screen_name)  # returns nil if not found
-        if twitter_user.nil?
-          TwitterUser.create_new_pif(pif, @@ind)
-        else
-          twitter_user.process_pif(pif, @@ind)
-        end
+        # Process a TU that the FIU follows
+        # Against these models: TwitterUser, Following
+        Following.process_pif_for_current_user(fiu, pif, @@ind)
+        #twitter_user = TwitterUser.find_by_name(pif.screen_name)  # returns nil if not found
+        #if twitter_user.nil?
+        #  TwitterUser.create_new_pif(pif, @@ind)
+        #else
+        #  twitter_user.process_pif(pif, @@ind)
+        #end
         percent_complete = (@@done_count * 100) / @@friends_page_size # TODO fix this for FI users who follow > 5000 people
         #puts "Updating PIFs is #{percent_complete}% complete..."
         at(percent_complete, "At #{percent_complete}")

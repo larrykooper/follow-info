@@ -55,7 +55,7 @@ class LarrysTwitterAccount
     @pifs_job_id 
   end   
 
-def update_follers     
+  def update_follers
     # Update entire list of people who follow me 
     # From Twitter to my database 
     larry = LarrysTwitterAccount.instance

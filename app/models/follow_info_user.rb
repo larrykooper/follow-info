@@ -11,6 +11,8 @@ class FollowInfoUser < ActiveRecord::Base
 
   has_many :follow_info_users_tags
   has_many :followings
+  has_many :deleted_followers
+  has_many :deleted_pifs
 
   def fiu_tag(tag)
     # may be nil
@@ -31,7 +33,7 @@ class FollowInfoUser < ActiveRecord::Base
   end
 
   def pifs
-    Following.for_user_fiu_follows_tu_mini(self)
+    followings.where(:fiu_follows_tu => true)   
   end
 
   def pifs_with_join
@@ -39,11 +41,11 @@ class FollowInfoUser < ActiveRecord::Base
   end
 
   def pif_count
-    Following.for_user_fiu_follows_tu_mini(self).count
+    followings.where(:fiu_follows_tu => true).count
   end
 
   def follower_count
-    Following.for_user_tu_follows_fiu_mini(self).count
+    followings.where(:tu_follows_fiu => true).count
   end
 
   def pif_follower_count
@@ -79,5 +81,29 @@ class FollowInfoUser < ActiveRecord::Base
            "ORDER BY LOWER(tags.name)",
             self.id])
   end
+
+  def update_pifs 
+    # Update entire list of TUs that the FIU follows (aka PIFs)
+    # From Twitter to the local database
+    # Fiirst clear out deleted_pifs 
+    DeletedPif.clear_out_for(self)
+    # For all FIU's followings, set taken_care_of to false, because we haven't taken care of any yet.     
+    ActiveRecord::Base.connection.execute("UPDATE followings SET taken_care_of = false WHERE follow_info_user_id = " + self.id)
+    # Call Resque worker
+    @pifs_job_id = UpdatePifsJob.create(:fiu => self) 
+    @pifs_job_id
+  end
+
+  def update_follers     
+    # Update entire list of people who follow the FIU 
+    # From Twitter to the local database 
+    # First clear out deleted_followers
+    DeletedFollower.clear_out_for(self)
+    # For all FIU's followings, set taken_care_of to false, because we haven't taken care of any yet.
+    ActiveRecord::Base.connection.execute("UPDATE followings SET taken_care_of = false WHERE follow_info_user_id = " + self.id)
+    # Call Resque worker
+    @follers_job_id = UpdateFollowersJob.create(:follers_nbr => self.follower_count)           
+    @follers_job_id   
+  end  
 
 end

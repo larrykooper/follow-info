@@ -57,15 +57,13 @@ class WelcomeController < ApplicationController
     @deleted_followers = DeletedFollower.order(sort_clause)
   end   
   
-  def update_follers 
-    larry = LarrysTwitterAccount.instance 
-    follers_job_id = larry.update_follers
+  def update_follers
+    follers_job_id = current_follow_info_user.update_follers
     redirect_to :action => 'check_foller_update_status', :follers_job_id => follers_job_id
   end  
   
   def update_pif    
-    larry = LarrysTwitterAccount.instance 
-    pifs_job_id = larry.update_all_pif  
+    pifs_job_id = current_follow_info_user.update_pifs
     redirect_to :action => 'check_pif_update_status', :pifs_job_id => pifs_job_id
   end     
     

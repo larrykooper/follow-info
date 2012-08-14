@@ -20,12 +20,8 @@ class Following < ActiveRecord::Base
     Following.where(:follow_info_user_id => fiu.id, :tu_follows_fiu => true).includes(:twitter_user).order("follower_number desc")
   end
   
-  def self.for_user_fiu_follows_tu_mini(fiu)
-    Following.where(:follow_info_user_id => fiu.id, :fiu_follows_tu => true)
-  end
-  
-  def self.for_user_tu_follows_fiu_mini(fiu)
-    Following.where(:follow_info_user_id => fiu.id, :tu_follows_fiu => true)
+  def self.process_pif_for_current_user(fiu, pif, index)
+    #lkhere
   end
 
 end

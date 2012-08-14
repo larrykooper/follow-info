@@ -5,8 +5,6 @@
 class TwitterUser < ActiveRecord::Base
   attr_accessible :name, :nbr_followers, :follows_me, :i_follow, :i_follow_nbr, :follows_me_nbr, :taken_care_of, :last_time_tweeted
   has_many :followings
-  # has_many :taggings, :dependent => :destroy
-  # has_many :tags, :through => :taggings
 
   require 'math_stuff'
 
