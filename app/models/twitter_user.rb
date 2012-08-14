@@ -71,11 +71,21 @@ class TwitterUser < ActiveRecord::Base
   end
 
   def tag(fiu)
+    # Note, may be nil if TU not tagged by FIU
     followings.where(:follow_info_user_id => fiu.id).first.tag
   end
 
-  def tag_list
+  def tag_list   # this is deprecated
      (tags.collect {|tag| tag.name }).join(", ")
+  end
+
+  def tag_name(fiu)
+    thetag = tag(fiu)
+    if thetag
+      thetag.name
+    else
+      ""
+    end
   end
 
   def tag_with_manually(list)

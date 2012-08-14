@@ -6,28 +6,25 @@
 
 <%= link_to "All people I follow", "/welcome/list_pif", :class=>"pif_link" %>
 
-<h2>Editing a User</h2> 
+<h2>Editing a User</h2>
 <div id="edit_page">
-  
-  <%= form_for @twitter_user do |f| -%>   
+  <%= form_for @twitter_user do |f| -%>
     <p>
       <label>User name:</label> <%= @twitter_user.name %>
     </p>
     <p>
-      <label id="tags_label">Tags:</label><%= text_field_tag "tags", @twitter_user.tag_list %>  
+      <label id="tags_label">Tags:</label><%= text_field_tag "tags", @tagname %>
     </p>
     <p>
-      <label>Tags Published:</label>
-      <%= display_tags(@twitter_user.taggings) %>
+      <label>Is Tag Published?</label>
+      <span id="is_tag_pub"><%= yes_no(@tag_is_published) %></span>
     </p>
     <%= submit_tag 'Save', {:id=> "save_button"} %>
     <div id="tags_area">
       <b>My tags:</b> (<b>bold</b> if tag is published)
     </div>
     <div id="tags_list">
-      <%= all_my_tags %>
+      <%= all_fiu_used_tags %>
     </div>
-
   <% end -%>
-
 </div>

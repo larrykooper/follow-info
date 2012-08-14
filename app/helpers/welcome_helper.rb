@@ -38,6 +38,19 @@ module WelcomeHelper
     taglist.html_safe
   end
 
+  def all_fiu_used_tags
+    taglist = ""
+    current_follow_info_user.used_tags_sorted.each do |tag|
+      taglist << "<span class='tagName"
+      taglist << " published" if tag.is_published
+      taglist << "'>"
+      taglist << tag.name
+      taglist << "</span>"
+    end
+    taglist.html_safe
+  end
+
+
   def tag_display_for_current_user(tag)
     fiut = FollowInfoUsersTag.find_by_follow_info_user_id_and_tag_id(current_follow_info_user.id, tag.id)
     output = ""
