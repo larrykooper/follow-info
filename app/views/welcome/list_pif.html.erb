@@ -1,6 +1,7 @@
 <% @page_title = "People I follow" %>
 
 <% content_for :script do %>
+  <%= javascript_include_tag "jquery.metadata" %>
   <%= javascript_include_tag "jquery.tablesorter" %>  
   <%= javascript_include_tag "pifs_list" %>
 <% end %>
@@ -13,7 +14,7 @@ Updated:  <%= iflu %><br/><br/>
       <th><%=sortable "i_follow_nbr", "I Follow Nbr" %></th>
       <th><%=sortable "name" %></th>
       <th><u>Tag(s)</u></th>
-      <th><%=sortable "nbr_followers", "Nbr Of Followers" %></th>     
+      <th class="{sorter: 'digitcomma'}"><u>Nbr Of Followers</u></th>
       <th>Follows Me?</th>       
       <th><%=sortable "last_time_tweeted" %></th>
       <th></th>

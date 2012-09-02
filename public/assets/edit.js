@@ -7,6 +7,6 @@ $(document).ready(function()
 		    $('#is_tag_pub').html('yes');
 		  } else {
 		     $('#is_tag_pub').html('no');
-		  }   
+		  }
     });
 });
