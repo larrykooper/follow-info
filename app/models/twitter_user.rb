@@ -85,14 +85,5 @@ class TwitterUser < ActiveRecord::Base
       ""
     end
   end
-
-  def tag_with_manually(list)
-    Tag.transaction do
-      taggings.destroy_all
-      Tag.parse(list).each do |name|
-        Tag.find_or_create_by_name(name).add_twitter_user_manually(self)
-      end
-    end
-  end
-
+  
 end

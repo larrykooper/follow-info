@@ -9,7 +9,8 @@ class TwitterUsersController < ApplicationController
 
   def update
     @twitter_user = TwitterUser.find(params[:id])
-    @twitter_user.tag_with_manually(params[:tags])
+    following = Following.find_by_follow_info_user_id_and_twitter_user_id(current_follow_info_user.id, params[:id])
+    following.tag_with(params[:tag])    
     flash[:notice] = 'Twitter User was successfully updated.'
     # invalidate cache
     expire_fragment("twitter_user-#{@twitter_user.id}")
