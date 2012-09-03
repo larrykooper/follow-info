@@ -53,7 +53,7 @@ class WelcomeController < ApplicationController
   end
   
   def list_unfollowed     
-    sort_clause = "fmr_follows_me_nbr DESC"
+    sort_clause = "fmr_follower_number DESC"
     @deleted_followers = DeletedFollower.order(sort_clause)
   end   
   
