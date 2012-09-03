@@ -5,6 +5,7 @@ application.js: application.js
 edit.js: edit.js
 jquery.metadata.js: jquery.metadata.js
 jquery.tablesorter.js: jquery.tablesorter.js
+list_follers.js: list_follers.js
 pifs_list.js: pifs_list.js
 tags_list.js: tags_list.js
 tags_short_list.js: tags_short_list.js
