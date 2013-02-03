@@ -14,6 +14,7 @@ FollowInfo::Application.routes.draw do
   get "/welcome/check_pif_update_status"
   get "/welcome/check_foller_update_status"
   get "/tag/edit"
+  post "/tag/edit"
   post "/welcome/update_follers"
   post "/welcome/update_pif"
   
