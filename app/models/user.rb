@@ -87,7 +87,8 @@ class User < ActiveRecord::Base
     self.taken_care_of = true
     self.save!   
     # invalidate cache
-    ActionController::Base.new.expire_fragment("user-#{self.id}")                   
+    # commented out because now does it in observer
+    #ActionController::Base.new.expire_fragment("user-#{self.id}")                   
   end      
   
   def tag_list
