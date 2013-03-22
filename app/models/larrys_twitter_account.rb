@@ -59,12 +59,12 @@ def update_follers
     # Update entire list of people who follow me 
     # From Twitter to my database 
     larry = LarrysTwitterAccount.instance
-    follers_nbr = larry.nbr_of_followers  
+    #follers_nbr = larry.nbr_of_followers  
     ActiveRecord::Base.connection.execute("TRUNCATE my_quitters")
     # For all users, set taken_care_of to false; taken_care_of is a temp column
     ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = false")
     # Call Resque worker
-    @follers_job_id = UpdateFollowersJob.create(:follers_nbr => follers_nbr)           
+    @follers_job_id = UpdateFollowersJob.create()           
     @follers_job_id   
   end  
 
