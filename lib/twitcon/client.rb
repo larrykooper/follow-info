@@ -55,7 +55,7 @@ module Twitcon
       options.merge!(args.extract_options!)
       user = args.pop
       options.merge_user!(user)
-      response = get("/1/followers/ids.json", options)
+      response = get("/1.1/followers/ids.json", options)
       Twitcon::Cursor.from_response(response)
     end    
     
@@ -85,7 +85,7 @@ module Twitcon
       options.merge!(args.extract_options!)
       user = args.pop
       options.merge_user!(user)
-      response = get("/1/friends/ids.json", options)
+      response = get("/1.1/friends/ids.json", options)
       Twitcon::Cursor.from_response(response)
     end
     
@@ -107,7 +107,7 @@ module Twitcon
     def users(*args)
       options = args.extract_options!
       args.flatten.each_slice(MAX_USERS_PER_REQUEST).threaded_map do |users|
-        response = post("/1/users/lookup.json", options.merge_users(users))
+        response = post("/1.1/users/lookup.json", options.merge_users(users))
         collection_from_array(response[:body], Twitcon::User)
       end.flatten
     end
