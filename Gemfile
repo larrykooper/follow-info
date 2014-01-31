@@ -1,7 +1,7 @@
 # Edit this Gemfile to bundle your application's dependencies.
 # This preamble is the current preamble for Rails 3 apps; edit as needed.
 
-source :rubygems
+source 'https://rubygems.org'
 gem "rails", "3.2.6"
 
 group :assets do 
@@ -18,6 +18,7 @@ gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
 gem 'oauth'
 gem 'pg'
+gem 'memcachier'
 gem 'dalli'
 gem 'oauth'
 gem 'thin'

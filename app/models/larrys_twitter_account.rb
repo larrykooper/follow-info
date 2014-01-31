@@ -64,6 +64,10 @@ def update_follers
     # For all users, set taken_care_of to false; taken_care_of is a temp column
     ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = false")
     # Call Resque worker
+    Rails.logger.debug "now going to create follers job"
+    # 7/21/13 it DID work with enqueue
+    #Resque.enqueue(UpdateFollowersJob)
+    # 7/21/13 commented out next line
     @follers_job_id = UpdateFollowersJob.create()           
     @follers_job_id   
   end  
