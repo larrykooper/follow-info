@@ -35,7 +35,7 @@ GEM
     builder (3.0.0)
     columnize (0.3.6)
     daemons (1.1.8)
-    dalli (2.1.0)
+    dalli (2.7.0)
     devise (2.1.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -192,7 +192,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dalli
+  dalli (~> 2.7.0)
   devise
   faraday
   heroku

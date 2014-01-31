@@ -18,7 +18,7 @@ gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
 gem 'pg'
 gem 'memcachier'
-gem 'dalli'
+gem 'dalli', "~> 2.7.0"
 gem 'oauth'
 gem 'thin'
 gem 'faraday'
