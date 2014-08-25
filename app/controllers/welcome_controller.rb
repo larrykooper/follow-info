@@ -8,7 +8,7 @@ class WelcomeController < ApplicationController
 	end 
 	
   def check_foller_update_status    
-    larry = LarrysTwitterAccount.instance 
+    larry = LarrysTwitterAccount.instance
     @follers_job_id = params[:follers_job_id]        
     if request.xhr?
       @status = larry.foller_update_status(@follers_job_id)      
@@ -28,6 +28,12 @@ class WelcomeController < ApplicationController
     end  
   end   
   
+  def get_recoms
+    larry = LarrysTwitterAccount.instance
+    recoms_job_id = larry.create_recommendations
+    redirect_to :action => 'check_recom_update_status', :recoms_job_id => recoms_job_id
+  end
+
   def index 
     @following = User.where(:i_follow => true).count 
     @followers = User.where(:follows_me => true).count

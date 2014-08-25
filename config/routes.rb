@@ -18,6 +18,7 @@ FollowInfo::Application.routes.draw do
   post "/tag/edit"
   post "/welcome/update_follers"
   post "/welcome/update_pif"
+  post "/welcome/get_recoms"
   
   devise_scope :follow_info_user do
     match '/follow_info_users/sign_out' => "devise/sessions#destroy"

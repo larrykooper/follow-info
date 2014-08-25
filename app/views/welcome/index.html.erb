@@ -2,44 +2,50 @@
 
 <div id="main_page">
 
-<h1>Larry's Twitter App</h1>
+  <h1>Larry's Twitter App</h1>
 
-<h2>Functions</h2>
+  <h2>Functions</h2>
 
-<h3>SHOW INFO:</h3>
-<table id="show_info">
+  <h3>SHOW INFO:</h3>
+  <table id="show_info">
 
-<tr><td>&bull; <%= link_to "List people I follow", "/welcome/list_pif" %> - <%= @following %></td><td>Last updated: <%= iflu %> </td></tr>
+  <tr><td>&bull; <%= link_to "List people I follow", "/welcome/list_pif" %> - <%= @following %></td><td>Last updated: <%= iflu %> </td></tr>
 
-<tr><td>&bull; <%= link_to "Stats", "/welcome/list_stats" %></td><td>Last updated: <%= earlier %></td></tr>
+  <tr><td>&bull; <%= link_to "Stats", "/welcome/list_stats" %></td><td>Last updated: <%= earlier %></td></tr>
 
-<tr><td>&bull; <%= link_to "List my followers", "/welcome/list_follers" %>  - <%= @followers %></td><td>Last updated: <%= flu %></td></tr>
+  <tr><td>&bull; <%= link_to "List my followers", "/welcome/list_follers" %>  - <%= @followers %></td><td>Last updated: <%= flu %></td></tr>
 
-<tr><td>&bull; <%= link_to "List Unfollowed me", "/welcome/list_unfollowed" %> </td><td>Last updated: <%= flu %></td></tr>
+  <tr><td>&bull; <%= link_to "List Unfollowed me", "/welcome/list_unfollowed" %> </td><td>Last updated: <%= flu %></td></tr>
 
-<tr><td>&bull; <%= link_to "List people I unfollowed (or changed usernames)", "/welcome/list_idropped" %> </td><td>Last updated: <%= iflu %></td></tr>
+  <tr><td>&bull; <%= link_to "List people I unfollowed (or changed usernames)", "/welcome/list_idropped" %> </td><td>Last updated: <%= iflu %></td></tr>
 
-<tr><td>&bull; <%= link_to "List Tags", "/tags" %></td><td></td></tr>
+  <tr><td>&bull; <%= link_to "List Tags", "/tags" %></td><td></td></tr>
 
-</table>
+  </table>
 
-<h3>UPDATE MY DATABASE:</h3>
+  <h3>UPDATE MY DATABASE:</h3>
   <div id="update_area">
     <div id="long_running_jobs">
-      <%= form_tag('/welcome/update_follers', :method => :post) do -%>   
+      <%= form_tag('/welcome/update_follers', :method => :post) do -%>
         <span id="update_follers_text">&bull; Update my followers list</span>
         <span>Last updated: <%= flu %></span>
         <%= submit_tag 'Update followers info', :class => "homepage_button" %>
       <% end %>
       <hr>
-      <%= form_tag('/welcome/update_pif', :method => :post) do -%>    
+      <%= form_tag('/welcome/update_pif', :method => :post) do -%>
         <span id="update_pifs_text">&bull; Update list of people I follow (PIF)</span>
         <span>Last updated: <%= iflu %></span>
         <%= submit_tag 'Update PIFs info', :class => "homepage_button" %>
       <% end %>
-    <hr>
-    </div>
+      <hr>
+      <%= form_tag('/welcome/get_recoms', :method => :post) do -%>
+        <span>&bull; Get recommendations - who to follow</span>
+
+        <%= submit_tag 'Get recommendations', :class => "homepage_button" %>
+      <% end %>
+      <hr>
+    </div> <!-- long_running_jobs -->
     &bull; <%= link_to "Change Published / Unpublished Status of Tags", "/tag/edit" %>
     <hr>
-  </div>
-</div>
+  </div> <!-- update_area -->
+</div> <!-- main_page -->
