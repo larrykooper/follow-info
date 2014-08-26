@@ -10,7 +10,8 @@ class LarrysTwitterAccount
   def create_recommendations
     # Run the job to create follow recommendations
     # Call Resque worker
-    @recoms_job_id = CreateRecomsJob.create(:fruit => 'pineapple')
+    pif_test_array = ['newyorkyimby', 'RWhelanWSJ', 'stevecuozzo']
+    @recoms_job_id = CreateRecomsJob.create(:pifs => pif_test_array)
     @recoms_job_id
   end
 

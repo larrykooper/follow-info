@@ -17,7 +17,7 @@ module Twitcon
     include Twitcon::Configurable
     attr_reader :rate_limit
     MAX_USERS_PER_REQUEST = 100
-    
+
     # Initializes a new Client object
     #
     # @param options [Hash]
@@ -28,7 +28,7 @@ module Twitcon
       end
       @rate_limit = Twitcon::RateLimit.new
     end
-    
+
     # @see https://dev.twitter.com/docs/api/1/get/followers/ids
     # @rate_limited Yes
     # @authentication_required No unless requesting it from a protected user
@@ -57,8 +57,8 @@ module Twitcon
       options.merge_user!(user)
       response = get("/1.1/followers/ids.json", options)
       Twitcon::Cursor.from_response(response)
-    end    
-    
+    end
+
     # @see https://dev.twitter.com/docs/api/1/get/friends/ids
     # @rate_limited Yes
     # @authentication_required No unless requesting it from a protected user
@@ -88,7 +88,7 @@ module Twitcon
       response = get("/1.1/friends/ids.json", options)
       Twitcon::Cursor.from_response(response)
     end
-    
+
     # Returns extended information for up to 100 users
     #
     # @see https://dev.twitter.com/docs/api/1/get/users/lookup
@@ -111,9 +111,9 @@ module Twitcon
         collection_from_array(response[:body], Twitcon::User)
       end.flatten
     end
-    
+
       # Perform an HTTP GET request
-    def get(path, params={}, options={})    
+    def get(path, params={}, options={})
       request(:get, path, params, options)
     end
 
@@ -123,13 +123,13 @@ module Twitcon
     end
 
   private
-  
+
     def collection_from_array(array, klass)
       array.map do |element|
         klass.fetch_or_new(element)
       end
     end
-    
+
     # Returns a Faraday::Connection object
     #
     # @return [Faraday::Connection]
@@ -138,10 +138,11 @@ module Twitcon
     end
 
     # Perform an HTTP request
-    def request(method, path, params={}, options={})     
+    def request(method, path, params={}, options={})
       uri = options[:endpoint] || @endpoint
       uri = URI(uri) unless uri.respond_to?(:host)
-      uri += path      
+      uri += path
+      puts uri # debug
       request_headers = {}
       if self.credentials?
         authorization = auth_header(method, uri, params)
@@ -169,7 +170,7 @@ module Twitcon
       # When posting a file, don't sign any params
       signature_params = [:post, :put].include?(method.to_sym) && params.values.any?{|value| value.is_a?(File) || (value.is_a?(Hash) && (value[:io].is_a?(IO) || value[:io].is_a?(StringIO)))} ? {} : params
       SimpleOAuth::Header.new(method, uri, signature_params, credentials)
-    end    
+    end
 
   end # class Client
 end

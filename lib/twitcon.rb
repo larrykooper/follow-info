@@ -4,8 +4,7 @@ require 'twitcon/configurable'
 module Twitcon
   class << self
      include Twitcon::Configurable
-  
-  
+
     # Delegate to a Twitcon::Client
     #
     # @return [Twitcon::Client]
@@ -29,6 +28,6 @@ module Twitcon
     end
 
   end
-end 
+end
 
 Twitcon.setup
