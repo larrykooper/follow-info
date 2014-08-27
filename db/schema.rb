@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,27 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111209191737) do
-
-  create_table "bdrb_job_queues", :force => true do |t|
-    t.binary   "args"
-    t.string   "worker_name"
-    t.string   "worker_method"
-    t.string   "job_key"
-    t.integer  "taken"
-    t.integer  "finished"
-    t.integer  "timeout"
-    t.integer  "priority"
-    t.datetime "submitted_at"
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.datetime "archived_at"
-    t.string   "tag"
-    t.string   "submitter_info"
-    t.string   "runner_info"
-    t.string   "worker_key"
-    t.datetime "scheduled_at"
-  end
+ActiveRecord::Schema.define(:version => 20140827005857) do
 
   create_table "deleted_pifs", :force => true do |t|
     t.string  "name"
@@ -104,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20111209191737) do
     t.integer  "follows_me_nbr"
     t.boolean  "taken_care_of"
     t.datetime "last_time_tweeted"
+    t.integer  "recommendation_count"
   end
 
 end

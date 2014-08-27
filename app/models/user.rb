@@ -3,7 +3,8 @@
 # or both.
 
 class User < ActiveRecord::Base
-  attr_accessible :name, :nbr_followers, :is_me, :follows_me, :i_follow, :i_follow_nbr, :follows_me_nbr, :taken_care_of, :last_time_tweeted
+  attr_accessible :name, :nbr_followers, :is_me, :follows_me, :i_follow, :i_follow_nbr,
+    :follows_me_nbr, :taken_care_of, :last_time_tweeted, :recommendation_count
   has_many :taggings, :dependent => :destroy
   has_many :tags, :through => :taggings
 
@@ -33,6 +34,20 @@ class User < ActiveRecord::Base
       :i_follow_nbr => ind,
       :taken_care_of => true})
     user.save!
+  end
+
+  def self.create_new_ppf(ppf)
+    last_time_tweeted = ppf.status.nil? ? nil : ppf.status['created_at']
+    user = User.new({:name => ppf.screen_name,
+      :nbr_followers => ppf.followers_count,
+      :last_time_tweeted => last_time_tweeted,
+      :is_me => false,
+      :follows_me => false,
+      :i_follow => false,
+      :taken_care_of => true,
+      :recommendation_count => 0})
+    user.save!
+    user
   end
 
   def self.larrys_foller_count
@@ -67,6 +82,11 @@ class User < ActiveRecord::Base
   end
 
   # PUBLIC INSTANCE METHODS
+
+  def bump_recommend_count
+    self.recommendation_count = self.recommendation_count + 1
+    self.save!
+  end
 
  def process_foller(foller, ind)
     # Update one user who follows me

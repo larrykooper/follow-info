@@ -10,7 +10,11 @@ class LarrysTwitterAccount
   def create_recommendations
     # Run the job to create follow recommendations
     # Call Resque worker
+    # pif_test_array line is only for dev
+    # In real runs, will want to pass all PIFs with a given tag
     pif_test_array = ['newyorkyimby', 'RWhelanWSJ', 'stevecuozzo']
+    # For all users, set recommendation_count to zero
+    ActiveRecord::Base.connection.execute("UPDATE users SET recommendation_count = 0")
     @recoms_job_id = CreateRecomsJob.create(:pifs => pif_test_array)
     @recoms_job_id
   end

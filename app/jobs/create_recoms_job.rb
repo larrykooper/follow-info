@@ -103,12 +103,17 @@ class CreateRecomsJob
       puts "larrylog: just successfully did user lookup"
       twitter_user_info.each do |ppf|
         puts "larrylog: processing #{ppf.screen_name}"
+        # see if the PPF has a user record
+        user = User.find_by_name(ppf.screen_name)  # returns nil if not found
+        if user.nil?
+          user = User.create_new_ppf(ppf)
+        end
+        if !(user.i_follow)
+          user.bump_recommend_count
+        end # if I don't follow user
       end
     end # if user_lookup_ok
     user_lookup_ok
   end # do_100
-
-
-
 
 end # class CreateRecomsJob
