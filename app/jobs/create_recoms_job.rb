@@ -50,19 +50,24 @@ class CreateRecomsJob
   	ret_hash = {}
     ret_hash[:api_status] = "ok"
     friend_lookup_ok = true
-  begin
-  	twitter_reply = @@tclient.friend_ids({:screen_name => username})
-  rescue
-  	puts "Twitter call friend_ids caused error!"
-    p $!
-    puts $@
-    # end further processing
-    friend_lookup_ok = false
-    ret_hash[:api_status] = "Friend lookup caused error"
-  end
-  if friend_lookup_ok
-    puts "larrylog: I just successfully called friend_ids"
-  end # if friend_lookup_ok
+    begin
+  	  twitter_reply = @@tclient.friend_ids({:screen_name => username})
+    rescue
+  	  puts "Twitter call friend_ids caused error!"
+      p $!
+      puts $@
+      # end further processing
+      friend_lookup_ok = false
+      ret_hash[:api_status] = "Friend lookup caused error"
+    end
+    if friend_lookup_ok
+      puts "larrylog: I just successfully called friend_ids"
+      next_cursor = twitter_reply.next_cursor
+      ret_hash[:next_cursor] = next_cursor
+      ppfs = twitter_reply.ids
+      puts ppfs
+    end # if friend_lookup_ok
+    ret_hash
   end # process_5000_ppfs
 
 
