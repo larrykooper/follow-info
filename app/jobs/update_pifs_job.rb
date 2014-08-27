@@ -69,7 +69,7 @@ class UpdatePifsJob
           done_with_friends_page = true
         end
         starting = ending + 1
-      end
+      end # while not done_with_friends_page
     end # if friend_lookup_ok
     ret_hash
   end  # do_5000_pifs
@@ -104,7 +104,7 @@ class UpdatePifsJob
         puts "done count: #{@@done_count} of #{@@friends_page_size}"
         puts "ind: #{@@ind}"
       end
-    end
+    end # if user_lookup_ok
     user_lookup_ok
   end # do_100
 

@@ -65,10 +65,45 @@ class CreateRecomsJob
       next_cursor = twitter_reply.next_cursor
       ret_hash[:next_cursor] = next_cursor
       ppfs = twitter_reply.ids
-      puts ppfs
+      #puts ppfs
+      @@ppfs_size = ppfs.size
+      puts "larrylog: PPFs size: #{@@ppfs_size}"
+      done_with_ppfs_page = false
+      starting = 0
+      user_lookup_ok = true
+      while not done_with_ppfs_page
+        ending = starting + 99
+        puts "larrylog: starting: #{starting}, ending: #{ending}"
+        user_lookup_ok = do_100(ppfs[starting..ending])
+        if !user_lookup_ok
+          ret_hash[:api_status] = "User lookup caused error"
+          done_with_ppfs_page = true  #we stop
+        end
+        if ending >= (@@ppfs_size - 1)
+          done_with_ppfs_page = true
+        end
+        starting = ending + 1
+      end # while not done_with_ppfs_page
     end # if friend_lookup_ok
     ret_hash
   end # process_5000_ppfs
+
+  def do_100(ppfs)
+    user_lookup_ok = true
+    begin
+       twitter_user_info = @@tclient.users(ppfs) # Call Twitter; this returns an array of Twitcon::User objects
+    rescue
+      puts "Twitter call users/lookup caused error!"
+      p $!
+      puts $@
+      # end further processing
+      user_lookup_ok = false
+    end
+    if user_lookup_ok
+      puts "larrylog: just successfully did user lookup"
+    end # if user_lookup_ok
+    user_lookup_ok
+  end # do_100
 
 
 
