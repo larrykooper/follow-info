@@ -101,6 +101,9 @@ class CreateRecomsJob
     end
     if user_lookup_ok
       puts "larrylog: just successfully did user lookup"
+      twitter_user_info.each do |ppf|
+        puts "larrylog: processing #{ppf.screen_name}"
+      end
     end # if user_lookup_ok
     user_lookup_ok
   end # do_100

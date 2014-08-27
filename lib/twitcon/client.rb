@@ -142,7 +142,7 @@ module Twitcon
       uri = options[:endpoint] || @endpoint
       uri = URI(uri) unless uri.respond_to?(:host)
       uri += path
-      puts uri # debug
+      #puts uri # debug
       request_headers = {}
       if self.credentials?
         authorization = auth_header(method, uri, params)
