@@ -2,16 +2,16 @@ require 'twitcon'
 
 class UpdatePifsJob
   include Resque::Plugins::Status
-  extend HerokuAutoScaler::AutoScaling  
-  
-  @queue = :pif_updating 
-  
+  extend HerokuAutoScaler::AutoScaling
+
+  @queue = :pif_updating
+
   def perform
     puts 'updatePifsJob started'
     @@done_count = 0
     if defined? CLIENT
       @@tclient = CLIENT
-    else 
+    else
       @@tclient = Twitcon::Client.new(
         :consumer_key => ENV["TWITTER_CONSUMER_KEY"],
         :consumer_secret => ENV["TWITTER_CONSUMER_SECRET"],
@@ -67,10 +67,10 @@ class UpdatePifsJob
         end
         if ending >= (@@friends_page_size - 1)
           done_with_friends_page = true
-        end 
+        end
         starting = ending + 1
       end
-    end
+    end # if friend_lookup_ok
     ret_hash
   end  # do_5000_pifs
 
@@ -107,27 +107,27 @@ class UpdatePifsJob
     end
     user_lookup_ok
   end # do_100
-  
+
   def finish_update_pifs
-    # Update system info 
+    # Update system info
     si = SystemInfo.find(1)
-    si.i_follow_last_update = Time.now 
-    si.save!       
+    si.i_follow_last_update = Time.now
+    si.save!
     # Deal with the deleted (the users where taken_care_of is now false)
-    gone_list = User.pifs_deleted 
+    gone_list = User.pifs_deleted
     gone_list.each do |user|
-      deleted_pif = DeletedPif.new({:name => user.name, 
-        :nbr_followers => user.nbr_followers, 
-        :i_follow_nbr => user.i_follow_nbr, 
+      deleted_pif = DeletedPif.new({:name => user.name,
+        :nbr_followers => user.nbr_followers,
+        :i_follow_nbr => user.i_follow_nbr,
         :follows_me => user.follows_me})
-      deleted_pif.save! 
-      if user.follows_me 
-        user.i_follow = false 
-        user.save! 
-      else 
-        user.destroy 
-      end       
-    end # gone_list.each do  
+      deleted_pif.save!
+      if user.follows_me
+        user.i_follow = false
+        user.save!
+      else
+        user.destroy
+      end
+    end # gone_list.each do
   end
 
 end # class UpdatePifsJob
