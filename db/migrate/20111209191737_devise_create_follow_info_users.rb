@@ -1,7 +1,7 @@
 class DeviseCreateFollowInfoUsers < ActiveRecord::Migration
   def self.up
     create_table(:follow_info_users) do |t|
-      t.database_authenticatable :null => false
+      #t.database_authenticatable :null => false
       t.recoverable
       t.rememberable
       t.trackable

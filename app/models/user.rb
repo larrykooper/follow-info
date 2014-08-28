@@ -1,6 +1,19 @@
 # A user is one Twitter account.
 # It could be somebody I follow or someone who follows me,
-# or both.
+# or both, or neither (a recommended user)
+
+# id
+# name
+# nbr_followers
+# follows_me
+# i_follow
+# created_at
+# updated_at
+# i_follow_nbr
+# follows_me_nbr
+# taken_care_of
+# last_time_tweeted
+# recommendation_count
 
 class User < ActiveRecord::Base
   attr_accessible :name, :nbr_followers, :is_me, :follows_me, :i_follow, :i_follow_nbr,

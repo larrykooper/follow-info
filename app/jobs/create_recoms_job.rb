@@ -20,6 +20,7 @@ class CreateRecomsJob
   def perform
     puts 'larrylog: CreateRecomsJob started'
     pifs = options['pifs']
+    @@input_size = pifs.size
     if defined? CLIENT
       @@tclient = CLIENT
     else
@@ -30,11 +31,14 @@ class CreateRecomsJob
         :oauth_token_secret => ENV["TWITTER_OAUTH_TOKEN_SECRET"]
       )
     end
+    on_count = 0
     # In most cases, my PIF will follow less than 5,000 people.
     # But sometimes (NYTFridge, +) they follow more than 5,000.
     pifs.each do |pif|
     # process one PIF that was passed to job
+      on_count += 1
     	puts "larrylog: doing #{pif}"
+      puts "larrylog: doing #{on_count} of #{@@input_size}"
     	done_with_this_pif = false
     	while not done_with_this_pif
     		ending_hash = process_5000_ppfs(pif)
@@ -68,7 +72,11 @@ class CreateRecomsJob
       #puts ppfs
       @@ppfs_size = ppfs.size
       puts "larrylog: PPFs size: #{@@ppfs_size}"
-      done_with_ppfs_page = false
+      if @@ppfs_size == 0
+        done_with_ppfs_page = true
+      else
+        done_with_ppfs_page = false
+      end
       starting = 0
       user_lookup_ok = true
       while not done_with_ppfs_page
