@@ -37,6 +37,7 @@ class CreateRecomsJob
     pifs.each do |pif|
     # process one PIF that was passed to job
       on_count += 1
+      puts "larrylog:"
       puts "larrylog: processing PIF: #{pif}"
       puts "larrylog: doing PIF ##{on_count} of #{@@input_size} PIFs"
       done_with_this_pif = false
