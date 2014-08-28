@@ -37,25 +37,29 @@ class CreateRecomsJob
     pifs.each do |pif|
     # process one PIF that was passed to job
       on_count += 1
-    	puts "larrylog: doing #{pif}"
-      puts "larrylog: doing #{on_count} of #{@@input_size}"
-    	done_with_this_pif = false
-    	while not done_with_this_pif
-    		ending_hash = process_5000_ppfs(pif)
+      puts "larrylog: processing PIF: #{pif}"
+      puts "larrylog: doing PIF ##{on_count} of #{@@input_size} PIFs"
+      done_with_this_pif = false
+      cursor = -1
+      while not done_with_this_pif
+    		ending_hash = process_5000_ppfs(pif, cursor)
     		if ending_hash[:next_cursor] == 0
     		  done_with_this_pif = true
+        else
+          cursor = ending_hash[:next_cursor]
     		end
     	end # while not done_with_this_pif
     end # pifs.each do
 
   end # perform
 
-  def process_5000_ppfs(username)
+  def process_5000_ppfs(username, cursor)
   	ret_hash = {}
     ret_hash[:api_status] = "ok"
     friend_lookup_ok = true
     begin
-  	  twitter_reply = @@tclient.friend_ids({:screen_name => username})
+      # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitcon::Cursor object
+  	  twitter_reply = @@tclient.friend_ids({:screen_name => username, :cursor => cursor})
     rescue
   	  puts "Twitter call friend_ids caused error!"
       p $!
@@ -69,7 +73,15 @@ class CreateRecomsJob
       next_cursor = twitter_reply.next_cursor
       ret_hash[:next_cursor] = next_cursor
       ppfs = twitter_reply.ids
-      #puts ppfs
+      rate_limit = @@tclient.rate_limit
+      rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
+      #rate_limit_reset = rate_limit.attrs["x-rate-limit-reset"]
+      puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
+      # rate limit code
+      if rate_limit_remaining.to_i <= 1
+        puts "larrylog: sleeping until #{rate_limit.reset_at}"
+        sleep rate_limit.reset_in
+      end
       @@ppfs_size = ppfs.size
       puts "larrylog: PPFs size: #{@@ppfs_size}"
       if @@ppfs_size == 0
@@ -101,7 +113,7 @@ class CreateRecomsJob
     begin
        twitter_user_info = @@tclient.users(ppfs) # Call Twitter; this returns an array of Twitcon::User objects
     rescue
-      puts "Twitter call users/lookup caused error!"
+      puts "larrylog: Twitter call users/lookup caused error!"
       p $!
       puts $@
       # end further processing
@@ -109,8 +121,16 @@ class CreateRecomsJob
     end
     if user_lookup_ok
       puts "larrylog: just successfully did user lookup"
+      # rate limit code
+      rate_limit = @@tclient.rate_limit
+      rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
+      puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
+      if rate_limit_remaining.to_i <= 1
+        puts "larrylog: sleeping until #{rate_limit.reset_at}"
+        sleep rate_limit.reset_in
+      end
       twitter_user_info.each do |ppf|
-        puts "larrylog: processing #{ppf.screen_name}"
+        puts "larrylog: processing PPF: #{ppf.screen_name}"
         # see if the PPF has a user record
         user = User.find_by_name(ppf.screen_name)  # returns nil if not found
         if user.nil?

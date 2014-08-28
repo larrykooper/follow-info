@@ -12,8 +12,8 @@ class LarrysTwitterAccount
     # Call Resque worker
     # pif_test_array line is only for dev
     # In real runs, will want to pass all PIFs with a given tag
-    # pif_test_array = ['newyorkyimby', 'RWhelanWSJ', 'stevecuozzo']
-    pifs = User.pifs_with_tag('real-estate').map {|user| user.name}
+    # pifs = ['newyorkyimby', 'RWhelanWSJ', 'stevecuozzo']
+    pifs = User.pifs_with_tag('transportation').map {|user| user.name}
     # For all users, set recommendation_count to zero
     ActiveRecord::Base.connection.execute("UPDATE users SET recommendation_count = 0")
     @recoms_job_id = CreateRecomsJob.create(:pifs => pifs)
