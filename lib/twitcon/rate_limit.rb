@@ -33,7 +33,8 @@ module Twitcon
 
     # @return [Time]
     def reset_at
-      reset = @attrs.values_at('x-ratelimit-reset', 'X-RateLimit-Reset').compact.first
+      reset = @attrs['x-rate-limit-reset']
+      #reset = @attrs.values_at('x-ratelimit-reset', 'X-RateLimit-Reset').compact.first
       Time.at(reset.to_i) if reset
     end
 
