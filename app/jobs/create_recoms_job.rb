@@ -41,6 +41,13 @@ class CreateRecomsJob
       puts "larrylog: processing PIF: #{pif}"
       puts "larrylog: doing PIF ##{on_count} of #{@@input_size} PIFs"
       done_with_this_pif = false
+      # We check how many people this PIF follows
+      twitter_reply = @@tclient.user_show({:screen_name => pif})
+      pif_following_count = twitter_reply[:body][:friends_count]
+      if pif_following_count > 10000
+        puts "larrylog: User follows more than 10,000 people - skipping!"
+        done_with_this_pif = true
+      end
       cursor = -1
       while not done_with_this_pif
     		ending_hash = process_5000_ppfs(pif, cursor)
