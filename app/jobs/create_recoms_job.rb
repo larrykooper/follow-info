@@ -74,12 +74,11 @@ class CreateRecomsJob
       next_cursor = twitter_reply.next_cursor
       ret_hash[:next_cursor] = next_cursor
       ppfs = twitter_reply.ids
+      # rate limit code
       rate_limit = @@tclient.rate_limit
       rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
-      #rate_limit_reset = rate_limit.attrs["x-rate-limit-reset"]
       puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
-      # rate limit code
-      if rate_limit_remaining.to_i <= 1
+      if rate_limit_remaining.to_i <= 0
         puts "larrylog: sleeping until #{rate_limit.reset_at}"
         sleep rate_limit.reset_in
       end
@@ -126,7 +125,7 @@ class CreateRecomsJob
       rate_limit = @@tclient.rate_limit
       rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
       puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
-      if rate_limit_remaining.to_i <= 1
+      if rate_limit_remaining.to_i <= 0
         puts "larrylog: sleeping until #{rate_limit.reset_at}"
         sleep rate_limit.reset_in
       end
