@@ -112,6 +112,13 @@ module Twitcon
       end.flatten
     end
 
+    # Returns information about one user
+    # https://dev.twitter.com/docs/api/1.1/get/users/show
+    def user_show(*args)
+      options = args.extract_options!
+      response = get("/1.1/users/show.json", options)
+    end
+
       # Perform an HTTP GET request
     def get(path, params={}, options={})
       request(:get, path, params, options)
@@ -142,6 +149,7 @@ module Twitcon
       uri = options[:endpoint] || @endpoint
       uri = URI(uri) unless uri.respond_to?(:host)
       uri += path
+      #puts "URI: " # debug
       #puts uri # debug
       request_headers = {}
       if self.credentials?
