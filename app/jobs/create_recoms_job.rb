@@ -42,8 +42,23 @@ class CreateRecomsJob
       puts "larrylog: doing PIF ##{on_count} of #{@@input_size} PIFs"
       done_with_this_pif = false
       # We check how many people this PIF follows
-      twitter_reply = @@tclient.user_show({:screen_name => pif})
+      begin
+        twitter_reply = @@tclient.user_show({:screen_name => pif})
+      rescue
+        puts "larrylog: Twitter call user_show caused error!"
+        p $!
+        puts $@
+      end
       pif_following_count = twitter_reply[:body][:friends_count]
+      # rate limit code
+      rate_limit = @@tclient.rate_limit
+      rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
+      puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
+      if rate_limit_remaining.to_i <= 0
+        puts "larrylog: sleeping until #{rate_limit.reset_at}"
+        sleep rate_limit.reset_in
+      end
+      # end rate limit code
       if pif_following_count > 10000
         puts "larrylog: User follows more than 10,000 people - skipping!"
         done_with_this_pif = true
@@ -69,7 +84,7 @@ class CreateRecomsJob
       # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitcon::Cursor object
   	  twitter_reply = @@tclient.friend_ids({:screen_name => username, :cursor => cursor})
     rescue
-  	  puts "Twitter call friend_ids caused error!"
+  	  puts "larrylog: Twitter call friend_ids caused error!"
       p $!
       puts $@
       # end further processing
