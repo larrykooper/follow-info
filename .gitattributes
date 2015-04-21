@@ -1,0 +1,4 @@
+app/assets/javascripts/jquery.js linguist-vendored
+app/assets/javascripts/jquery.min.js  linguist-vendored
+app/assets/javascripts/jquery.tablesorter.js  linguist-vendored
+app/assets/javascripts/jquery_ujs.js linguist-vendored
