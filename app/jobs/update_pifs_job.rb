@@ -2,7 +2,7 @@ require 'twitcon'
 
 class UpdatePifsJob
   include Resque::Plugins::Status
-  extend HerokuAutoScaler::AutoScaling
+  
 
   @queue = :pif_updating
 

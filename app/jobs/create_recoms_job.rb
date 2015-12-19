@@ -13,7 +13,7 @@ require 'twitcon'
 
 class CreateRecomsJob
   include Resque::Plugins::Status
-  extend HerokuAutoScaler::AutoScaling
+  
 
   @queue = :recommending
 
