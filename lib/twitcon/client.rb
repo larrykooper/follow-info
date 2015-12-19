@@ -114,14 +114,15 @@ module Twitcon
 
     # Returns information about one user
     # https://dev.twitter.com/docs/api/1.1/get/users/show
+    # https://dev.twitter.com/rest/reference/get/users/show
     def user_show(*args)
-      options = args.extract_options!
-      response = get("/1.1/users/show.json", options)
+      params = args.extract_options! 
+      response = get("/1.1/users/show.json", params)
     end
 
       # Perform an HTTP GET request
-    def get(path, params={}, options={})
-      request(:get, path, params, options)
+    def get(path, params={}, options={})       
+        request(:get, path, params, options)
     end
 
     # Perform an HTTP POST request
@@ -141,16 +142,14 @@ module Twitcon
     #
     # @return [Faraday::Connection]
     def connection
-      @connection ||= Faraday.new(@endpoint, @connection_options.merge(:builder => @middleware))
+      @connection ||= Faraday.new(@endpoint)      
     end
 
     # Perform an HTTP request
     def request(method, path, params={}, options={})
       uri = options[:endpoint] || @endpoint
       uri = URI(uri) unless uri.respond_to?(:host)
-      uri += path
-      #puts "URI: " # debug
-      #puts uri # debug
+      uri += path      
       request_headers = {}
       if self.credentials?
         authorization = auth_header(method, uri, params)
