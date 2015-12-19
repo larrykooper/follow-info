@@ -12,8 +12,7 @@ end
 
 gem 'resque-status'
 gem 'resque'
-gem 'heroku'
-gem 'devise'
+gem 'devise', "3.2.2"
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
@@ -28,5 +27,5 @@ gem 'simple_oauth'
 
 group :development do
   gem 'rspec-rails'
-  gem 'ruby-debug19', "0.11.6"
+  #gem 'ruby-debug19', "0.11.6"
 end
