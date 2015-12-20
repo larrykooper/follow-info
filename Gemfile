@@ -12,6 +12,7 @@ end
 
 gem 'resque-status'
 gem 'resque'
+gem 'twitter'
 gem 'devise', "3.2.2"
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
