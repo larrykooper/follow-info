@@ -1,5 +1,3 @@
-require 'twitcon'
-
 # Idea - a subset of user's PIFs (those with a given tag) (an array)
 # will be passed into the job. Passing all of my 1,800+
 # PIFs would be unwieldy; Also, I probably want recommendations
@@ -8,12 +6,9 @@ require 'twitcon'
 # PIF -> person I follow
 # PPF -> Person my PIF follows
 
-# CURRENT VERSION IGNORES RATE LIMITING
-# RL SUPPORT TO BE ADDED LATER
-
 class CreateRecomsJob
   include Resque::Plugins::Status
-  
+  require 'twitter'  
 
   @queue = :recommending
 
@@ -24,7 +19,7 @@ class CreateRecomsJob
     if defined? CLIENT
       @@tclient = CLIENT
     else
-      @@tclient = Twitcon::Client.new(
+      @@tclient = Twitter::REST::Client.new(
         :consumer_key => ENV["TWITTER_CONSUMER_KEY"],
         :consumer_secret => ENV["TWITTER_CONSUMER_SECRET"],
         :oauth_token => ENV["TWITTER_OAUTH_TOKEN"],
@@ -43,21 +38,27 @@ class CreateRecomsJob
       done_with_this_pif = false
       # We check how many people this PIF follows
       begin
-        twitter_reply = @@tclient.user_show({:screen_name => pif})
+        twitter_reply = @@tclient.user(pif)
+      rescue Twitter::Error::TooManyRequests => error 
+          puts "larrylog: Twitter call to 'user' caused TooManyRequests error"
+          rate_limit = error.rate_limit 
+          puts "larrylog: sleeping until #{rate_limit.reset_at}"
+          sleep error.rate_limit.reset_in + 1   
+          retry
       rescue
         puts "larrylog: Twitter call user_show caused error!"
         p $!
         puts $@
       end
-      pif_following_count = twitter_reply[:body][:friends_count]
+      pif_following_count = twitter_reply.friends_count
       # rate limit code
-      rate_limit = @@tclient.rate_limit
-      rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
-      puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
-      if rate_limit_remaining.to_i <= 0
-        puts "larrylog: sleeping until #{rate_limit.reset_at}"
-        sleep rate_limit.reset_in
-      end
+      # rate_limit = @@tclient.rate_limit
+      # rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
+      # puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
+      # if rate_limit_remaining.to_i <= 0
+      #   puts "larrylog: sleeping until #{rate_limit.reset_at}"
+      #   sleep rate_limit.reset_in
+      # end
       # end rate limit code
       if pif_following_count > 10000
         puts "larrylog: User follows more than 10,000 people - skipping!"
@@ -83,6 +84,12 @@ class CreateRecomsJob
     begin
       # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitcon::Cursor object
   	  twitter_reply = @@tclient.friend_ids({:screen_name => username, :cursor => cursor})
+  	rescue Twitter::Error::TooManyRequests => error   
+  	    puts "larrylog: Twitter call to 'friend_ids' caused TooManyRequests error"
+        rate_limit = error.rate_limit 
+        puts "larrylog: sleeping until #{rate_limit.reset_at}"
+        sleep error.rate_limit.reset_in + 1   
+        retry
     rescue
   	  puts "larrylog: Twitter call friend_ids caused error!"
       p $!
@@ -93,17 +100,17 @@ class CreateRecomsJob
     end
     if friend_lookup_ok
       puts "larrylog: I just successfully called friend_ids"
-      next_cursor = twitter_reply.next_cursor
+      next_cursor = twitter_reply.attrs[:next_cursor]
       ret_hash[:next_cursor] = next_cursor
-      ppfs = twitter_reply.ids
-      # rate limit code
-      rate_limit = @@tclient.rate_limit
-      rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
-      puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
-      if rate_limit_remaining.to_i <= 0
-        puts "larrylog: sleeping until #{rate_limit.reset_at}"
-        sleep rate_limit.reset_in
-      end
+      ppfs = twitter_reply.attrs[:ids]
+      # # rate limit code
+      # rate_limit = @@tclient.rate_limit
+      # rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
+      # puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
+      # if rate_limit_remaining.to_i <= 0
+      #   puts "larrylog: sleeping until #{rate_limit.reset_at}"
+      #   sleep rate_limit.reset_in
+      # end
       @@ppfs_size = ppfs.size
       puts "larrylog: PPFs size: #{@@ppfs_size}"
       if @@ppfs_size == 0
@@ -134,6 +141,12 @@ class CreateRecomsJob
     user_lookup_ok = true
     begin
        twitter_user_info = @@tclient.users(ppfs) # Call Twitter; this returns an array of Twitcon::User objects
+    rescue Twitter::Error::TooManyRequests => error   
+  	    puts "larrylog: Twitter call to users in do_100 caused TooManyRequests error"
+        rate_limit = error.rate_limit 
+        puts "larrylog: sleeping until #{rate_limit.reset_at}"
+        sleep error.rate_limit.reset_in + 1    
+        retry  
     rescue
       puts "larrylog: Twitter call users/lookup caused error!"
       p $!
@@ -144,13 +157,13 @@ class CreateRecomsJob
     if user_lookup_ok
       puts "larrylog: just successfully did user lookup"
       # rate limit code
-      rate_limit = @@tclient.rate_limit
-      rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
-      puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
-      if rate_limit_remaining.to_i <= 0
-        puts "larrylog: sleeping until #{rate_limit.reset_at}"
-        sleep rate_limit.reset_in
-      end
+      # rate_limit = @@tclient.rate_limit
+      # rate_limit_remaining = rate_limit.attrs["x-rate-limit-remaining"]
+      # puts "larrylog: rate_limit_remaining: #{rate_limit_remaining}, rate_limit_reset: #{rate_limit.reset_at}"
+      # if rate_limit_remaining.to_i <= 0
+      #   puts "larrylog: sleeping until #{rate_limit.reset_at}"
+      #   sleep rate_limit.reset_in
+      # end
       twitter_user_info.each do |ppf|
         puts "larrylog: processing PPF: #{ppf.screen_name}"
         # see if the PPF has a user record
