@@ -1,6 +1,6 @@
 class Tagging < ActiveRecord::Base
 
-  attr_accessible :tag, :user, :is_published
+
   belongs_to :tag
   belongs_to :user
 
