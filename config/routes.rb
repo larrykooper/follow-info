@@ -4,10 +4,6 @@ FollowInfo::Application.routes.draw do
   devise_for :follow_info_users
   #devise_for :follow_info_users, :skip => :registrations
 
-
-  #devise_for :follow_info_users, :skip => :registrations
-  devise_for :follow_info_users
-
   root :to => "welcome#index"
   get '/' => 'welcome#index'
   get "tags" => "tag#list"
