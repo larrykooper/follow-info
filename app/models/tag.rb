@@ -1,20 +1,22 @@
-# A Tag is a label used to categorize a Twitter user's tweets 
+# A Tag is a label used to categorize a Twitter user's tweets
 #  in order to organize them into lists
-# and keep track of who I follow. 
-class Tag < ActiveRecord::Base 
-  attr_accessible :name, :is_published
+
+# and keep track of who I follow.
+class Tag < ActiveRecord::Base
+
   has_many :taggings
-  has_many :users, :through => :taggings  
-  
+  has_many :users, :through => :taggings
+
+
   # Class Methods
 
   def self.by_user_count
-    tags_hash = Tagging.joins(:tag).joins(:user).where("users.i_follow" => 't').count(:group => 'tags.name') 
+    tags_hash = Tagging.joins(:tag).joins(:user).where("users.i_follow" => 't').count(:group => 'tags.name')
     tags_arr = tags_hash.sort { |a,b| b[1]<=>a[1] }
   end
 
-  # input is a delimited list of tags 
-  # output is an array of tags 
+  # input is a delimited list of tags
+  # output is an array of tags
   def self.parse(list)
     tag_names = []
     # first, pull out the quoted tags
@@ -28,22 +30,22 @@ class Tag < ActiveRecord::Base
     # delete any blank tag names
     tag_names = tag_names.delete_if { |t| t.empty? }
     return tag_names
-  end  
-  
-  def self.used_tags 
+  end
+
+  def self.used_tags
     where(:taggings.size > 0).order('name')
-  end   
+  end
 
   # Instance Methods
 
   def add_user_manually(user)
-    # We set is_published to false 
-    # because manually added tags are not published    
-    Tagging.create(:tag => self, :user => user, :is_published => false)    
+    # We set is_published to false
+    # because manually added tags are not published
+    Tagging.create(:tag => self, :user => user, :is_published => false)
   end
-  
+
   def pifs_count
-    users.where(:i_follow => true).count 
-  end 
-  
+    users.where(:i_follow => true).count
+  end
+
 end

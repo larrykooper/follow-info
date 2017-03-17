@@ -1,37 +1,39 @@
 class Tagging < ActiveRecord::Base
+
   attr_accessible :tag, :user, :is_published
   belongs_to :tag
   belongs_to :user
-  
-  # CLASS METHODS 
+
+  # CLASS METHODS
   def self.create_from_twit_list_entry(user_id, tag_id)
-    tagging = Tagging.new({:tag_id => tag_id, 
-      :user_id => user_id, 
+    tagging = Tagging.new({:tag_id => tag_id,
+      :user_id => user_id,
       :is_published => true,
       :taken_care_of => true})
-    tagging.save! 
-  end  
-  
-  def self.taggings_not_taken_care_of 
+    tagging.save!
+  end
+
+  def self.taggings_not_taken_care_of
     sex_tag = Tag.find_by_name("sex")
-    # Sex taggings for now will not be taken_care_of since they are private 
-    # But we can't assume if not TCO they are deleted 
+    # Sex taggings for now will not be taken_care_of since they are private
+    # But we can't assume if not TCO they are deleted
     Tagging.where("taken_care_of = false AND is_published = true AND tag_id != ?", sex_tag.id)
-  end 
-    
-  # INSTANCE METHODS 
+  end
+
+  # INSTANCE METHODS
   def process_twit_list_entry(user_id, tag_id)
-    self.is_published = true  # Because coming from Twitter 
-    self.taken_care_of = true 
+    self.is_published = true  # Because coming from Twitter
+    self.taken_care_of = true
     self.save!
-  end  
-  
+  end
+
   def tag_name
     tag.name
   end
-  
+
   def user_name
     user.name
+
   end
-  
+
 end
