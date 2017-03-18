@@ -33,7 +33,13 @@ class Tag < ActiveRecord::Base
   end
 
   def self.used_tags
-    where(:taggings.size > 0).order('name')
+    used_tags = []
+    Tag.all.each do |tag|
+      if tag.taggings.size > 0
+        used_tags << tag
+      end
+    end
+    used_tags.sort_by! {|tag| tag.name.downcase}
   end
 
   # Instance Methods

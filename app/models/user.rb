@@ -99,7 +99,7 @@ class User < ActiveRecord::Base
     Tag.transaction do
       taggings.destroy_all
       Tag.parse(list).each do |name|
-        Tag.find_or_create_by_name(name).add_user_manually(self)
+        Tag.find_or_create_by(name: name).add_user_manually(self)
       end
     end
   end
