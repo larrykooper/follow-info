@@ -11,7 +11,7 @@ class Tag < ActiveRecord::Base
   # Class Methods
 
   def self.by_user_count
-    tags_hash = Tagging.joins(:tag).joins(:user).where("users.i_follow" => 't').count(:group => 'tags.name')
+    tags_hash = Tagging.joins(:tag).joins(:user).where("users.i_follow" => 't').group('tags.name').count
     tags_arr = tags_hash.sort { |a,b| b[1]<=>a[1] }
   end
 
