@@ -13,7 +13,7 @@ end
 gem 'resque-status'
 gem 'resque'
 gem 'twitter'
-gem 'devise', "3.2.2"
+#gem 'devise'
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
@@ -21,7 +21,7 @@ gem 'pg'
 gem 'memcachier'
 gem 'dalli', "~> 2.7.0"
 gem 'oauth'
-gem 'thin'
+gem 'thin', "1.7.2"
 gem 'faraday'
 gem 'multi_json'
 gem 'simple_oauth'
