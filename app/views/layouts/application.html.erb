@@ -6,15 +6,15 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title>Larry's Twitter App - <%= @page_title || "Page needs title" %></title>
   <%= stylesheet_link_tag 'base', 'screen' %>
-  <%= javascript_include_tag "application" %> 
-  <%= yield :script %> 
+  <%= javascript_include_tag "application" %>
+  <%= yield :script %>
 </head>
 <body>
-  
+
 <div id="content">
   <% if @current_owner -%>
-    <div class="owner_header"> 
-      <%= @current_owner.name %> 
+    <div class="owner_header">
+      <%= @current_owner.name %>
     </div>
   <% end -%>
 
@@ -26,11 +26,7 @@
     <% end -%>
   <% end -%>
   <%= link_to "Home", "/welcome/index" %>
-  <% if follow_info_user_signed_in? %>
-    <%= link_to('logout', destroy_follow_info_user_session_path) %>
-  <% else %>
-    <%= link_to('login', new_follow_info_user_session_path) %>
-  <% end %>
+
 
   <%= yield  %>
 </div>

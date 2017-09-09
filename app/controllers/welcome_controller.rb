@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  before_filter :authenticate_follow_info_user!
+  #before_filter :authenticate_follow_info_user!
   helper_method :sort_column, :sort_direction
 
 	def add_pif

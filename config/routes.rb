@@ -1,6 +1,6 @@
 FollowInfo::Application.routes.draw do
 
-  devise_for :follow_info_users
+  #devise_for :follow_info_users
   #devise_for :follow_info_users, :skip => :registrations
 
   root :to => "welcome#index"
@@ -21,9 +21,9 @@ FollowInfo::Application.routes.draw do
   post "/welcome/update_pif"
   post "/welcome/get_recoms"
 
-  devise_scope :follow_info_user do
-    match '/follow_info_users/sign_out' => "devise/sessions#destroy"
-  end
+  # devise_scope :follow_info_user do
+  #   match '/follow_info_users/sign_out' => "devise/sessions#destroy"
+  # end
   resources :users
 
   #match ':controller/:action'
