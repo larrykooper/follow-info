@@ -1,4 +1,4 @@
-require 'twitcon'
+require 'twitter'
 
 class UpdatePifsJob
   include Resque::Plugins::Status
@@ -12,12 +12,12 @@ class UpdatePifsJob
     if defined? CLIENT
       @@tclient = CLIENT
     else
-      @@tclient = Twitcon::Client.new(
-        :consumer_key => ENV["TWITTER_CONSUMER_KEY"],
-        :consumer_secret => ENV["TWITTER_CONSUMER_SECRET"],
-        :oauth_token => ENV["TWITTER_OAUTH_TOKEN"],
-        :oauth_token_secret => ENV["TWITTER_OAUTH_TOKEN_SECRET"]
-      )
+      @@tclient = Twitter::REST::Client.new do |config|
+        config.consumer_key = ENV["TWITTER_CONSUMER_KEY"]
+        config.consumer_secret = ENV["TWITTER_CONSUMER_SECRET"]
+        config.access_token = ENV["TWITTER_OAUTH_TOKEN"]
+        config.access_token_secret = ENV["TWITTER_OAUTH_TOKEN_SECRET"]
+      end
     end
     done_with_all_pifs = false
     while not done_with_all_pifs
@@ -38,7 +38,7 @@ class UpdatePifsJob
     ret_hash[:api_status] = "ok"
     friend_lookup_ok = true
     begin
-      twitter_reply = @@tclient.friend_ids # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitcon::Cursor object
+      twitter_reply = @@tclient.friend_ids('larrykooper') # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitter::Cursor object
     rescue
       puts "Twitter call friend_ids caused error!"
       p $!
@@ -51,7 +51,7 @@ class UpdatePifsJob
       puts "I just successfully called friend_ids"
       next_cursor = twitter_reply.next_cursor
       ret_hash[:next_cursor] = next_cursor
-      pifs = twitter_reply.ids
+      pifs = twitter_reply.collection
       @@friends_page_size = pifs.size
       puts "friends_page_size: #{@@friends_page_size}"
       done_with_friends_page = false
@@ -77,7 +77,7 @@ class UpdatePifsJob
   def do_100(pifs)
     user_lookup_ok = true
     begin
-      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitcon::User objects
+      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitter::User objects
     rescue
       puts "Twitter call users/lookup caused error!"
       p $!
@@ -98,9 +98,11 @@ class UpdatePifsJob
         else
           user.process_pif(pif, @@ind)
         end
-        percent_complete = (@@done_count * 100) / @@friends_page_size # TODO fix this for users who follow > 5000 people
+        fps = @@friends_page_size
+        percent_complete = (@@done_count * 100) / fps
+        # TODO fix this for users who follow > 5000 people
         #puts "Updating PIFs is #{percent_complete}% complete..."
-        at(percent_complete, "At #{percent_complete}")
+        at(percent_complete, @@friends_page_size, "At #{percent_complete}")
         puts "done count: #{@@done_count} of #{@@friends_page_size}"
         puts "ind: #{@@ind}"
       end
