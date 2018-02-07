@@ -4,7 +4,7 @@
 source 'https://rubygems.org'
 
 gem 'rack'
-gem "rails"
+gem "rails", "5.1.4"
 
 group :assets do
   #gem 'sass-rails', '~> 3.2.3'
@@ -17,14 +17,21 @@ gem 'devise'
 gem 'hpricot'
 gem 'jquery-rails', '>= 1.0.3'
 gem 'libxml-ruby'
-gem 'pg'
+gem 'pg', '~> 0.18'
 gem 'dalli'
 gem 'thin'
 gem 'faraday'
 gem 'multi_json'
 gem 'simple_oauth'
+gem 'addressable'
+gem 'memoizable'
+gem 'naught'
+gem 'http'
+gem 'equalizer'
+gem 'buftok'
 
 group :development do
-  #gem 'rspec-rails'
+  gem 'rspec-rails'
+  gem 'byebug'
   #gem 'ruby-debug19', "0.11.6"
 end
