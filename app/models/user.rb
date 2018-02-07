@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
   end
 
   def process_pif(pif, ind)
-    last_time_tweeted = pif.status.nil? ? nil : pif.status['created_at']
+    last_time_tweeted = pif.status.nil? ? nil : pif.status.created_at
     # Update one user that I follow
     unless self.i_follow
       self.i_follow = true
