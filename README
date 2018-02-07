@@ -1,35 +1,35 @@
-follow-info 
+follow-info
 
 A Twitter web application
 
-I wrote follow-info provide a few functions that Twitter natively doesn't provide.  
+I wrote follow-info provide a few functions that Twitter natively doesn't provide.
 
-It does these things: 
+It does these things:
 
 - Update a database of the people I follow and how many followers each one of them has.
 
 - Update a database of the people who follow me.
 
-- Track changes in both of those lists since the last update.  This allows me to see who unfollows me and who might have changed their username. 
+- Track changes in both of those lists since the last update.  This allows me to see who unfollows me and who might have changed their username.
 
-- Calculate statistics including average number of followers among those I follow and how many of those I follow have more or fewer followers than I. 
+- Calculate statistics including average number of followers among those I follow and how many of those I follow have more or fewer followers than I.
 
-- Display all the above and allow the lists to be sorted by name or number of followers. 
+- Display all the above and allow the lists to be sorted by name or number of followers.
 
-Also, there's an option to manually enter a new person I follow from the homepage of the app, to avoid redoing the whole list to add one user. 
+Also, there's an option to manually enter a new person I follow from the homepage of the app, to avoid redoing the whole list to add one user.
 
-Because the updating of the lists can take a long time, I chose to use the backgroundrb library to offload the long-running processing. 
-While the lists are being updated in the background, I poll the background worker every 3 seconds using periodically_call_remote, and update a progress bar.  
+Because the updating of the lists can take a long time, I chose to use the backgroundrb library to offload the long-running processing.
+While the lists are being updated in the background, I poll the background worker every 3 seconds using periodically_call_remote, and update a progress bar.
 
 I parse the response from Twitter into JSON to make it easier to deal with.
 
-To use the background functions of the app, before starting the server, start backgroundrb using ./script/backgroundrb at the Rails root. 
+To use the background functions of the app, before starting the server, start backgroundrb using ./script/backgroundrb at the Rails root.
 
 Because this has been up to now a single-user app, you will need to make a few code changes to make it run for any user (Sorry, no setup app yet):
 
-replace YourTwitterUsername with 
+replace YourTwitterUsername with
 
 app/models/larrys_twitter_account.rb - replace YourTwitterUsername with your Twitter username (2 times)
 app/workers/update_lists_job.rb - replace YourTwitterUsername with your Twitter username (1 time)
 lib/tasks/follow.rake - replace YourTwitterUsername with your Twitter username (1 time)
-lib/twitcon.rb -replace YourTwitterUsername with your Twitter username (2 times)
+lib/twitter.rb -replace YourTwitterUsername with your Twitter username (2 times)
