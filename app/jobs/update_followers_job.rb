@@ -1,4 +1,4 @@
-require 'twitcon'
+require 'twitter'
 
 class UpdateFollowersJob
   include Resque::Plugins::Status
@@ -12,7 +12,7 @@ class UpdateFollowersJob
     if defined? CLIENT
       @@tclient = CLIENT
     else
-      @@tclient = Twitcon::Client.new(
+      @@tclient = Twitter::Client.new(
         :consumer_key => ENV["TWITTER_CONSUMER_KEY"],
         :consumer_secret => ENV["TWITTER_CONSUMER_SECRET"],
         :oauth_token => ENV["TWITTER_OAUTH_TOKEN"],
@@ -77,7 +77,7 @@ class UpdateFollowersJob
   def do_100(follers)
     user_lookup_ok = true
     begin
-      twitter_user_info = @@tclient.users(follers) # Call Twitter; this returns an array of Twitcon::User objects
+      twitter_user_info = @@tclient.users(follers) # Call Twitter; this returns an array of Twitter::User objects
     rescue
       puts "Twitter call users/lookup caused error!"
       puts "#{$!}"
