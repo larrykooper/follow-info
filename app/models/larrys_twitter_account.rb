@@ -51,8 +51,11 @@ class LarrysTwitterAccount
     # For all users, set taken_care_of to false
     ActiveRecord::Base.connection.execute("UPDATE users SET taken_care_of = false")
     # Call Resque worker
-    #@pifs_job_id = UpdatePifsJob.create()
-    Resque.enqueue(UpdatePifsJob)  # 31 Jan 18 adopting new resque
+    # NOTE
+    # We use enqueue for pure Resque
+    # We use create for resque-status
+    @pifs_job_id = UpdatePifsJob.create()
+    #Resque.enqueue(UpdatePifsJob)
     @pifs_job_id
   end
 
