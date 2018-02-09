@@ -35,3 +35,5 @@ group :development do
   gem 'byebug'
   #gem 'ruby-debug19', "0.11.6"
 end
+
+ruby "2.3.4"
