@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
 
   # Add a new person I follow from the Twitter API
   def self.create_new_pif(pif, ind)
-    last_time_tweeted = pif.status.nil? ? nil : pif.status['created_at']
+    last_time_tweeted = pif.status.nil? ? nil : pif.status.created_at
     user = User.new({:name => pif.screen_name,
       :nbr_followers => pif.followers_count,
       :last_time_tweeted => last_time_tweeted,
