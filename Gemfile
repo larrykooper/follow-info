@@ -29,6 +29,7 @@ gem 'naught'
 gem 'http'
 gem 'equalizer'
 gem 'buftok'
+gem 'redis'
 
 group :development do
   gem 'rspec-rails'

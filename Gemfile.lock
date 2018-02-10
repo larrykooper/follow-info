@@ -221,12 +221,16 @@ DEPENDENCIES
   pg (~> 0.18)
   rack
   rails (= 5.1.4)
+  redis
   resque
   resque-status
   rspec-rails
   simple_oauth
   thin
   uglifier (>= 1.0.3)
+
+RUBY VERSION
+   ruby 2.3.4p301
 
 BUNDLED WITH
    1.16.1
