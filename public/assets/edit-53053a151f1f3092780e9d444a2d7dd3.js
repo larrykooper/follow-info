@@ -1,1 +1,0 @@
-$(document).ready(function(){$(".tagName").click(function(e){$("#tags").val($(e.target).text())})});
