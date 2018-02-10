@@ -1,24 +1,23 @@
-require 'twitcon'
+require 'twitter'
 
 class UpdatePifsJob
   include Resque::Plugins::Status
-  extend HerokuAutoScaler::AutoScaling  
-  
-  @queue = :pif_updating 
-  
+  #extend HerokuAutoScaler::AutoScaling
+
+  @queue = :pif_updating
+
   def perform
     puts 'updatePifsJob started'
-    fiu = options['fiu']
     @@done_count = 0
     if defined? CLIENT
       @@tclient = CLIENT
-    else 
-      @@tclient = Twitcon::Client.new(
-        :consumer_key => ENV["TWITTER_CONSUMER_KEY"],
-        :consumer_secret => ENV["TWITTER_CONSUMER_SECRET"],
-        :oauth_token => ENV["TWITTER_OAUTH_TOKEN"],   # TODO fix this
-        :oauth_token_secret => ENV["TWITTER_OAUTH_TOKEN_SECRET"]   # TODO fix this
-      )
+    else
+      @@tclient = Twitter::REST::Client.new do |config|
+        config.consumer_key = ENV["TWITTER_CONSUMER_KEY"]
+        config.consumer_secret = ENV["TWITTER_CONSUMER_SECRET"]
+        config.access_token = ENV["TWITTER_OAUTH_TOKEN"]
+        config.access_token_secret = ENV["TWITTER_OAUTH_TOKEN_SECRET"]
+      end
     end
     done_with_all_pifs = false
     while not done_with_all_pifs
@@ -39,7 +38,7 @@ class UpdatePifsJob
     ret_hash[:api_status] = "ok"
     friend_lookup_ok = true
     begin
-      twitter_reply = @@tclient.friend_ids # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitcon::Cursor object
+      twitter_reply = @@tclient.friend_ids('larrykooper') # Call Twitter; this returns at most 5,000 IDs. It actually returns a Twitter::Cursor object
     rescue
       puts "Twitter call friend_ids caused error!"
       p $!
@@ -52,7 +51,7 @@ class UpdatePifsJob
       puts "I just successfully called friend_ids"
       next_cursor = twitter_reply.next_cursor
       ret_hash[:next_cursor] = next_cursor
-      pifs = twitter_reply.ids
+      pifs = twitter_reply.collection
       @@friends_page_size = pifs.size
       puts "friends_page_size: #{@@friends_page_size}"
       done_with_friends_page = false
@@ -68,7 +67,7 @@ class UpdatePifsJob
         end
         if ending >= (@@friends_page_size - 1)
           done_with_friends_page = true
-        end 
+        end
         starting = ending + 1
       end
     end
@@ -78,7 +77,7 @@ class UpdatePifsJob
   def do_100(pifs)
     user_lookup_ok = true
     begin
-      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitcon::User objects
+      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitter::User objects
     rescue
       puts "Twitter call users/lookup caused error!"
       p $!
@@ -92,45 +91,46 @@ class UpdatePifsJob
         puts "doing #{pif.screen_name}"
         @@done_count += 1
         @@ind = @@friends_page_size + 1 - @@done_count
-        # Process a TU that the FIU follows
-        # Against these models: TwitterUser, Following
-        Following.process_pif_for_current_user(fiu, pif, @@ind)
-        #twitter_user = TwitterUser.find_by_name(pif.screen_name)  # returns nil if not found
-        #if twitter_user.nil?
-        #  TwitterUser.create_new_pif(pif, @@ind)
-        #else
-        #  twitter_user.process_pif(pif, @@ind)
-        #end
-        percent_complete = (@@done_count * 100) / @@friends_page_size # TODO fix this for FI users who follow > 5000 people
+        # Process a PIF against User table
+        user = User.find_by_name(pif.screen_name)  # returns nil if not found
+        if user.nil?
+          User.create_new_pif(pif, @@ind)
+        else
+          user.process_pif(pif, @@ind)
+        end
+        fps = @@friends_page_size
+        percent_complete = (@@done_count * 100) / fps
+        # TODO fix this for users who follow > 5000 people
         #puts "Updating PIFs is #{percent_complete}% complete..."
-        at(percent_complete, "At #{percent_complete}")
+        at(percent_complete, @@friends_page_size, "At #{percent_complete}")
         puts "done count: #{@@done_count} of #{@@friends_page_size}"
         puts "ind: #{@@ind}"
       end
     end
     user_lookup_ok
   end # do_100
-  
+
   def finish_update_pifs
-    # Update system info 
+    # Update system info
     si = SystemInfo.find(1)
-    si.i_follow_last_update = Time.now 
-    si.save!       
-    # Deal with the deleted (the twitter_users where taken_care_of is now false)
-    gone_list = TwitterUser.pifs_deleted 
-    gone_list.each do |twitter_user|
-      deleted_pif = DeletedPif.new({:name => twitter_user.name, 
-        :nbr_followers => twitter_user.nbr_followers, 
-        :fmr_i_follow_nbr => twitter_user.i_follow_nbr, 
-        :follows_me => twitter_user.follows_me})
-      deleted_pif.save! 
-      if twitter_user.follows_me 
-        twitter_user.i_follow = false 
-        twitter_user.save! 
-      else 
-        twitter_user.destroy 
-      end       
-    end # gone_list.each do  
+
+    si.i_follow_last_update = Time.now
+    si.save!
+    # Deal with the deleted (the users where taken_care_of is now false)
+    gone_list = User.pifs_deleted
+    gone_list.each do |user|
+      deleted_pif = DeletedPif.new({:name => user.name,
+        :nbr_followers => user.nbr_followers,
+        :i_follow_nbr => user.i_follow_nbr,
+        :follows_me => user.follows_me})
+      deleted_pif.save!
+      if user.follows_me
+        user.i_follow = false
+        user.save!
+      else
+        user.destroy
+      end
+    end # gone_list.each do
   end
 
 end # class UpdatePifsJob

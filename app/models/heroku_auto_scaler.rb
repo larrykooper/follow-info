@@ -1,5 +1,5 @@
 # Based on the ideas from: http://blog.darkhax.com/2010/07/30/auto-scale-your-resque-workers-on-heroku
-require 'heroku'
+# require 'heroku'
 
 # Scale workers on Heroku automatically as your Resque queue grows.
 # Mixin the +AutoScaling+ module into your models to get the behavior.

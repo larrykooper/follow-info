@@ -1,5 +1,3 @@
-# A FollowInfoUser is a user of the follow-info app, i.e. someone who wants to track and tag who they follow on Twitter.
-
 class FollowInfoUser < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -7,7 +5,6 @@ class FollowInfoUser < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
 
   has_many :follow_info_users_tags
   has_many :followings
@@ -33,7 +30,7 @@ class FollowInfoUser < ActiveRecord::Base
   end
 
   def pifs
-    followings.where(:fiu_follows_tu => true)   
+    followings.where(:fiu_follows_tu => true)
   end
 
   def pifs_with_join
@@ -71,8 +68,8 @@ class FollowInfoUser < ActiveRecord::Base
          "AND fiu_follows_tu = 't' ",
           self.id])
   end
-  
-  def used_tags_sorted 
+
+  def used_tags_sorted
       Tag.find_by_sql(["SELECT DISTINCT LOWER(tags.name), tags.* FROM tags " +
            "INNER JOIN followings " +
            "ON tags.id = followings.tag_id " +
@@ -82,28 +79,29 @@ class FollowInfoUser < ActiveRecord::Base
             self.id])
   end
 
-  def update_pifs 
+  def update_pifs
     # Update entire list of TUs that the FIU follows (aka PIFs)
     # From Twitter to the local database
-    # Fiirst clear out deleted_pifs 
+    # Fiirst clear out deleted_pifs
     DeletedPif.clear_out_for(self)
-    # For all FIU's followings, set taken_care_of to false, because we haven't taken care of any yet.     
+    # For all FIU's followings, set taken_care_of to false, because we haven't taken care of any yet.
     ActiveRecord::Base.connection.execute("UPDATE followings SET taken_care_of = false WHERE follow_info_user_id = " + self.id)
     # Call Resque worker
-    @pifs_job_id = UpdatePifsJob.create(:fiu => self) 
+    @pifs_job_id = UpdatePifsJob.create(:fiu => self)
     @pifs_job_id
   end
 
-  def update_follers     
-    # Update entire list of people who follow the FIU 
-    # From Twitter to the local database 
+  def update_follers
+    # Update entire list of people who follow the FIU
+    # From Twitter to the local database
     # First clear out deleted_followers
     DeletedFollower.clear_out_for(self)
     # For all FIU's followings, set taken_care_of to false, because we haven't taken care of any yet.
     ActiveRecord::Base.connection.execute("UPDATE followings SET taken_care_of = false WHERE follow_info_user_id = " + self.id)
     # Call Resque worker
-    @follers_job_id = UpdateFollowersJob.create(:follers_nbr => self.follower_count)           
-    @follers_job_id   
-  end  
+    @follers_job_id = UpdateFollowersJob.create(:follers_nbr => self.follower_count)
+    @follers_job_id
+  end
+
 
 end

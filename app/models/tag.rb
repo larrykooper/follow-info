@@ -1,16 +1,17 @@
 # A Tag is a label used to categorize a Twitter user's tweets
 #  in order to organize them into lists
+
 # and keep track of who I follow.
 class Tag < ActiveRecord::Base
-  attr_accessible :name, :is_published
-  has_many :followings
-  has_many :follow_info_users_tags
-  has_many :twitter_users, :through => :followings
+
+  has_many :taggings
+  has_many :users, :through => :taggings
+
 
   # Class Methods
 
-  def self.by_twitter_user_count
-    tags_hash = Tagging.joins(:tag).joins(:twitter_user).where("twitter_users.i_follow" => 't').count(:group => 'tags.name')
+  def self.by_user_count
+    tags_hash = Tagging.joins(:tag).joins(:user).where("users.i_follow" => 't').group('tags.name').count
     tags_arr = tags_hash.sort { |a,b| b[1]<=>a[1] }
   end
 
@@ -32,17 +33,25 @@ class Tag < ActiveRecord::Base
   end
 
   def self.used_tags
-    where(:taggings.size > 0).order('name')
+    used_tags = []
+    Tag.all.each do |tag|
+      if tag.taggings.size > 0
+        used_tags << tag
+      end
+    end
+    used_tags.sort_by! {|tag| tag.name.downcase}
   end
 
   # Instance Methods
 
-  def add_twitter_user_manually(twitter_user)
-    Tagging.create(:tag => self, :twitter_user => twitter_user)
+  def add_user_manually(user)
+    # We set is_published to false
+    # because manually added tags are not published
+    Tagging.create(:tag => self, :user => user, :is_published => false)
   end
 
   def pifs_count
-    twitter_users.where(:i_follow => true).count
+    users.where(:i_follow => true).count
   end
 
 end
