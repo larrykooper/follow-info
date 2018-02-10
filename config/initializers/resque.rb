@@ -1,15 +1,6 @@
-if Rails.env.nyt? 
-  uri = URI.parse("redis://localhost:6379/")  
-  Resque.redis = Redis.new(:host => uri.host, :port => uri.port,  
-                                            :password => uri.password)  
-else 
-  ENV["REDISTOGO_URL"] ||= "redis://larrykooper:326ccce841a2132c4650f75439938cbc@barb.redistogo.com:9012/"
-  uri = URI.parse(ENV["REDISTOGO_URL"])
-  Resque.redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password, :thread_safe => true)
-end
+rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
+rails_env = ENV['RAILS_ENV'] || 'development'
 
-Dir["#{Rails.root}/app/jobs/*.rb"].each { |file| require file }
-
+resque_config = YAML.load_file(rails_root + '/config/resque.yml')
+Resque.redis = resque_config[rails_env]
 Resque::Plugins::Status::Hash.expire_in = (24 * 60 * 60) # 24hrs in seconds
-
-Resque.after_fork = Proc.new { ActiveRecord::Base.establish_connection }
