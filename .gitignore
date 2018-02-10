@@ -1,5 +1,4 @@
 .DS_Store
-.env
 /log/*.log
 /log/nohup.out
 /tmp/sessions/*
