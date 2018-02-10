@@ -1,16 +1,21 @@
-class WelcomeController < ApplicationController 
-  before_filter :authenticate_follow_info_user!
-  helper_method :sort_column, :sort_direction 
-	
-  def check_foller_update_status    
-    larry = LarrysTwitterAccount.instance 
-    @follers_job_id = params[:follers_job_id]        
+class WelcomeController < ApplicationController
+  before_action :authenticate_follow_info_user!
+  helper_method :sort_column, :sort_direction
+
+	def add_pif
+	  User.add_pif(params)
+	  redirect_to(:action => 'list_pif')
+	end
+
+  def check_foller_update_status
+    larry = LarrysTwitterAccount.instance
+    @follers_job_id = params[:follers_job_id]
     if request.xhr?
-      @status = larry.foller_update_status(@follers_job_id)      
+      @status = larry.foller_update_status(@follers_job_id)
       response = {:mystatus => @status["status"], :pct => @status["num"]}
       render json: response
     end
-  end 
+  end
 
   def check_pif_update_status
     larry = LarrysTwitterAccount.instance
@@ -20,61 +25,67 @@ class WelcomeController < ApplicationController
       @status = larry.pif_update_status(@pifs_job_id)
       response = {:mystatus => @status["status"], :pct => @status["num"]}
       render json: response
-    end  
-  end   
-  
-  def index 
-    @following = current_follow_info_user.pif_count 
-    @followers = current_follow_info_user.follower_count  
+    end
+  end
+
+  def index
+    @following = User.where(:i_follow => true).count
+    @followers = User.where(:follows_me => true).count
   end
 
   def list_follers
-    @followings = Following.for_user_tu_follows_fiu(current_follow_info_user)
-    @count = @followings.size
-  end  
-  
-  def list_idropped       
-    sort_clause = "fmr_i_follow_nbr DESC"
-    @deleted_pifs = DeletedPif.order(sort_clause)   
+    @sort_column_default = 'follows_me_nbr'
+    @sort_direction_default = 'desc'
+    @follers = User.where(:follows_me => true).order(sort_column + " " + sort_direction)
+    @count = @follers.size
   end
-  
+
+  def list_idropped
+    sort_clause = "i_follow_nbr DESC"
+    @deleted_pifs = DeletedPif.order(sort_clause)
+  end
+
   def list_pif
-    @followings = Following.for_user_fiu_follows_tu(current_follow_info_user) 
-    @count = @followings.size 
-  end   
-  
+    @sort_column_default = 'i_follow_nbr'
+    @sort_direction_default = 'desc'
+    @users = User.where(:i_follow => true).order(sort_column + " " + sort_direction)
+    @count = @users.size
+  end
+
   def list_stats
-    @following = current_follow_info_user.pif_count  
-    @followers = current_follow_info_user.follower_count 
-    @pif_folling = current_follow_info_user.pif_follower_count
+    @following = User.larry_following_count
+    @followers = User.larrys_foller_count
+    @pif_folling = User.pif_following_me_count
     @pif_folling_pct = @pif_folling * 100 / @following
-    @median_fol = current_follow_info_user.median_followers_of_pifs 
-    @mean_fol = current_follow_info_user.mean_followers_of_pifs   
+    @median_fol = User.median_followers_of_pif
+    @mean_fol = User.where(:i_follow => true).average(:nbr_followers)
   end
-  
-  def list_unfollowed     
-    sort_clause = "fmr_follower_number DESC"
-    @deleted_followers = DeletedFollower.order(sort_clause)
-  end   
-  
+
+  def list_unfollowed
+    sort_clause = "fmr_follows_me_nbr DESC"
+    @my_quitters = MyQuitter.order(sort_clause)
+  end
+
   def update_follers
-    follers_job_id = current_follow_info_user.update_follers
+    larry = LarrysTwitterAccount.instance
+    follers_job_id = larry.update_follers
     redirect_to :action => 'check_foller_update_status', :follers_job_id => follers_job_id
-  end  
-  
-  def update_pif    
-    pifs_job_id = current_follow_info_user.update_pifs
-    redirect_to :action => 'check_pif_update_status', :pifs_job_id => pifs_job_id
-  end     
-    
-  private 
-  
-  def sort_column
-    TwitterUser.column_names.include?(params[:sort]) ? params[:sort] : @sort_column_default
   end
-  
-  def sort_direction 
+
+  def update_pif
+    larry = LarrysTwitterAccount.instance
+    pifs_job_id = larry.update_all_pif
+    redirect_to :action => 'check_pif_update_status', :pifs_job_id => pifs_job_id
+  end
+
+  private
+
+  def sort_column
+    User.column_names.include?(params[:sort]) ? params[:sort] : @sort_column_default
+  end
+
+  def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
-  end  
-      
+  end
+
 end

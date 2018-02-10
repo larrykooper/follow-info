@@ -30,7 +30,7 @@ class TagController < ApplicationController
   end  # def edit
 
   def list
-    @tags = Tag.by_twitter_user_count
+    @tags = Tag.by_user_count
   end
 
 end # class
