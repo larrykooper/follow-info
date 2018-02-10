@@ -2,7 +2,7 @@
 
 <% content_for :script do %>
   <%= javascript_include_tag "jquery.metadata" %>
-  <%= javascript_include_tag "jquery.tablesorter" %>  
+  <%= javascript_include_tag "jquery.tablesorter" %>
   <%= javascript_include_tag "pifs_list" %>
 <% end %>
 
@@ -13,13 +13,13 @@ Updated:  <%= iflu %><br/><br/>
     <tr>
       <th><%=sortable "i_follow_nbr", "I Follow Nbr" %></th>
       <th><%=sortable "name" %></th>
-      <th><u>Tag(s)</u></th>
+      <th><u>Tag</u></th>
       <th class="{sorter: 'digitcomma'}"><u>Nbr Of Followers</u></th>
-      <th>Follows Me?</th>       
+      <th>Follows Me?</th>
       <th><%=sortable "last_time_tweeted" %></th>
       <th></th>
     </tr>
   </thead>
-  
-  <%= render(:partial => "ifollow_row", :collection => @followings) %> 
+
+  <%= render(:partial => "ifollow_row", :collection => @users) %>
 </table>

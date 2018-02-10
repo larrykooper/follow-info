@@ -1,21 +1,17 @@
-<% @page_title = "My Followers" %>
-
-<% content_for :script do %>
-  <%= javascript_include_tag "jquery.metadata" %>
-  <%= javascript_include_tag "jquery.tablesorter" %>  
-  <%= javascript_include_tag "list_follers" %>
-<% end %>
+<% 
+@page_title = "My Followers"
+%>
 
 <h1>My Followers - <%= @count %></h1>
 Updated:  <%= flu %><br/><br/>
-<table id="myFollowers" class="tablesorter">
+<table>
   <thead>
     <tr>
-      <th><u>Follows Me Nbr</u></th>
-      <th><u>Name</u></th>     
-      <th><u>I Follow?</u></th>
+      <th><%= sortable "follows_me_nbr", "Follows Me Nbr" %></th>
+      <th><%= sortable "name" %></th>     
+      <th>I Follow?</th>
     </tr>
   </thead>
   
-  <%= render(:partial => "foller_row", :collection => @followings) %> 
+  <%= render(:partial => "foller_row", :collection => @follers) %> 
 </table>

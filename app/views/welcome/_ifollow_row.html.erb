@@ -1,13 +1,10 @@
-<% ifollow_row = ifollow_row.twitter_user %>
-<% cache "twitter_user-#{ifollow_row.id}" do %>
-  <% thetag = ifollow_row.tag(current_follow_info_user)  %>
+
   <tr>
     <td><%= ifollow_row.i_follow_nbr %></td>
     <td><%= link_to ifollow_row.name, "http://twitter.com/#{ifollow_row.name}" %></td>
-    <td><%= tag_display_for_current_user(thetag) if thetag %></td>
+    <td><%= tags_display_for(ifollow_row.tags) %></td>
     <td align="right"><%= number_with_delimiter(ifollow_row.nbr_followers) %></td>
     <td><%= yes_no(ifollow_row.follows_me) %></td>
     <td><%= ifollow_row.last_time_tweeted.strftime("%Y-%m-%d %H:%M") if ifollow_row.last_time_tweeted %></td>
-    <td><%=link_to "Edit Tag", :controller => "twitter_users", :action => "edit", :id => ifollow_row.id %></td>
+    <td><%=link_to "Edit Tag", :controller => "users", :action => "edit", :id => ifollow_row.id %></td>
   </tr>
-<% end %>
