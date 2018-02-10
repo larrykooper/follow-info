@@ -1,0 +1,4 @@
+development: localhost:6379
+test: localhost:6379
+fi: localhost:6379
+production: redis://redistogo:ded4a276d28baf2b0dba3364a86dc0d2@koi.redistogo.com:9554/
