@@ -30,6 +30,7 @@ gem 'http'
 gem 'equalizer'
 gem 'buftok'
 gem 'redis'
+gem 'puma'
 
 group :development do
   gem 'rspec-rails'
