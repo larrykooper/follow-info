@@ -2,7 +2,6 @@ require 'twitter'
 
 class UpdatePifsJob
   include Resque::Plugins::Status
-  #extend HerokuAutoScaler::AutoScaling
 
   @queue = :pif_updating
 
@@ -100,8 +99,6 @@ class UpdatePifsJob
         end
         fps = @@friends_page_size
         percent_complete = (@@done_count * 100) / fps
-        # TODO fix this for users who follow > 5000 people
-        #puts "Updating PIFs is #{percent_complete}% complete..."
         at(percent_complete, @@friends_page_size, "At #{percent_complete}")
         puts "done count: #{@@done_count} of #{@@friends_page_size}"
         puts "ind: #{@@ind}"

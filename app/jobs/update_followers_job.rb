@@ -2,7 +2,6 @@ require 'twitter'
 
 class UpdateFollowersJob
   include Resque::Plugins::Status
-  #extend HerokuAutoScaler::AutoScaling
 
   @queue = :follower_updating
 
@@ -12,17 +11,17 @@ class UpdateFollowersJob
     if defined? CLIENT
       @@tclient = CLIENT
     else
-      @@tclient = Twitter::Client.new(
-        :consumer_key => ENV["TWITTER_CONSUMER_KEY"],
-        :consumer_secret => ENV["TWITTER_CONSUMER_SECRET"],
-        :oauth_token => ENV["TWITTER_OAUTH_TOKEN"],
-        :oauth_token_secret => ENV["TWITTER_OAUTH_TOKEN_SECRET"]
-      )
+      @@tclient = Twitter::REST::Client.new do |config|
+        config.consumer_key = ENV["TWITTER_CONSUMER_KEY"]
+        config.consumer_secret = ENV["TWITTER_CONSUMER_SECRET"]
+        config.access_token = ENV["TWITTER_OAUTH_TOKEN"]
+        config.access_token_secret = ENV["TWITTER_OAUTH_TOKEN_SECRET"]
+      end
     end
     done_with_all_follers = false
     while not done_with_all_follers
       ending_hash = do_5000_follers
-      if ending_hash[:next_cursor] = 0
+      if ending_hash[:next_cursor] == 0
         done_with_all_follers = true
       end
     end
@@ -38,12 +37,11 @@ class UpdateFollowersJob
     ret_hash[:api_status] = "ok"
     followers_lookup_ok = true
     begin
-      twitter_reply = @@tclient.follower_ids # Call Twitter
+      twitter_reply = @@tclient.follower_ids('larrykooper') # Call Twitter
     rescue
       puts "Twitter call follower_ids caused error!"
-
-      puts "#{$!}"
-
+      p $!
+      puts $@
       # end further processing
       followers_lookup_ok = false
       ret_hash[:api_status] = "Follower lookup caused error"
@@ -51,7 +49,8 @@ class UpdateFollowersJob
     if followers_lookup_ok
       puts "I just successfully called follower_ids"
       next_cursor = twitter_reply.next_cursor
-      follers = twitter_reply.ids
+      ret_hash[:next_cursor] = next_cursor
+      follers = twitter_reply.collection
       @@follers_page_size = follers.size
       puts "follers_page_size: #{@@follers_page_size}"
       done_with_follers_page = false
@@ -80,7 +79,8 @@ class UpdateFollowersJob
       twitter_user_info = @@tclient.users(follers) # Call Twitter; this returns an array of Twitter::User objects
     rescue
       puts "Twitter call users/lookup caused error!"
-      puts "#{$!}"
+      p $!
+      puts $@
       # end further processing
       user_lookup_ok = false
     end
@@ -90,18 +90,17 @@ class UpdateFollowersJob
         puts "doing #{foller.screen_name}"
         @@done_count += 1
         @@ind = @@follers_page_size + 1 - @@done_count
-
         # Process a follower against User table
         user = User.find_by_name(foller.screen_name) # returns nil if not found
         if user.nil?
           User.create_new_foller(foller, @@ind)
-
         else
           user.process_foller(foller, @@ind)
         end
-        percent_complete = (@@done_count * 100) / @@follers_page_size # TODO fix this for users who have > 5000 followers
-        at(percent_complete, "At #{percent_complete}")
-        puts "done count: #{@@done_count} of #{@@follers_page_size}" # TODO fix for users who have > 5000 followers
+        fps = @@follers_page_size
+        percent_complete = (@@done_count * 100) / fps
+        at(percent_complete, @@follers_page_size, "At #{percent_complete}")
+        puts "done count: #{@@done_count} of #{@@follers_page_size}"
         puts "ind: #{@@ind}"
       end
     end
@@ -115,20 +114,19 @@ class UpdateFollowersJob
     si.followers_last_update = Time.now
     si.save!
     # Deal with the twitter_users who have unfollowed me
-    unfollowed_me_list = TwitterUser.followers_deleted
-    unfollowed_me_list.each do |twitter_user|
-      unfollower = DeletedFollower.new({:name => twitter_user.name,
-        :fmr_follows_me_nbr => twitter_user.follows_me_nbr,
-        :i_follow => twitter_user.i_follow})
+    unfollowed_me_list = User.followers_deleted
+    unfollowed_me_list.each do |user|
+      unfollower = DeletedFollower.new({:name => user.name,
+        :fmr_follows_me_nbr => user.follows_me_nbr,
+        :i_follow => user.i_follow})
       unfollower.save!
-      if twitter_user.i_follow
-        twitter_user.follows_me = false
-        twitter_user.save!
+      if user.i_follow
+        user.follows_me = false
+        user.save!
       else
-        twitter_user.destroy
+        user.destroy
       end
     end # unfollowed_me_list.each do
-
   end
 
 end # class
