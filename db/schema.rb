@@ -8,102 +8,86 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111209191737) do
+ActiveRecord::Schema.define(version: 20180211014712) do
 
-  create_table "bdrb_job_queues", :force => true do |t|
-    t.binary   "args"
-    t.string   "worker_name"
-    t.string   "worker_method"
-    t.string   "job_key"
-    t.integer  "taken"
-    t.integer  "finished"
-    t.integer  "timeout"
-    t.integer  "priority"
-    t.datetime "submitted_at"
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.datetime "archived_at"
-    t.string   "tag"
-    t.string   "submitter_info"
-    t.string   "runner_info"
-    t.string   "worker_key"
-    t.datetime "scheduled_at"
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "deleted_followers", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.integer "fmr_follower_number"
+    t.boolean "fiu_follows_tu"
+    t.integer "follow_info_user_id"
+    t.datetime "date_tu_started_following_fiu"
   end
 
-  create_table "deleted_pifs", :force => true do |t|
-    t.string  "name"
+  create_table "deleted_pifs", id: :integer, default: -> { "nextval('deleted_pifs_id_seq1'::regclass)" }, force: :cascade do |t|
+    t.string "name"
     t.integer "nbr_followers"
     t.integer "i_follow_nbr"
     t.boolean "follows_me"
   end
 
-  create_table "deleted_taggings", :force => true do |t|
-    t.string   "tag_name"
-    t.string   "user_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "follow_info_users", :force => true do |t|
-    t.string   "email",                                 :default => "", :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
-    t.string   "reset_password_token"
+  create_table "follow_info_users", id: :integer, default: -> { "nextval('follow_info_users_id_seq1'::regclass)" }, force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", limit: 128, default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         :default => 0
+    t.integer "sign_in_count", default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["email"], name: "index_follow_info_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_follow_info_users_on_reset_password_token", unique: true
   end
 
-  add_index "follow_info_users", ["email"], :name => "index_follow_info_users_on_email", :unique => true
-  add_index "follow_info_users", ["reset_password_token"], :name => "index_follow_info_users_on_reset_password_token", :unique => true
-
-  create_table "my_quitters", :force => true do |t|
-    t.string  "name"
+  create_table "my_quitters", id: :integer, default: -> { "nextval('my_quitters_id_seq1'::regclass)" }, force: :cascade do |t|
+    t.string "name"
     t.integer "fmr_follows_me_nbr"
     t.boolean "i_follow"
   end
 
-  create_table "system_infos", :force => true do |t|
+  create_table "system_infos", id: :integer, default: -> { "nextval('system_infos_id_seq1'::regclass)" }, force: :cascade do |t|
     t.datetime "followers_last_update"
     t.datetime "i_follow_last_update"
     t.datetime "lists_last_update"
   end
 
-  create_table "taggings", :force => true do |t|
-    t.integer  "tag_id"
-    t.integer  "user_id"
-    t.boolean  "is_published"
+  create_table "taggings", id: :integer, default: -> { "nextval('taggings_id_seq1'::regclass)" }, force: :cascade do |t|
+    t.integer "tag_id"
+    t.integer "user_id"
+    t.boolean "is_published"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "taken_care_of"
+    t.boolean "taken_care_of"
   end
 
-  create_table "tags", :force => true do |t|
-    t.string   "name"
+  create_table "tags", id: :integer, default: -> { "nextval('tags_id_seq1'::regclass)" }, force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "is_published"
+    t.boolean "is_published"
   end
 
-  create_table "users", :force => true do |t|
-    t.string   "name"
-    t.integer  "nbr_followers"
-    t.boolean  "is_me"
-    t.boolean  "follows_me"
-    t.boolean  "i_follow"
+  create_table "users", id: :integer, default: -> { "nextval('users_id_seq1'::regclass)" }, force: :cascade do |t|
+    t.string "name"
+    t.integer "nbr_followers"
+    t.boolean "is_me"
+    t.boolean "follows_me"
+    t.boolean "i_follow"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "i_follow_nbr"
-    t.integer  "follows_me_nbr"
-    t.boolean  "taken_care_of"
+    t.integer "i_follow_nbr"
+    t.integer "follows_me_nbr"
+    t.boolean "taken_care_of"
     t.datetime "last_time_tweeted"
+    t.integer "recommendation_count"
   end
 
 end
