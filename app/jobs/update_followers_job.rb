@@ -117,7 +117,7 @@ class UpdateFollowersJob
     unfollowed_me_list = User.quitters
     unfollowed_me_list.each do |user|
       unfollower = DeletedFollower.new({:name => user.name,
-        :fmr_follows_me_nbr => user.follows_me_nbr,
+        :fmr_follower_number => user.follows_me_nbr,
         :i_follow => user.i_follow})
       unfollower.save!
       if user.i_follow
