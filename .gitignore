@@ -11,3 +11,4 @@
 /config/heroku.yml
 dump.rdb
 /config/database.yml
+.envrc
