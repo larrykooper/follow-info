@@ -42,6 +42,7 @@ class LarrysTwitterAccount
     @status
   end
 
+  # Runs the job update_pifs_job
   def update_all_pif
     # Update entire list of people I follow
     # From Twitter to my database
