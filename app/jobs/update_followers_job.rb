@@ -114,7 +114,7 @@ class UpdateFollowersJob
     si.followers_last_update = Time.now
     si.save!
     # Deal with the twitter_users who have unfollowed me
-    unfollowed_me_list = User.followers_deleted
+    unfollowed_me_list = User.quitters
     unfollowed_me_list.each do |user|
       unfollower = DeletedFollower.new({:name => user.name,
         :fmr_follows_me_nbr => user.follows_me_nbr,
