@@ -8,6 +8,5 @@ namespace :db do
     ActiveRecord::Base.connection.execute(CREATE SEQUENCE taggings_id_seq1)
     ActiveRecord::Base.connection.execute(CREATE SEQUENCE tags_id_seq1)
     ActiveRecord::Base.connection.execute(CREATE SEQUENCE users_id_seq1)
-      )
   end
 end
