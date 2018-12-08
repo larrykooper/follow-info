@@ -1,5 +1,6 @@
 class Tagging < ActiveRecord::Base
 
+# The user is the person I have tagged
 
   belongs_to :tag
   belongs_to :user
