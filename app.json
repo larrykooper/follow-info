@@ -1,7 +1,7 @@
 {
   "name": "follow-info",
   "scripts": {
-    "postdeploy": "bundle exec rake db:schema:load db:seed"
+    "postdeploy": "bundle exec rake db:create_sequences rake db:schema:load db:seed"
   },
   "env": {
     "GEM_PATH": {
