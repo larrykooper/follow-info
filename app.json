@@ -1,0 +1,80 @@
+{
+  "name": "follow-info",
+  "scripts": {
+  },
+  "env": {
+    "GEM_PATH": {
+      "required": true
+    },
+    "HEROKU_APP": {
+      "required": true
+    },
+    "HEROKU_PASSWORD": {
+      "required": true
+    },
+    "HEROKU_POSTGRESQL_PURPLE_URL": {
+      "required": true
+    },
+    "HEROKU_USER": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    },
+    "MEMCACHIER_PASSWORD": {
+      "required": true
+    },
+    "MEMCACHIER_SERVERS": {
+      "required": true
+    },
+    "MEMCACHIER_USERNAME": {
+      "required": true
+    },
+    "PATH": {
+      "required": true
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "RAILS_ENV": {
+      "required": true
+    },
+    "RAILS_MAX_THREADS": {
+      "required": true
+    },
+    "REDISTOGO_URL": {
+      "required": true
+    },
+    "TWITTER_CONSUMER_KEY": {
+      "required": true
+    },
+    "TWITTER_CONSUMER_SECRET": {
+      "required": true
+    },
+    "TWITTER_OAUTH_TOKEN": {
+      "required": true
+    },
+    "TWITTER_OAUTH_TOKEN_SECRET": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    },
+    "worker": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql",
+    "memcachier",
+    "redistogo"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "stack": "heroku-18"
+}
