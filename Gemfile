@@ -38,4 +38,4 @@ group :development do
   #gem 'ruby-debug19', "0.11.6"
 end
 
-ruby "2.3.4"
+ruby "2.5.3"
