@@ -35,6 +35,7 @@ gem 'puma'
 group :development do
   gem 'rspec-rails'
   gem 'byebug'
+  gem 'pry'
   #gem 'ruby-debug19', "0.11.6"
 end
 

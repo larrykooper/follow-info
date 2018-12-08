@@ -45,6 +45,7 @@ GEM
     buftok (0.2.0)
     builder (3.2.3)
     byebug (10.0.0)
+    coderay (1.1.2)
     concurrent-ruby (1.0.5)
     crass (1.0.3)
     daemons (1.2.6)
@@ -104,6 +105,9 @@ GEM
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
     pg (0.21.0)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     public_suffix (3.0.1)
     puma (3.11.2)
     rack (2.0.4)
@@ -220,6 +224,7 @@ DEPENDENCIES
   multi_json
   naught
   pg (~> 0.18)
+  pry
   puma
   rack
   rails (= 5.1.4)
@@ -235,4 +240,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.16.1
+   1.17.1
