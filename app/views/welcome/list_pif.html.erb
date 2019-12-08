@@ -20,6 +20,8 @@ Updated:  <%= iflu %><br/><br/>
       <th></th>
     </tr>
   </thead>
-
   <%= render(:partial => "ifollow_row", :collection => @users) %>
+
+  <%= will_paginate @users %>
+
 </table>

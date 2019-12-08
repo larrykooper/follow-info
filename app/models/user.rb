@@ -1,6 +1,23 @@
-# A user is one Twitter account.
-# It could be somebody I follow or someone who follows me,
-# or both.
+=begin
+
+ A user is one Twitter account.
+ It could be somebody I follow or someone who follows me,
+ or both.
+
+  name  string
+  nbr_followers  integer
+  is_me  boolean
+  follows_me  boolean
+  i_follow  boolean
+  created_at  datetime
+  updated_at  datetime
+  i_follow_nbr  integer
+  follows_me_nbr  integer
+  taken_care_of  boolean
+  last_time_tweeted  datetime
+  recommendation_count  integer
+
+=end
 
 class User < ActiveRecord::Base
 
