@@ -52,8 +52,9 @@ module WelcomeHelper
   end
 
   def sortable(column, title = nil)
+    test_column = sort_column == "LOWER(tags.name)" ? "tag" : sort_column
     title ||= column.titleize
-    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+    direction = column == test_column && sort_direction == "asc" ? "desc" : "asc"
     link_to title, :sort => column, :direction => direction
   end
 

@@ -47,7 +47,7 @@ class WelcomeController < ApplicationController
 
 
   def list_pif
-    @users = User.where(:i_follow => true).paginate(page: params[:page], per_page: 50).order(sort_column + " " + sort_direction)
+    @users = User.joins(:taggings, :tags).where(:i_follow => true).paginate(page: params[:page], per_page: 50).order(sort_column + " " + sort_direction)
     @count = User.larry_following_count
   end
 
@@ -80,7 +80,13 @@ class WelcomeController < ApplicationController
   private
 
   def sort_column
-    User.column_names.include?(params[:sort]) ? params[:sort] : "i_follow_nbr"
+    if !params[:sort]
+      "i_follow_nbr"
+    elsif params[:sort] == 'tag'
+      "LOWER(tags.name)"
+    else
+      params[:sort]
+    end
   end
 
   def sort_direction
