@@ -2,21 +2,21 @@
 
 <% content_for :script do %>
   <%= javascript_include_tag "jquery.metadata" %>
-  <%= javascript_include_tag "jquery.tablesorter" %>
-  <%= javascript_include_tag "pifs_list" %>
+
+
 <% end %>
 
 <h1>People I follow - <%= @count %></h1>
 Updated:  <%= iflu %><br/><br/>
-<table id="myPifs" class="tablesorter">
+<table id="myPifs">
   <thead>
     <tr>
-      <th><%=sortable "i_follow_nbr", "I Follow Nbr" %></th>
-      <th><%=sortable "name" %></th>
-      <th><u>Tag</u></th>
-      <th class="{sorter: 'digitcomma'}"><u>Nbr Of Followers</u></th>
-      <th>Follows Me?</th>
-      <th><%=sortable "last_time_tweeted" %></th>
+      <th><%= link_to "I Follow Nbr", :sort => "i_follow_nbr" %></th>
+      <th><%= link_to "Name", :sort => "name"  %></th>
+      <th><%= link_to "Tag", :sort => "tag" %></th>
+      <th><%= link_to "Nbr Of Followers", :sort => "nbr_followers" %></th>
+      <th><%= link_to "Follows Me?", :sort => "follows_me" %></th>
+      <th><%= link_to "Last Time Tweeted", :sort => "last_time_tweeted" %></th>
       <th></th>
     </tr>
   </thead>
