@@ -1,5 +1,3 @@
-# Edit this Gemfile to bundle your application's dependencies.
-# This preamble is the current preamble for Rails 3 apps; edit as needed.
 
 source 'https://rubygems.org'
 
@@ -31,6 +29,8 @@ gem 'equalizer'
 gem 'buftok'
 gem 'redis'
 gem 'puma'
+gem 'rake', '12.3.2'
+gem 'will_paginate', '~> 3.1.0'
 
 group :development do
   gem 'rspec-rails'

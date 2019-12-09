@@ -1,54 +1,61 @@
-module WelcomeHelper 
-  
+module WelcomeHelper
+
   def earlier
-    SystemInfo.earlier.strftime("%l:%M %p %m/%d/%y")    
+    SystemInfo.earlier.strftime("%l:%M %p %m/%d/%y")
   end
-  
-  def flu 
+
+  def flu
     si = SystemInfo.find(1)
     si.followers_last_update.blank? ? "never" : si.followers_last_update.strftime("%l:%M %p %m/%d/%y")
-  end 
-  
+  end
+
   def iflu
     si = SystemInfo.find(1)
     si.i_follow_last_update.strftime("%l:%M %p %m/%d/%y")
-  end 
-  
+  end
+
   def yes_no(value)
     value ? 'yes' : 'no'
   end
-  
+
   def display_tags(taggings)
     if taggings.empty?
       "no"
     else
       yes_no(taggings.first.tag.is_published)
-    end  
+    end
   end
-  
-  def all_my_tags 
+
+  def all_my_tags
     taglist = ""
     Tag.used_tags.each do |tag|
       taglist << "<span class='tagName"
-      taglist << " published" if tag.is_published 
+      taglist << " published" if tag.is_published
       taglist << "'>"
-      taglist << tag.name 
+      taglist << tag.name
       taglist << "</span>"
     end
     taglist.html_safe
-  end 
-  
+  end
+
   def tags_display_for(tag_arr)
     taglist = ""
     tag_arr.each do |tag|
       taglist << "<span"
-      taglist << " class='published'" if tag.is_published 
+      taglist << " class='published'" if tag.is_published
       taglist << ">"
       taglist << tag.name
       taglist << "</span>"
       taglist << ", " unless tag_arr.last == tag
-    end 
-    taglist.html_safe     
+    end
+    taglist.html_safe
   end
-  
+
+  def sortable(column, title = nil)
+    test_column = sort_column == "LOWER(tags.name)" ? "tag" : sort_column
+    title ||= column.titleize
+    direction = column == test_column && sort_direction == "asc" ? "desc" : "asc"
+    link_to title, :sort => column, :direction => direction
+  end
+
 end

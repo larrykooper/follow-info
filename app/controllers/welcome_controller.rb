@@ -45,11 +45,10 @@ class WelcomeController < ApplicationController
     @deleted_pifs = DeletedPif.order(sort_clause)
   end
 
+
   def list_pif
-    @sort_column_default = 'i_follow_nbr'
-    @sort_direction_default = 'desc'
-    @users = User.where(:i_follow => true).order(sort_column + " " + sort_direction)
-    @count = @users.size
+    @users = User.joins(:taggings, :tags).where(:i_follow => true).paginate(page: params[:page], per_page: 50).order(sort_column + " " + sort_direction)
+    @count = User.larry_following_count
   end
 
   def list_stats
@@ -81,7 +80,13 @@ class WelcomeController < ApplicationController
   private
 
   def sort_column
-    User.column_names.include?(params[:sort]) ? params[:sort] : @sort_column_default
+    if !params[:sort]
+      "i_follow_nbr"
+    elsif params[:sort] == 'tag'
+      "LOWER(tags.name)"
+    else
+      params[:sort]
+    end
   end
 
   def sort_direction
