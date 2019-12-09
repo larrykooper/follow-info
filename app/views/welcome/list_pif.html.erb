@@ -11,12 +11,12 @@ Updated:  <%= iflu %><br/><br/>
 <table id="myPifs">
   <thead>
     <tr>
-      <th><%= link_to "I Follow Nbr", :sort => "i_follow_nbr" %></th>
-      <th><%= link_to "Name", :sort => "name"  %></th>
-      <th><%= link_to "Tag", :sort => "tag" %></th>
-      <th><%= link_to "Nbr Of Followers", :sort => "nbr_followers" %></th>
-      <th><%= link_to "Follows Me?", :sort => "follows_me" %></th>
-      <th><%= link_to "Last Time Tweeted", :sort => "last_time_tweeted" %></th>
+      <th><%= sortable "i_follow_nbr", "I Follow Nbr" %></th>
+      <th><%= sortable "name" %></th>
+      <th><%= sortable "tag", "Tag" %></th>
+      <th><%= sortable "nbr_followers", "Nbr Of Followers"  %></th>
+      <th><%= sortable "follows_me", "Follows Me?" %></th>
+      <th><%= sortable "last_time_tweeted", "Last Time Tweeted" %></th>
       <th></th>
     </tr>
   </thead>
