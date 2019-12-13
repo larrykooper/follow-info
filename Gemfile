@@ -30,7 +30,6 @@ gem 'buftok'
 gem 'redis'
 gem 'puma'
 gem 'rake', '12.3.2'
-gem 'will_paginate', '~> 3.1.0'
 
 group :development do
   gem 'rspec-rails'

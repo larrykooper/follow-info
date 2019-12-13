@@ -204,7 +204,6 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
-    will_paginate (3.1.8)
 
 PLATFORMS
   ruby
@@ -237,7 +236,6 @@ DEPENDENCIES
   simple_oauth
   thin
   uglifier (>= 1.0.3)
-  will_paginate (~> 3.1.0)
 
 RUBY VERSION
    ruby 2.6.5p114
