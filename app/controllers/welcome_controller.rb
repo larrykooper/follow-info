@@ -52,6 +52,8 @@ class WelcomeController < ApplicationController
     @page_wanted = params[:page] ||= 1
     @total_pages = (@count / per_page) + 1
     @users = User.paginated_pifs(per_page, @page_wanted, sort_column, sort_direction)
+    @sort = sort_column
+    @direction = sort_direction
     # should just return 50 users
   end
 
@@ -87,7 +89,7 @@ class WelcomeController < ApplicationController
     if !params[:sort]
       "i_follow_nbr"
     elsif params[:sort] == 'tag'
-      "LOWER(tags.name)"
+      "LOWER(t.name)"
     else
       params[:sort]
     end

@@ -9,8 +9,8 @@ Updated:  <%= iflu %><br/><br/>
 
 <% page_num = @page_wanted.to_i %>
 
-<%= link_to "Previous", welcome_list_pif_path(:page => page_num - 1) unless page_num == 1 %>
-<%= link_to "Next", welcome_list_pif_path(:page => page_num + 1) unless page_num == @total_pages %>
+<%= link_to "Previous", welcome_list_pif_path(:page => page_num - 1, :sort => @sort, :direction => @direction) unless page_num == 1 %>
+<%= link_to "Next", welcome_list_pif_path(:page => page_num + 1, :sort => @sort, :direction => @direction) unless page_num == @total_pages %>
 
 <table id="myPifs">
   <thead>

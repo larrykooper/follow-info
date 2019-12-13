@@ -2,7 +2,7 @@
   <tr>
     <td><%= ifollow_row.i_follow_nbr %></td>
     <td><%= link_to ifollow_row.name, "http://twitter.com/#{ifollow_row.name}" %></td>
-    <td><%= tags_display_for(ifollow_row.tags) %></td>
+    <td><span<%= published(tag.is_published) %> ><%= ifollow_row.tag %></span></td>
     <td align="right"><%= number_with_delimiter(ifollow_row.nbr_followers) %></td>
     <td><%= yes_no(ifollow_row.follows_me) %></td>
     <td><%= ifollow_row.last_time_tweeted.strftime("%Y-%m-%d %H:%M") if ifollow_row.last_time_tweeted %></td>
