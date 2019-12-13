@@ -45,10 +45,14 @@ class WelcomeController < ApplicationController
     @deleted_pifs = DeletedPif.order(sort_clause)
   end
 
-
+  # sort_column and sort_direction are helper methods defined in this controller
   def list_pif
-    @users = User.joins(:taggings, :tags).where(:i_follow => true).paginate(page: params[:page], per_page: 50).order(sort_column + " " + sort_direction)
+    per_page = 50
     @count = User.larry_following_count
+    @page_wanted = params[:page] ||= 1
+    @total_pages = (@count / per_page) + 1
+    @users = User.paginated_pifs(per_page, @page_wanted, sort_column, sort_direction)
+    # should just return 50 users
   end
 
   def list_stats

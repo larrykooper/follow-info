@@ -2,12 +2,16 @@
 
 <% content_for :script do %>
   <%= javascript_include_tag "jquery.metadata" %>
-
-
 <% end %>
 
 <h1>People I follow - <%= @count %></h1>
 Updated:  <%= iflu %><br/><br/>
+
+<% page_num = @page_wanted.to_i %>
+
+<%= link_to "Previous", welcome_list_pif_path(:page => page_num - 1) unless page_num == 1 %>
+<%= link_to "Next", welcome_list_pif_path(:page => page_num + 1) unless page_num == @total_pages %>
+
 <table id="myPifs">
   <thead>
     <tr>
@@ -21,7 +25,5 @@ Updated:  <%= iflu %><br/><br/>
     </tr>
   </thead>
   <%= render(:partial => "ifollow_row", :collection => @users) %>
-
-  <%= will_paginate @users %>
 
 </table>
