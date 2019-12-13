@@ -82,7 +82,7 @@ class User < ActiveRecord::Base
   def self.paginated_pifs(per_page, page_wanted, sort_column, sort_direction)
     offset = (page_wanted.to_i - 1) * per_page
     sql = <<-SQL
-      SELECT
+      SELECT u.id,
       u.i_follow_nbr, u.name, t.name AS tag, u.nbr_followers, u.follows_me, u.last_time_tweeted
       FROM users u
       LEFT JOIN taggings tg
