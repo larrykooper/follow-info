@@ -79,6 +79,25 @@ class User < ActiveRecord::Base
    User.where("taken_care_of = false AND follows_me = true")
   end
 
+  def self.paginated_pifs(per_page, page_wanted, sort_column, sort_direction)
+    offset = (page_wanted.to_i - 1) * per_page
+    sql = <<-SQL
+      SELECT
+      u.i_follow_nbr, u.name, t.name AS tag, u.nbr_followers, u.follows_me, u.last_time_tweeted
+      FROM users u
+      LEFT JOIN taggings tg
+      ON u.id = tg.user_id
+      LEFT JOIN tags t
+      ON tg.tag_id = t.id
+      WHERE u.i_follow
+      ORDER BY #{sort_column} #{sort_direction}
+      LIMIT #{per_page}
+      OFFSET #{offset};
+    SQL
+    pifs = User.find_by_sql(sql)
+    pifs
+  end
+
   # PUBLIC INSTANCE METHODS
 
  def process_foller(foller, ind)
