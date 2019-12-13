@@ -79,8 +79,10 @@ class User < ActiveRecord::Base
    User.where("taken_care_of = false AND follows_me = true")
   end
 
-  def self.paginated_pifs(per_page, page_wanted, sort_column, sort_direction)
+  # Controller passes the sort column and direction it wants
+  def self.paginated_pifs(per_page, page_wanted, sort_column, sort_direction, two_sorts=false, second_sort='', second_direction='')
     offset = (page_wanted.to_i - 1) * per_page
+    second_sort = two_sorts ? ", #{second_sort} #{second_direction}" : ''
     sql = <<-SQL
       SELECT u.id,
       u.i_follow_nbr, u.name, t.name AS tag, u.nbr_followers, u.follows_me, u.last_time_tweeted
@@ -91,6 +93,7 @@ class User < ActiveRecord::Base
       ON tg.tag_id = t.id
       WHERE u.i_follow
       ORDER BY #{sort_column} #{sort_direction}
+      #{second_sort}
       LIMIT #{per_page}
       OFFSET #{offset};
     SQL

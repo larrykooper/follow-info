@@ -48,12 +48,22 @@ class WelcomeController < ApplicationController
   # sort_column and sort_direction are helper methods defined in this controller
   def list_pif
     per_page = 50
+    @sort = sort_column
+    @direction = sort_direction
+    if @sort == 'LOWER(t.name)'
+      two_sorts = true
+      second_sort = 'i_follow_nbr'
+      second_direction = 'desc'
+    else
+      two_sorts = false
+      second_sort = ''
+      second_direction = ''
+    end
     @count = User.larry_following_count
     @page_wanted = params[:page] ||= 1
     @total_pages = (@count / per_page) + 1
-    @users = User.paginated_pifs(per_page, @page_wanted, sort_column, sort_direction)
-    @sort = sort_column
-    @direction = sort_direction
+    @users = User.paginated_pifs(per_page, @page_wanted, @sort, @direction, two_sorts, second_sort, second_direction)
+
     # should just return 50 users
   end
 
@@ -85,6 +95,7 @@ class WelcomeController < ApplicationController
 
   private
 
+  # Default sort column is i_follow_nbr
   def sort_column
     if !params[:sort]
       "i_follow_nbr"
@@ -95,6 +106,7 @@ class WelcomeController < ApplicationController
     end
   end
 
+  # Default sort direction is descending
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end

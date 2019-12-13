@@ -42,11 +42,11 @@ module WelcomeHelper
     is_published ? " class='published" : ""
   end
 
+  # Creates the column headers with sorting links in the HTML
   def sortable(column, title = nil)
-    puts("Column:#{column}")
-    test_column = sort_column
     title ||= column.titleize
-    direction = column == test_column && sort_direction == "asc" ? "desc" : "asc"
+    # Link to reverse direction if you click again
+    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     link_to title, :sort => column, :direction => direction
   end
 
