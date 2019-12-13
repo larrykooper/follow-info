@@ -1,16 +1,16 @@
-/* Advanced Rails Recipes */
+/* Common Selectors */
 
 body {
-  font-family: Verdana, 'Lucida Grande', sans-serif;     
+  font-family: Verdana, 'Lucida Grande', sans-serif;
   font-size: small;
-  background-color: #6B8FD4; 
+  background-color: #6B8FD4;
   color: #333;
   margin: 25px;
 }
 
 #content {
   background-color: #fff;
-  padding: 20px;	
+  padding: 20px;
 }
 
 img {
@@ -21,7 +21,7 @@ img {
 hr {
   height: 0;
   border: 0;
-  border-bottom: 2px solid #ececec;  
+  border-bottom: 2px solid #ececec;
   margin: 1em 0;
 }
 
@@ -35,11 +35,11 @@ hr {
 /* LINKS */
 
 a {
-  color: #000; 
+  color: #000;
 }
 
 a:visited {
-  color: #666; 
+  color: #666;
 }
 
 a:hover {
@@ -61,12 +61,12 @@ fieldset {
 
 fieldset legend {
   font-size: 1.4em;
-  font-weight: bold;   
+  font-weight: bold;
   color: #333;
 }
 
 form label {
-  color: #333; 
+  color: #333;
   font-weight: bold;
   padding-bottom: 2px;
 }
@@ -79,7 +79,7 @@ form .hint {
   color: #777;
   display: block;
   font-size: 0.9em;
-  font-style: italic;  
+  font-style: italic;
 }
 
 form input {
@@ -97,7 +97,7 @@ table {
 table th,
 table td {
   border-bottom: 2px solid #ececec;
-  padding: 4px 8px;   
+  padding: 4px 8px;
 }
 
 table .odd {
@@ -189,7 +189,7 @@ table .odd {
 	cursor: pointer;
 }
 
-/* EDIT A USER PAGE  */
+/* EDIT-A-USER PAGE  */
 
 .pif_link {
 	margin: 0 30px;
@@ -233,4 +233,18 @@ input#save_button {
 
 .published {
 	font-weight: bold;
+}
+
+/* PAGINATION */
+
+.pagination {
+  margin-bottom: 14px;
+}
+
+.pagination a {
+  background: linear-gradient(to bottom, #f7f8fa, #e7e9ec);
+  border: 1px solid #6c6e73;
+  margin-right: 14px;
+  padding: 8px 12px 7px 13px;
+  text-decoration: none;
 }
