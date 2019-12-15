@@ -18,12 +18,10 @@ It does these things:
 
 Also, there's an option to manually enter a new person I follow from the homepage of the app, to avoid redoing the whole list to add one user.
 
-Because the updating of the lists can take a long time, I chose to use the backgroundrb library to offload the long-running processing.
-While the lists are being updated in the background, I poll the background worker every 3 seconds using periodically_call_remote, and update a progress bar.
+Because the updating of the lists can take a long time, I chose to use Resque to offload the long-running processing.
+While the lists are being updated in the background, I poll the background worker every 3 seconds, and update a progress bar.
 
 I parse the response from Twitter into JSON to make it easier to deal with.
-
-To use the background functions of the app, before starting the server, start backgroundrb using ./script/backgroundrb at the Rails root.
 
 Because this has been up to now a single-user app, you will need to make a few code changes to make it run for any user (Sorry, no setup app yet):
 
