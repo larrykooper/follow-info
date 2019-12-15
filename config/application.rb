@@ -63,4 +63,3 @@ module FollowInfo
 
   end
 end
-#CACHE = MemCache.new('127.0.0.1') only needed for backgroundrb
