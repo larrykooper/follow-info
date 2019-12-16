@@ -134,6 +134,7 @@ class User < ActiveRecord::Base
      (tags.collect {|tag| tag.name }).join(", ")
   end
 
+  # this code is used
   def tag_with_manually(list)
     Tag.transaction do
       taggings.destroy_all
