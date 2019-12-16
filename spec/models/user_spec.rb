@@ -7,8 +7,8 @@ describe '.create_new_pif' do
     ind = 120
     User.create_new_pif(pif, ind)
     calv = User.find_by_name('Calvin')
-    calv.should_not be_nil
-    calv.nbr_followers.should == 287
+    expect(calv).not_to be_nil
+    expect(calv.nbr_followers).to eq(287)
   end
 end
 
@@ -18,8 +18,8 @@ describe '#process_pif' do
     pif = Twitter::User.new(id: 4535, followers_count: 48, status: nil)
     ind = 39
     user.process_pif(pif, ind)
-    user.nbr_followers.should == 48
-    user.i_follow_nbr.should == 39
+    expect(user.nbr_followers).to eq(48)
+    expect(user.i_follow_nbr).to eq(39)
   end
 end
 
@@ -29,9 +29,9 @@ describe '.create_new_foller' do
     ind = 298
     User.create_new_foller(foller, ind)
     marv = User.find_by_name("Marvin")
-    marv.should_not be_nil
-    marv.follows_me_nbr.should == 298
-    marv.nbr_followers.should == 801
+    expect(marv).not_to be_nil
+    expect(marv.follows_me_nbr).to eq(298)
+    expect(marv.nbr_followers).to eq(801)
   end
 end
 
@@ -41,8 +41,7 @@ describe '#process_foller' do
     ind = 329
     foller = Twitter::User.new(id: 58958, followers_count: 453)
     user.process_foller(foller, ind)
-    user.nbr_followers.should == 453
-    user.follows_me_nbr.should == 329
-
+    expect(user.nbr_followers).to eq(453)
+    expect(user.follows_me_nbr).to eq(329)
   end
 end
