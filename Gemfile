@@ -31,6 +31,10 @@ gem 'redis'
 gem 'puma'
 gem 'rake', '12.3.2'
 
+group :test do
+  gem 'mocha'
+end
+
 group :development do
   gem 'rspec-rails'
   gem 'byebug'
