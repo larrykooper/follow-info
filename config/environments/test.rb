@@ -1,4 +1,5 @@
-Rails.application.configure do
+FollowInfo::Application.configure do
+
   # Settings specified here will take precedence over those in config/environment.rb
 
   # The test environment is used exclusively to run your application's
@@ -16,7 +17,8 @@ Rails.application.configure do
   config.whiny_nils = true
 
   # Show full error reports and disable caching
-  config.action_controller.consider_all_requests_local = true
+  #config.action_controller.consider_all_requests_local = true
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching             = false
   config.action_view.cache_template_loading            = true
 
@@ -32,4 +34,5 @@ Rails.application.configure do
   # This is necessary if your schema can't be completely dumped by the schema dumper,
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
+  ENV["REDISTOGO_URL"] = 'redis://redistogo:ded4a276d28baf2b0dba3364a86dc0d2@koi.redistogo.com:9554'
 end
