@@ -1,6 +1,8 @@
 require 'test_helper'
 require 'net/http'
 
+# NB This test stubs a class method
+
 class LarrysTwitterAccountTest < ActiveSupport::TestCase
 
 # We don't call the real Twitter API in these two tests
