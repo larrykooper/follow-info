@@ -30,6 +30,7 @@ gem 'buftok'
 gem 'redis'
 gem 'puma'
 gem 'rake', '12.3.2'
+gem 'sprockets', ">= 3.7.2"
 
 group :test do
   gem 'mocha'
