@@ -2,7 +2,9 @@
 source 'https://rubygems.org'
 
 gem 'rack'
-gem "rails", "5.1.4"
+gem "rails", "5.1.6.2"
+# The below is to fix a vulnerability
+gem 'actionview', ">= 5.1.6.2"
 
 group :assets do
   #gem 'sass-rails', '~> 3.2.3'
