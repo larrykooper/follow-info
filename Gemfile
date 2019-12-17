@@ -30,7 +30,11 @@ gem 'buftok'
 gem 'redis'
 gem 'puma'
 gem 'rake', '12.3.2'
+# sprockets is a dependency of the rails asset pipeline
 gem 'sprockets', ">= 3.7.2"
+# sinatra is only included here because it is a dependency of resque
+# resque comes with a Sinatra app for monitoring your jobs
+gem 'sinatra', ">= 2.0.2"
 
 group :test do
   gem 'mocha'
