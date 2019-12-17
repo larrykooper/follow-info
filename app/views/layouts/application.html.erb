@@ -27,7 +27,7 @@
   <% end -%>
   <%= link_to "Home", "/welcome/index" %>
   <% if follow_info_user_signed_in? %>
-    <%= link_to('logout', destroy_follow_info_user_session_path) %>
+    <%= link_to('logout', destroy_follow_info_user_session_path, method: "delete") %>
   <% else %>
     <%= link_to('login', new_follow_info_user_session_path) %>
   <% end %>
