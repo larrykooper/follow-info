@@ -30,7 +30,8 @@ gem 'http'
 gem 'equalizer'
 gem 'buftok'
 gem 'redis'
-gem 'puma'
+# 2019-1216 puma updated due to a vulnerability
+gem 'puma', ">= 3.12.2"
 gem 'rake', '12.3.2'
 # sprockets is a dependency of the rails asset pipeline
 gem 'sprockets', ">= 3.7.2"
