@@ -42,4 +42,9 @@ group :development do
   #gem 'ruby-debug19', "0.11.6"
 end
 
+group :development, :test do
+  gem 'factory_bot_rails'
+  gem 'faker'
+end
+
 ruby "2.6.5"
