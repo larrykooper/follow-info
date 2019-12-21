@@ -1,5 +1,6 @@
 require 'twitter'
 
+# puts writes to the Resque log
 class UpdatePifsJob
   include Resque::Plugins::Status
 
@@ -51,6 +52,7 @@ class UpdatePifsJob
       next_cursor = twitter_reply.next_cursor
       ret_hash[:next_cursor] = next_cursor
       pifs = twitter_reply.collection
+      # friends_page_size is going to be number of PIFs or 5000 (usually number of PIFs)
       @@friends_page_size = pifs.size
       puts "friends_page_size: #{@@friends_page_size}"
       done_with_friends_page = false
@@ -76,7 +78,7 @@ class UpdatePifsJob
   def do_100(pifs)
     user_lookup_ok = true
     begin
-      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of Twitter::User objects
+      twitter_user_info = @@tclient.users(pifs) # Call Twitter; this returns an array of 100 Twitter::User objects
     rescue
       puts "Twitter call users/lookup caused error!"
       p $!
@@ -99,6 +101,7 @@ class UpdatePifsJob
         end
         fps = @@friends_page_size
         percent_complete = (@@done_count * 100) / fps
+        # I think the "at" function updates resque-status
         at(percent_complete, @@friends_page_size, "At #{percent_complete}")
         puts "done count: #{@@done_count} of #{@@friends_page_size}"
         puts "ind: #{@@ind}"

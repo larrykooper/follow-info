@@ -37,6 +37,7 @@ class LarrysTwitterAccount
     nbr
   end
 
+  # This calls resque-status
   def pif_update_status(job_id)
     @status = Resque::Plugins::Status::Hash.get(job_id)
     @status

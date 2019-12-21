@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
 
-  test "creates and saves a new person I follow (pif)" do
+  test "create_new_pif creates and saves a new person I follow (pif)" do
     pif = Twitter::User.new(id: 4533, screen_name: 'Calvin', followers_count: 287, status: nil)
     ind = 120
     User.create_new_pif(pif, ind)
@@ -13,14 +13,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "process_pif should update the user's number of followers" do
-
     user = User.new
     pif = Twitter::User.new(id: 4535, followers_count: 48, status: nil)
     ind = 39
     user.process_pif(pif, ind)
     assert_equal(48, user.nbr_followers)
     assert_equal(39, user.i_follow_nbr)
-
   end
 
   test "create_new_foller should create and save a new user" do

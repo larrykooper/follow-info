@@ -2,19 +2,19 @@
 
 function checkJobStatus(resqueJobId, checkJobStatusPath, jobDonePath){
   function recursiveCheckJobStatus(){
-    // 'response' in the success function is whatever is rendered by the controller 
+    // 'response' in the success function is whatever is rendered by the controller
     setTimeout(function(){
       $.ajax({
-        url: checkJobStatusPath + resqueJobId, 
+        url: checkJobStatusPath + resqueJobId,
         success: function(response) {
-          var pctDone = response.pct; 
+          var pctDone = response.pct;
           var myStatus = response.mystatus;
             if (!isNaN(pctDone)) {
               // Update the on-screen progress bar
               $('.progress').width(2*pctDone);
               $('.progress').html(pctDone+"%");
               if (myStatus == "completed") {
-                window.location=jobDonePath; 
+                window.location=jobDonePath;
               } else {
                 recursiveCheckJobStatus(); // recurse
               };
@@ -23,15 +23,15 @@ function checkJobStatus(resqueJobId, checkJobStatusPath, jobDonePath){
               // just display the response
               $('#messages').html(response);
             };
-        }, 
+        },
         error: function() {
-          // do some error handling. Should 
-          // probably adjust the timeout here. 
+          // do some error handling. Should
+          // probably adjust the timeout here.
           recursiveCheckJobStatus();
-        } 
+        }
       });
     }, 2000); // wait 2000 milliseconds or 2 seconds
-  }
+  } // end function recursiveCheckJobStatus;
   recursiveCheckJobStatus();
 }
 
