@@ -18,14 +18,12 @@ module WelcomeHelper
     value ? 'yes' : 'no'
   end
 
-  def display_tags(taggings)
-    if taggings.empty?
-      "no"
-    else
-      yes_no(taggings.first.tag.is_published)
-    end
+  def is_tag_published(tag)
+    tag ? yes_no(tag.is_published) : "no"
   end
 
+  # This is displayed when I edit
+  # It only displays tags that are CURRENTLY USED
   def all_my_tags
     taglist = ""
     Tag.used_tags.each do |tag|

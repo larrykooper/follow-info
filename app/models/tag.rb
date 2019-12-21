@@ -4,15 +4,12 @@
 # and keep track of who I follow.
 class Tag < ActiveRecord::Base
 
-  has_many :taggings
-  has_many :users, :through => :taggings
-
+  has_many :users
 
   # Class Methods
 
   def self.by_user_count
-    tags_hash = Tagging.joins(:tag).joins(:user).where("users.i_follow" => 't').group('tags.name').count
-    tags_arr = tags_hash.sort { |a,b| b[1]<=>a[1] }
+    Tag.joins(:users).where("users.i_follow").select("tags.name", "tags.id", "COUNT(tags.id) AS tags_count").group('tags.name, tags.id').order("tags_count DESC")
   end
 
   # input is a delimited list of tags
@@ -33,22 +30,10 @@ class Tag < ActiveRecord::Base
   end
 
   def self.used_tags
-    used_tags = []
-    Tag.all.each do |tag|
-      if tag.taggings.size > 0
-        used_tags << tag
-      end
-    end
-    used_tags.sort_by! {|tag| tag.name.downcase}
+    Tag.joins(:users).distinct.sort_by {|tag| tag.name.downcase}
   end
 
   # Instance Methods
-
-  def add_user_manually(user)
-    # We set is_published to false
-    # because manually added tags are not published
-    Tagging.create(:tag => self, :user => user, :is_published => false)
-  end
 
   def pifs_count
     users.where(:i_follow => true).count

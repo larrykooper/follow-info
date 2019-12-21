@@ -1,6 +1,6 @@
-$(document).ready(function() 
-  { 
+$(document).ready(function()
+  {
     $(".tagName").click(function(event) {
-		  $('#tags').val($(event.target).text());	
+		  $('#tag').val($(event.target).text());
     });
 });

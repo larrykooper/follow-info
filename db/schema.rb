@@ -1,32 +1,3 @@
-# Larry 12/16/2019
-
-# In order to create the test database for testing, I had to change:
-
-#  create_table "deleted_pifs", id: :integer, default: -> { "nextval('deleted_pifs_id_seq1'::regclass)" }, force: :cascade do |t|
-# to
-#  create_table "deleted_pifs", id: :serial, force: :cascade do |t|
-
-# I made that change because when I ran:
-#  bundle exec rake db:schema:load RAILS_ENV=test
-# I would get:
-
-# ActiveRecord::StatementInvalid: PG::UndefinedTable: ERROR:  relation "deleted_pifs_id_seq1" does not exist
-# : CREATE TABLE "deleted_pifs" ("id" integer DEFAULT nextval('deleted_pifs_id_seq1'::regclass) NOT NULL PRIMARY KEY, "name" character varying, "nbr_followers" integer, "i_follow_nbr" integer, "follows_me" boolean)
-
-# However, I don't want to check that change in, because manually editing
-# schema.rb is a no-no. So if I really want to make that change ("nextval" to "serial")
-# in my actual database tables, I will need to create a migration to do so.
-
-# OR, I could just figure out why that sequence problem is happening.
-# ======================================================================
-
-# Also note that it may not be that important what the migration says for that stuff,
-#  it seems to be dependent on the Rails version:
-
-# https://stackoverflow.com/questions/54598531/what-determines-if-rails-includes-id-serial-in-a-table-definition
-
-# ======================================================================
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -39,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191216201340) do
+ActiveRecord::Schema.define(version: 20191221155943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,15 +58,6 @@ ActiveRecord::Schema.define(version: 20191216201340) do
     t.datetime "lists_last_update"
   end
 
-  create_table "taggings", id: :serial, force: :cascade do |t|
-    t.integer "tag_id"
-    t.integer "user_id"
-    t.boolean "is_published"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean "taken_care_of"
-  end
-
   create_table "tags", id: :serial, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at"
@@ -103,7 +65,8 @@ ActiveRecord::Schema.define(version: 20191216201340) do
     t.boolean "is_published"
   end
 
-  create_table "users", id: :serial, force: :cascade do |t|
+  create_table "users", id: false, force: :cascade do |t|
+    t.integer "id", null: false
     t.string "name"
     t.integer "nbr_followers"
     t.boolean "is_me"
@@ -116,6 +79,7 @@ ActiveRecord::Schema.define(version: 20191216201340) do
     t.boolean "taken_care_of"
     t.datetime "last_time_tweeted"
     t.integer "recommendation_count"
+    t.integer "tag_id"
   end
 
 end
