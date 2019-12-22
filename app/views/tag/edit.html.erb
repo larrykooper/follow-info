@@ -1,10 +1,5 @@
 <% @page_title = "Tags Publishing/Unpublishing" %>
 
-<% content_for :script do %>
-  <%= javascript_include_tag "tags_list" %>
-<% end %>
-
-
 <%= form_tag('/tag/edit', :method => :post) do -%>
   <%= submit_tag 'Save Changes' %>
   <table id="myTags">
