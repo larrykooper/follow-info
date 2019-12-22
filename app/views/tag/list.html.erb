@@ -1,16 +1,11 @@
 <% @page_title = "Tags List" %>
 
-<% content_for :script do %>
-  <%= javascript_include_tag "jquery.tablesorter" %>  
-  <%= javascript_include_tag "tags_short_list" %>
-<% end %>
-
-<table id="myTags" class="tablesorter">
+<table class="myTags">
   <thead>
     <tr>
       <th>Tag</th>
-      <th>User Count</th>        
+      <th>User Count</th>
     </tr>
-  </thead>    
-  <%= render(:partial => "tag_short_row", :collection => @tags) %>   
+  </thead>
+  <%= render(:partial => "tag_short_row", :collection => @tags) %>
 </table>

@@ -41,7 +41,7 @@ FollowInfo::Application.configure do
 
   config.cache_store = :dalli_store
 
-  config.assets.precompile += %w( base.css screen.css edit.js follower_update_status.js jquery.tablesorter.js jquery.metadata.js pif_update_status.js pifs_list.js list_follers.js tags_list.js tags_short_list.js)
+  config.assets.precompile += %w( base.css screen.css edit.js follower_update_status.js jquery.metadata.js pif_update_status.js pifs_list.js list_follers.js)
 
   ENV["REDISTOGO_URL"] = 'redis://redistogo:ded4a276d28baf2b0dba3364a86dc0d2@koi.redistogo.com:9554'
 

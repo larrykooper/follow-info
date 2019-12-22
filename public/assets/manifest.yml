@@ -4,10 +4,7 @@ sort_desc.png: sort_desc.png
 application.js: application.js
 edit.js: edit.js
 jquery.metadata.js: jquery.metadata.js
-jquery.tablesorter.js: jquery.tablesorter.js
 pifs_list.js: pifs_list.js
-tags_list.js: tags_list.js
-tags_short_list.js: tags_short_list.js
 application.css: application.css
 base.css: base.css
 screen.css: screen.css

@@ -16,13 +16,13 @@
   taken_care_of  boolean
   last_time_tweeted  datetime
   recommendation_count  integer
+  tag_id       integer
 
 =end
 
 class User < ActiveRecord::Base
 
-  has_many :taggings, :dependent => :destroy
-  has_many :tags, :through => :taggings
+  belongs_to :tag
 
   require 'math_stuff'
 
@@ -85,12 +85,10 @@ class User < ActiveRecord::Base
     second_sort = two_sorts ? ", #{second_sort} #{second_direction}" : ''
     sql = <<-SQL
       SELECT u.id,
-      u.i_follow_nbr, u.name, t.name AS tag, u.nbr_followers, u.follows_me, u.last_time_tweeted
+      u.i_follow_nbr, u.name, t.name AS tag, u.nbr_followers, u.follows_me, u.last_time_tweeted, t.id AS tag_id
       FROM users u
-      LEFT JOIN taggings tg
-      ON u.id = tg.user_id
       LEFT JOIN tags t
-      ON tg.tag_id = t.id
+      ON u.tag_id = t.id
       WHERE u.i_follow
       ORDER BY #{sort_column} #{sort_direction}
       #{second_sort}
@@ -125,23 +123,8 @@ class User < ActiveRecord::Base
     self.i_follow_nbr = ind
     self.taken_care_of = true
     self.save!
-    # invalidate cache
-    # commented out because now does it in observer
-    #ActionController::Base.new.expire_fragment("user-#{self.id}")
+
   end
 
-  def tag_list
-     (tags.collect {|tag| tag.name }).join(", ")
-  end
-
-  # this code is used
-  def tag_with_manually(list)
-    Tag.transaction do
-      taggings.destroy_all
-      Tag.parse(list).each do |name|
-        Tag.find_or_create_by(name: name).add_user_manually(self)
-      end
-    end
-  end
 
 end

@@ -1,4 +1,4 @@
-<% 
+<%
 @page_title = "Editing a user"
 %>
 
@@ -8,19 +8,19 @@
 
 <%= link_to "All people I follow", "/welcome/list_pif", :class=>"pif_link" %>
 
-<h2>Editing a User</h2> 
+<h2>Editing a User</h2>
 <div id="edit_page">
-  
-  <%= form_for @user do |f| -%>   
+
+  <%= form_for @user do |f| -%>
     <p>
       <label>User name:</label> <%= @user.name %>
     </p>
     <p>
-      <label id="tags_label">Tags:</label><%= text_field_tag "tags", @user.tag_list %>  
+      <label id="tags_label">Tag:</label><%= text_field_tag "tag", @user.tag %>
     </p>
     <p>
-      <label>Tags Published:</label>
-      <%= display_tags(@user.taggings) %>
+      <label>Tag Published:</label>
+      <%= is_tag_published(@user.tag) %>
     </p>
     <%= submit_tag 'Save', {:id=> "save_button"} %>
     <div id="tags_area">
