@@ -16,7 +16,8 @@
       <label>User name:</label> <%= @user.name %>
     </p>
     <p>
-      <label id="tags_label">Tag:</label><%= text_field_tag "tag", @user.tag.name %>
+      <label id="tags_label">Tag:</label>
+      <input type="text" name="tag" id="tag" value=<%= @user.tag.name if @user.tag  %>>
     </p>
     <p>
       <label>Tag Published:</label>

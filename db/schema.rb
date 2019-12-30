@@ -65,8 +65,7 @@ ActiveRecord::Schema.define(version: 20191221155943) do
     t.boolean "is_published"
   end
 
-  create_table "users", id: false, force: :cascade do |t|
-    t.integer "id", null: false
+  create_table "users", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "nbr_followers"
     t.boolean "is_me"
