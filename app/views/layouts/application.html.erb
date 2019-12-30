@@ -5,6 +5,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title>Larry's Twitter App - <%= @page_title || "Page needs title" %></title>
+  <%= csrf_meta_tags %>
   <%= stylesheet_link_tag 'base', 'screen' %>
   <%= javascript_include_tag "application" %>
   <%= yield :script %>
