@@ -43,6 +43,6 @@ FollowInfo::Application.configure do
 
   config.assets.precompile += %w( base.css screen.css edit.js follower_update_status.js jquery.metadata.js pif_update_status.js pifs_list.js list_follers.js)
 
-  ENV["REDIS_URL"] = 'redis://:pa99c6d50e68a04960537fd4860ffab88a24e331544c7fd81931dc0af518d5855@ec2-107-21-207-198.compute-1.amazonaws.com:17819'
+  ENV["REDIS_URL"] = 'redis://@localhost'
 
 end
