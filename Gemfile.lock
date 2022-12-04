@@ -49,7 +49,7 @@ GEM
     concurrent-ruby (1.1.5)
     crass (1.0.5)
     daemons (1.2.6)
-    dalli (2.7.6)
+    dalli (3.2.3)
     devise (4.7.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -112,7 +112,7 @@ GEM
     nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
     orm_adapter (0.5.0)
-    pg (0.21.0)
+    pg (1.4.5)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -236,7 +236,7 @@ DEPENDENCIES
   mocha
   multi_json
   naught
-  pg (~> 0.18)
+  pg (~> 1.4.5)
   pry
   puma (>= 3.12.2)
   rack
