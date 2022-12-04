@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 
   def edit
+    session[:return_to] = request.referrer
     @user = User.find_by(id: params["id"])
   end
 
@@ -11,8 +12,7 @@ class UsersController < ApplicationController
     @user.tag = tag
     @user.save!
     flash[:notice] = 'User was successfully updated.'
-    redirect_to :controller => "welcome", :action => 'list_pif', :sort => "i_follow_nbr", :direction => "desc"
-
+    redirect_to session[:return_to]
   end
 
 end
