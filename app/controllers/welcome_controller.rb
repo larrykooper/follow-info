@@ -46,7 +46,10 @@ class WelcomeController < ApplicationController
   end
 
   # sort_column and sort_direction are helper methods defined in this controller
+  #    t.name is tag name
+  #  When listing by tags, I want to sort by i_follow_nbr
   def list_pif
+    chosen_letter = ''
     per_page = 50
     @sort = sort_column
     @direction = sort_direction
@@ -62,9 +65,17 @@ class WelcomeController < ApplicationController
     @count = User.larry_following_count
     @page_wanted = params[:page] ||= 1
     @total_pages = (@count / per_page) + 1
-    @users = User.paginated_pifs(per_page, @page_wanted, @sort, @direction, two_sorts, second_sort, second_direction)
-
-    # should just return 50 users
+    @users = User.paginated_pifs(
+      per_page,
+      @page_wanted,
+      @sort,
+      @direction,
+      two_sorts,
+      second_sort,
+      second_direction,
+      chosen_letter
+    )
+    # should just return 50 users unless nav is by alpha
   end
 
   def list_stats

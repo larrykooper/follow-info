@@ -76,25 +76,72 @@ class User < ActiveRecord::Base
   end
 
   def self.quitters
-   User.where("taken_care_of = false AND follows_me = true")
+    User.where("taken_care_of = false AND follows_me = true")
   end
 
-  # Controller passes the sort column and direction it wants
-  def self.paginated_pifs(per_page, page_wanted, sort_column, sort_direction, two_sorts=false, second_sort='', second_direction='')
-    offset = (page_wanted.to_i - 1) * per_page
-    second_sort = two_sorts ? ", #{second_sort} #{second_direction}" : ''
+  def self.common_pifs_sql
     sql = <<-SQL
       SELECT u.id,
-      u.i_follow_nbr, u.name, t.name AS tag, u.nbr_followers, u.follows_me, u.last_time_tweeted, t.id AS tag_id
+      u.i_follow_nbr, u.name, t.name AS tag, u.nbr_followers,
+       u.follows_me, u.last_time_tweeted, t.id AS tag_id
       FROM users u
       LEFT JOIN tags t
       ON u.tag_id = t.id
       WHERE u.i_follow
+    SQL
+    sql
+  end
+
+  def self.general_case_pifs_sql_part_2(
+    per_page,
+    page_wanted,
+    sort_column,
+    sort_direction,
+    two_sorts,
+    second_sort,
+    second_direction
+  )
+    offset = (page_wanted.to_i - 1) * per_page
+    second_sort = two_sorts ? ", #{second_sort} #{second_direction}" : ''
+    sql = <<-SQL
       ORDER BY #{sort_column} #{sort_direction}
       #{second_sort}
       LIMIT #{per_page}
       OFFSET #{offset};
     SQL
+    sql
+  end
+
+  def self.alpha_nav_pifs_sql_part_2
+    sql = <<-SQL
+      AND SUBSTRING(LOWER(u.name),1,1) = #{chosen_letter}
+      ORDER BY LOWER(u.name) asc;
+    SQL
+  end
+
+
+  # Controller passes the sort column and direction it wants
+  def self.paginated_pifs(
+    per_page,
+    page_wanted,
+    sort_column,
+    sort_direction,
+    two_sorts=false,
+    second_sort='',
+    second_direction='',
+    chosen_letter=''
+  )
+    common_sql = self.common_pifs_sql
+    gen_case_sql =
+     self.general_case_pifs_sql_part_2(
+      per_page,
+      page_wanted,
+      sort_column,
+      sort_direction,
+      two_sorts,
+      second_sort,
+      second_direction)
+    sql = common_sql + gen_case_sql
     pifs = User.find_by_sql(sql)
     pifs
   end
