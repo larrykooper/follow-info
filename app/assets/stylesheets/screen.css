@@ -1,16 +1,11 @@
-/* Common Selectors */
+/* GENERAL STYLES */
 
 body {
   font-family: Verdana, 'Lucida Grande', sans-serif;
   font-size: small;
-  background-color: #6B8FD4;
+  background-color: red;
   color: #333;
   margin: 25px;
-}
-
-#content {
-  background-color: #fff;
-  padding: 20px;
 }
 
 img {
@@ -25,11 +20,22 @@ hr {
   margin: 1em 0;
 }
 
-.clear {
-  clear: both;
-  overflow: hidden;
-  height: 0px;
-  display: block;
+/* TABLES */
+
+table {
+  border-collapse: collapse;
+  padding: 0;
+  line-height: 1.5em;
+}
+
+table th,
+table td {
+  border-bottom: 2px solid #ececec;
+  padding: 4px 8px;
+}
+
+table .odd {
+  background: #ececec;
 }
 
 /* LINKS */
@@ -44,6 +50,26 @@ a:visited {
 
 a:hover {
   color: #fff; background-color:#000;
+}
+
+/* UTILITIES   */
+
+.clear {
+  clear: both;
+  overflow: hidden;
+  height: 0px;
+  display: block;
+}
+
+/* SITEWIDE  */
+
+.header {
+  cursor: pointer;
+}
+
+#content {
+  background-color: #fff;
+  padding: 20px;
 }
 
 /* FORMS */
@@ -86,23 +112,7 @@ form input {
   font-size: 120%;
 }
 
-/* TABLES */
 
-table {
-  border-collapse: collapse;
-  padding: 0;
-  line-height: 1.5em;
-}
-
-table th,
-table td {
-  border-bottom: 2px solid #ececec;
-  padding: 4px 8px;
-}
-
-table .odd {
-  background: #ececec;
-}
 
 /* ERRORS */
 
@@ -183,11 +193,6 @@ table .odd {
   background-color: green;
   padding: 10px;
 }
-/* other */
-
-.header {
-	cursor: pointer;
-}
 
 /* EDIT-A-USER PAGE  */
 
@@ -249,7 +254,7 @@ input#save_button {
   text-decoration: none;
 }
 
-/* list the tags */
+/* List Tags page */
 
 table.myTags td.count {
   text-align: right;
