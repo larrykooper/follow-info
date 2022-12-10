@@ -33,6 +33,46 @@ class WelcomeController < ApplicationController
     @followers = User.where(:follows_me => true).count
   end
 
+  # sort_column and sort_direction are helper methods defined
+  #  in this controller
+  #  t.name is tag name
+  #  When listing by tags, I want to sort by i_follow_nbr
+  def list_pif
+    if params[:chosen_letter]
+      @users = User.pifs_alpha_nav(
+        params[:chosen_letter]
+      )
+    else
+      per_page = 50
+      @sort = sort_column
+      @direction = sort_direction
+      if @sort == 'LOWER(t.name)'
+        two_sorts = true
+        second_sort = 'i_follow_nbr'
+        second_direction = 'desc'
+      else
+        two_sorts = false
+        second_sort = ''
+        second_direction = ''
+      end
+      @count = User.larry_following_count
+      @page_wanted = params[:page] ||= 1
+      @total_pages = (@count / per_page) + 1
+      # calls User model to get the PIFs to display
+      @users = User.pifs_general_case(
+        per_page,
+        @page_wanted,
+        @sort,
+        @direction,
+        two_sorts,
+        second_sort,
+        second_direction
+      )
+    end
+    @users
+    # should just return 50 users unless nav is by alpha
+  end
+
   def list_follers
     @sort_column_default = 'follows_me_nbr'
     @sort_direction_default = 'desc'
@@ -43,39 +83,6 @@ class WelcomeController < ApplicationController
   def list_idropped
     sort_clause = "i_follow_nbr DESC"
     @deleted_pifs = DeletedPif.order(sort_clause)
-  end
-
-  # sort_column and sort_direction are helper methods defined in this controller
-  #    t.name is tag name
-  #  When listing by tags, I want to sort by i_follow_nbr
-  def list_pif
-    chosen_letter = ''
-    per_page = 50
-    @sort = sort_column
-    @direction = sort_direction
-    if @sort == 'LOWER(t.name)'
-      two_sorts = true
-      second_sort = 'i_follow_nbr'
-      second_direction = 'desc'
-    else
-      two_sorts = false
-      second_sort = ''
-      second_direction = ''
-    end
-    @count = User.larry_following_count
-    @page_wanted = params[:page] ||= 1
-    @total_pages = (@count / per_page) + 1
-    @users = User.paginated_pifs(
-      per_page,
-      @page_wanted,
-      @sort,
-      @direction,
-      two_sorts,
-      second_sort,
-      second_direction,
-      chosen_letter
-    )
-    # should just return 50 users unless nav is by alpha
   end
 
   def list_stats

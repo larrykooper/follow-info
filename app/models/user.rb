@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
     sql
   end
 
-  def self.general_case_pifs_sql_part_2(
+  def self.general_case_pifs_sql(
     per_page,
     page_wanted,
     sort_column,
@@ -112,28 +112,28 @@ class User < ActiveRecord::Base
     sql
   end
 
-  def self.alpha_nav_pifs_sql_part_2
+  def self.alpha_nav_pifs_sql(
+    chosen_letter
+  )
     sql = <<-SQL
-      AND SUBSTRING(LOWER(u.name),1,1) = #{chosen_letter}
+      AND SUBSTRING(LOWER(u.name),1,1) = '#{chosen_letter}'
       ORDER BY LOWER(u.name) asc;
     SQL
   end
 
-
   # Controller passes the sort column and direction it wants
-  def self.paginated_pifs(
+  def self.pifs_general_case(
     per_page,
     page_wanted,
     sort_column,
     sort_direction,
     two_sorts=false,
     second_sort='',
-    second_direction='',
-    chosen_letter=''
+    second_direction=''
   )
     common_sql = self.common_pifs_sql
     gen_case_sql =
-     self.general_case_pifs_sql_part_2(
+     self.general_case_pifs_sql(
       per_page,
       page_wanted,
       sort_column,
@@ -145,6 +145,18 @@ class User < ActiveRecord::Base
     pifs = User.find_by_sql(sql)
     pifs
   end
+
+  def self.pifs_alpha_nav(
+    chosen_letter
+  )
+  common_sql = self.common_pifs_sql
+  alpha_nav_sql = self.alpha_nav_pifs_sql(
+    chosen_letter
+  )
+  sql = common_sql + alpha_nav_sql
+  pifs = User.find_by_sql(sql)
+  pifs
+end
 
   # PUBLIC INSTANCE METHODS
 

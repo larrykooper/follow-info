@@ -18,6 +18,12 @@ Updated:  <%= iflu %><br/><br/>
   <%= link_to "Last", welcome_list_pif_path(:page => @total_pages, :sort => @sort, :direction => @direction) %>
 </div>
 
+<nav class="AlphabetNav">
+  <% ('A'..'Z').each do |char| %>
+    <%= link_to char, welcome_list_pif_path(:chosen_letter => char.downcase) %>
+  <% end %>
+</nav>
+
 <table id="myPifs">
   <thead>
     <tr>
@@ -31,5 +37,4 @@ Updated:  <%= iflu %><br/><br/>
     </tr>
   </thead>
   <%= render(:partial => "ifollow_row", :collection => @users) %>
-
 </table>

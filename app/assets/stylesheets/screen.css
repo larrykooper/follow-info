@@ -254,6 +254,20 @@ input#save_button {
   text-decoration: none;
 }
 
+/* alphabet nav on the List PIFs page */
+/* source: https://codepen.io/team/lincolnloop/pen/xbJqgR  */
+
+.AlphabetNav {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  // Shorthand for flex-wrap and flex-direction
+  flex-flow: wrap row;
+  padding: .5rem;
+  background: ghostwhite;
+}
+
 /* List Tags page */
 
 table.myTags td.count {
