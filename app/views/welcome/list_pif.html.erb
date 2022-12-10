@@ -9,9 +9,11 @@ Updated:  <%= iflu %><br/><br/>
 
 <% page_num = @page_wanted.to_i %>
 
+<% prev_page_num = (page_num == 1 ? 1 : page_num - 1) %>
+
 <div class="pagination">
   <%= link_to "Page 1", welcome_list_pif_path(:page => 1, :sort => @sort, :direction => @direction) %>
-  <%= link_to "Previous", welcome_list_pif_path(:page => page_num - 1, :sort => @sort, :direction => @direction) unless page_num == 1 %>
+  <%= link_to "Previous", welcome_list_pif_path(:page => prev_page_num, :sort => @sort, :direction => @direction) %>
   <%= link_to "Next", welcome_list_pif_path(:page => page_num + 1, :sort => @sort, :direction => @direction) unless page_num == @total_pages %>
   <%= link_to "Last", welcome_list_pif_path(:page => @total_pages, :sort => @sort, :direction => @direction) %>
 </div>
